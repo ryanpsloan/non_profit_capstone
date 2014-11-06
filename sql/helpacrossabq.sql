@@ -1,5 +1,12 @@
 CREATE TABLE user(
 	userId INT UNSIGNED NOT NULL AUTO-INCREMENT,
 	userName VARCHAR(32) NOT NULL,
-	email	VARCHAR (132)	NOT NULL,
-)
+	email	VARCHAR(72)	NOT NULL,
+	passwordHash CHAR(120) NOT NULL,
+	salt CHAR(64),
+	authToken CHAR(32),
+	permissions TINYINT UNSIGNED NOT NULL,
+	PRIMARY KEY(userId),
+	UNIQUE(userName),
+	UNIQUE(email),
+);
