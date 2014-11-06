@@ -31,3 +31,7 @@ CREATE TABLE profile(
 	INDEX (zipCode),
 	INDEX (userId)
 );
+
+CREATE TABLE event(
+
+)
