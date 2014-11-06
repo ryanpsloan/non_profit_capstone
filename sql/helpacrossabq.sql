@@ -28,5 +28,6 @@ CREATE TABLE profile(
 	zipCode VARCHAR(10) NOT NULL,
 	PRIMARY KEY(profileId),
 	FOREIGN KEY (userId) REFERENCES user(userId),
-
-)
+	INDEX (zipCode),
+	INDEX (userId)
+);
