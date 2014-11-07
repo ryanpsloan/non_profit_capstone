@@ -38,7 +38,11 @@ CREATE TABLE profile(
 );
 
 CREATE TABLE cause(
-
+	causeId INT UNSIGNED NOT NULL  AUTO_INCREMENT,
+	causeName VARCHAR(64) NOT NULL,
+	causeDescription VARCHAR(256),
+	INDEX (causeName),
+	PRIMARY KEY (causeId)
 );
 
 CREATE TABLE team (
@@ -50,6 +54,7 @@ CREATE TABLE event (
 );
 
 CREATE TABLE userCause (
+	profileId VARCHAR(250)
 
 );
 
