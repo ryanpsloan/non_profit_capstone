@@ -52,7 +52,11 @@ CREATE TABLE team (
 );
 
 CREATE TABLE event (
-
+	eventId INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	eventTitle VARCHAR(64) NOT NULL,
+	eventDate DATETIME NOT NULL,
+	eventLocation VARCHAR(512),
+	PRIMARY KEY (eventId)
 );
 
 CREATE TABLE userCause (
