@@ -36,6 +36,10 @@ CREATE TABLE cause(
 
 )
 
+CREATE TABLE team (
+
+)
+
 CREATE TABLE event (
 
 )
