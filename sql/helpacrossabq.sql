@@ -98,7 +98,16 @@ CREATE TABLE userEvent (
 );
 
 CREATE TABLE teamEvent (
-
+	teamId INT UNSIGNED NOT NULL,
+	eventId INT UNSIGNED NOT NULL,
+	teamStatus TINYINT NOT NULL,
+	postingPermissions TINYINT NOT NULL,
+	banStatus TINYINT NOT NULL,
+	PRIMARY KEY (teamId, eventId),
+	INDEX (teamId),
+	INDEX (eventId),
+	FOREIGN KEY (teamId) REFERENCES team(teamId),
+	FOREIGN KEY (eventId) REFERENCES event(eventId)
 );
 
 CREATE TABLE userTeam (
