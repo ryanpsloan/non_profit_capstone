@@ -36,14 +36,6 @@ CREATE TABLE event(
 
 )
 
-CREATE TABLE  team (
-
-)
-
-CREATE TABLE event (
-
-)
-
 CREATE TABLE cause (
 
 )
