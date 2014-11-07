@@ -34,35 +34,35 @@ CREATE TABLE profile(
 
 CREATE TABLE cause(
 
-)
+);
 
 CREATE TABLE team (
 
-)
+);
 
 CREATE TABLE event (
 
-)
+);
 
 CREATE TABLE userCause (
 
-)
+);
 
 CREATE TABLE  teamCause (
 
-)
+);
 
 CREATE TABLE userEvent (
 
-)
+);
 
 CREATE TABLE teamEvent (
 
-)
+);
 
 CREATE TABLE userTeam (
 	profileId INT UNSIGNED NOT NULL,
 	teamId INT UNSIGNED NOT NULL,
 	roleInTeam TINYINT UNSIGNED NOT NULL,
 	teamPermission TINYINT UNSIGNED NOT NULL
-)
+);
