@@ -32,11 +32,11 @@ CREATE TABLE profile(
 	INDEX(userId)
 );
 
-CREATE TABLE event(
+CREATE TABLE cause(
 
 )
 
-CREATE TABLE cause (
+CREATE TABLE event (
 
 )
 
