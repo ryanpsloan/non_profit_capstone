@@ -59,6 +59,6 @@ CREATE TABLE teamEvent (
 CREATE TABLE userTeam (
 	profileId INT UNSIGNED NOT NULL,
 	teamId INT UNSIGNED NOT NULL,
-	roleInTeam ?? VARCHAR(25),
-	teamPermission ?? VARCHAR(25)
+	roleInTeam TINYINT UNSIGNED NOT NULL,
+	teamPermission TINYINT UNSIGNED NOT NULL
 )
