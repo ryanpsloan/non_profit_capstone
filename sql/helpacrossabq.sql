@@ -56,8 +56,14 @@ CREATE TABLE event (
 );
 
 CREATE TABLE userCause (
-	profileId INT UNSIGNED NOT NULL
-);
+	profileId INT UNSIGNED NOT NULL,
+	causeId INT UNSIGNED NOT NULL,
+	INDEX (profileId),
+	INDEX (causeId),
+	PRIMARY KEY (profileId,causeId),
+	FOREIGN KEY (profileId) REFERENCES profile(profileId),
+	FOREIGN KEY (causeId) REFERENCES cause (causeId)
+	);
 
 CREATE TABLE  teamCause (
 
