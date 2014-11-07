@@ -1,4 +1,6 @@
 DROP TABLE IF EXISTS  userTeam;
+DROP TABLE IF EXISTS  teamEvent;
+DROP TABLE IF EXISTS  userEvent;
 
 
 -- create tables for helpacrossabq
