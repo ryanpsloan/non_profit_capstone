@@ -1,7 +1,16 @@
-DROP TABLE IF EXISTS  userTeam;
-DROP TABLE IF EXISTS  teamEvent;
-DROP TABLE IF EXISTS  userEvent;
 
+-- create drop tables to test database
+
+DROP TABLE IF EXISTS userTeam;
+DROP TABLE IF EXISTS teamEvent;
+DROP TABLE IF EXISTS userEvent;
+DROP TABLE IF EXISTS teamCause;
+DROP TABLE IF EXISTS userCause;
+DROP TABLE IF EXISTS event;
+DROP TABLE IF EXISTS team;
+DROP TABLE IF EXISTS cause;
+DROP TABLE IF EXISTS profile;
+DROP TABLE IF EXISTS user;
 
 -- create tables for helpacrossabq
 
@@ -114,7 +123,12 @@ CREATE TABLE userTeam (
 	profileId INT UNSIGNED NOT NULL,
 	teamId INT UNSIGNED NOT NULL,
 	roleInTeam TINYINT UNSIGNED NOT NULL,
-	teamPermission TINYINT UNSIGNED NOT NULL
+	teamPermission TINYINT UNSIGNED NOT NULL,
+	INDEX(profileId),
+	INDEX(teamId),
+	PRIMARY KEY (profileId, teamId),
+	FOREIGN KEY (profileId) REFERENCES profile (profileId),
+	FOREIGN KEY (teamId) REFERENCES team (teamId)
 );
 
 -- Comment for test.
