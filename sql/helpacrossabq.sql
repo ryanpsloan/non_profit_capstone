@@ -70,7 +70,13 @@ CREATE TABLE userCause (
 	);
 
 CREATE TABLE  teamCause (
-
+		teamId INT UNSIGNED NOT NULL,
+		causeId INT UNSIGNED NOT NULL,
+		INDEX (teamId),
+		INDEX	(causeId),
+		PRIMARY KEY (teamId, causeId),
+		FOREIGN KEY (teamId) REFERENCES team(teamId),
+		FOREIGN KEY (causeId) REFERENCES cause(causeId)
 );
 
 CREATE TABLE userEvent (
