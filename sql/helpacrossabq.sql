@@ -74,7 +74,16 @@ CREATE TABLE  teamCause (
 );
 
 CREATE TABLE userEvent (
-
+	profileId INT UNSIGNED NOT NULL,
+	eventId	INT UNSIGNED NOT NULL,
+	userEventRole TINYINT NOT NULL,
+	postingPermissions TINYINT NOT NULL,
+	banStatus TINYINT NOT NULL,
+	INDEX (profileId),
+	INDEX (eventId),
+	PRIMARY KEY (eventId, profileId),
+	FOREIGN KEY (profileId) REFERENCES profile(profileId),
+	FOREIGN KEY (eventId) REFERENCES event (eventId)
 );
 
 CREATE TABLE teamEvent (
