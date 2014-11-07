@@ -77,3 +77,5 @@ CREATE TABLE userTeam (
 	roleInTeam TINYINT UNSIGNED NOT NULL,
 	teamPermission TINYINT UNSIGNED NOT NULL
 );
+
+-- Comment for test.
