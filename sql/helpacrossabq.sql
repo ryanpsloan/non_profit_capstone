@@ -54,8 +54,7 @@ CREATE TABLE event (
 );
 
 CREATE TABLE userCause (
-	profileId VARCHAR(250)
-
+	profileId INT UNSIGNED NOT NULL
 );
 
 CREATE TABLE  teamCause (
