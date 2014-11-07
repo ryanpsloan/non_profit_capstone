@@ -1,3 +1,8 @@
+DROP TABLE IF EXISTS  userTeam;
+
+
+-- create tables for helpacrossabq
+
 CREATE TABLE user(
 	userId INT UNSIGNED NOT NULL AUTO_INCREMENT,
 	userName VARCHAR(32) NOT NULL,
