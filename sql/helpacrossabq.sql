@@ -48,7 +48,12 @@ CREATE TABLE cause(
 );
 
 CREATE TABLE team (
-
+	teamId INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	teamName VARCHAR(64)	NOT NULL,
+	teamCause VARCHAR(64) NOT NULL,
+	INDEX (teamName),
+	INDEX (teamCause),
+	PRIMARY KEY (teamId)
 );
 
 CREATE TABLE event (
