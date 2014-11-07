@@ -28,10 +28,45 @@ CREATE TABLE profile(
 	zipCode VARCHAR(10) NOT NULL,
 	PRIMARY KEY(profileId),
 	FOREIGN KEY (userId) REFERENCES user(userId),
-	INDEX (zipCode),
-	INDEX (userId)
+	INDEX(zipCode),
+	INDEX(userId)
 );
 
 CREATE TABLE event(
 
+)
+
+CREATE TABLE  team (
+
+)
+
+CREATE TABLE event (
+
+)
+
+CREATE TABLE cause (
+
+)
+
+CREATE TABLE userCause (
+
+)
+
+CREATE TABLE  teamCause (
+
+)
+
+CREATE TABLE userEvent (
+
+)
+
+CREATE TABLE teamEvent (
+
+)
+
+CREATE TABLE userTeam (
+	profileId INT UNSIGNED NOT NULL,
+	teamId INT UNSIGNED NOT NULL,
+	roleInTeam ?? VARCHAR(25),
+	teamPermission ?? VARCHAR(25)
 )
