@@ -21,7 +21,7 @@ class Event {
 	 * @param string $eventDate the date of the event
 	 * @param string $eventLocation where it is taking place
 	 **/
-	public function __construct($eventId, $eventTitle, $eventDate, $eventLocation){
+	public function __construct($newEventId, $newEventTitle, $newEventDate, $newEventLocation){
 		try {
 			$this->setEventId($newEventId);
 			$this->setEventTitle($newEventTitle);
@@ -56,14 +56,32 @@ class Event {
 		$this->eventId = $newEventId;
 	}
 
-	public function setEventId($newEventTitle){
+	public function setEventTitle($newEventTitle){
 		$newEventTitle = trim($newEventTitle);
 		$newEventTitle = filter_var($newEventTitle, FILTER_SANITIZE_STRING);
 
 		$this->eventTitle = $newEventTitle;
 	}
 
+	/**
+	 * @param string $newEventDate eventDate
+	 * @throws UnexpectedValueException if date is not valid
+	 */
 	public function  setEventDate($newEventDate){
+		$newEventDate = trim($newEventDate);
+		if (($newEventDate = DateTime::createFromFormat("Y-m-d H:i:s", $newEventDate)) === false){
+			throw(new UnexpectedValueException("The date $newEventDate is not a valid date."));
+		}
+		$this->eventDate = $newEventDate;
+	}
 
+	/**
+	 * @param string $newEventLocation eventLocation
+	 */
+	public function setEventLocation($newEventLocation){
+		$newEventLocation = trim($newEventLocation);
+		$newEventLocation = filter_var($newEventLocation, FILTER_SANITIZE_STRING);
+
+		$this->eventLocation = $newEventLocation;
 	}
 }
