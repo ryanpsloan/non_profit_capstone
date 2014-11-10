@@ -147,8 +147,23 @@ class Event {
 		}
 	}
 
-	public function update($myslqi){
+	public function update($mysqli){
+		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli"){
+			throw (new mysqli_sql_exception("Input is not a mysqli object"));
+		}
 
+		if($this->eventId === null){
+			throw (new mysqli_sql_exception("Cannot update object that does not exist"));
+		}
+
+		$query		="UPDATE event SET eventId = ?, eventTitle = ?, eventDate = ?, eventLocation = ?";
+		$statement  =$mysqli->prepare->$query;
+		if($statement === false){
+			throw(new mysqli_sql_exception("Unable to prepare statment"));
+		}
+
+		$wasClean = $statement->bind_param("isss", $this->eventId, $this->eventTitle,
+																$this->eventDate, $this->eventLocation);
 	}
 
 }
