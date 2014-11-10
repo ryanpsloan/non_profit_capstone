@@ -16,7 +16,7 @@ class Event {
 	private $eventLocation;
 
 	/**
-	 * @param mixed $eventId product id (or null if new object)
+	 * @param mixed $eventId event id (or null if new object)
 	 * @param string $eventTitle event title
 	 * @param string $eventDate the date of the event
 	 * @param string $eventLocation where it is taking place
