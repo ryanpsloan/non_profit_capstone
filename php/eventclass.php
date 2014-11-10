@@ -147,4 +147,8 @@ class Event {
 		}
 	}
 
+	public function update($myslqi){
+
+	}
+
 }

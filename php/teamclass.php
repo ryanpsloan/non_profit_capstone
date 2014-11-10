@@ -5,7 +5,7 @@ class Team{
 	private $teamName;
 	/** Team description **/
 	private $teamCause;
-}
+
 
 	public function __construct($newTeamId, $newTeamName, $newTeamCause) {
 		try {
@@ -51,7 +51,7 @@ public function insert(&$mysqli) {
 	if($statement === false) {
 		throw(new mysqli_sql_exception("Unable to prepare statement"));
 	}
-	$wasClean = $statement->bind_param("ss", $this->teamName, $this->teamCause, ->team);
+	$wasClean = $statement->bind_param("ss", $this->teamName, $this->teamCause);
         if($wasClean === false) {
 			  throw(new mysqli_sql_exception("Unable to bind parameters"));
 		  }
@@ -104,11 +104,9 @@ if($statement->execute() === false) {
 	throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
 }
 }
-}
-
 /**
  * Created by PhpStorm.
  * User: Cass
  * Date: 11/7/2014
  * Time: 11:02 AM
- */ 
+ */
