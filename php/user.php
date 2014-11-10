@@ -626,23 +626,29 @@ class User {
 		//many users can have different permissions.
 		//if there's a result, we can show it
 		//if not error code 404
+
+		//userArrayCounter = 0
+	$userArray = array();
 	while(($row = $result->fetch_assoc()) !== null) {
 
-		//covert the associative array to a userId
+		//covert the associative array to a userId and repeat for all permissions
 		try {
 			$user = new user($row["userId"], $row["userName"], $row["email"], $row["passwordHash"], $row["salt"],
 				$row["authToken"], $row["permissions"]);
+			//build empty array for sql to fill
+			$userArray [] = $user;
+
 		} catch(Exception $exception) {
 			//rethrow
 			throw(new mysqli_sql_exception ("unable to convert row to user", 0, $exception));
 		}
 	}
 			//if we get a userId I'm lucky and show it
-		If ($result->num_rows ===0) {
+		if ($result->num_rows ===0) {
 				return (null);
 		} else {
 
-			return ($user);
+			return ($userArray);
 		}
 	}
 }
