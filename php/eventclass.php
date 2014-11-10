@@ -84,4 +84,67 @@ class Event {
 
 		$this->eventLocation = $newEventLocation;
 	}
+
+	/**
+	 * @param resource $mysqli pointer to mySQL connection by reference
+	 * @throws mysqli_sql_exception when mySQL related error occurs
+	 */
+
+	public function insert(&$mysqli)
+	{
+		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
+			throw(new mysqli_sql_exception("Input is not a mysqli object"));
+		}
+
+		if($this->eventId !== null) {
+			throw(new mysqli_sql_exception("Not a new event"));
+		}
+
+		$query = "INSERT INTO event(eventTitle, eventDate, eventLocation) VALUES(?,?,?)";
+		$statement = $mysqli->prepare($query);
+		if($statement === false) {
+			throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
+		}
+
+		$wasClean = $statement->bind_param("sss", $this->eventTitle, $this->eventDate, $this->eventLocation);
+		if($wasClean === false) {
+			throw(new mysqli_sql_exception("Unable to bind parameters"));
+		}
+
+		if($statement->execute() === false) {
+			throw (new mysqli_sql_exception("Unable to execute mySQL insert statement"));
+
+			$this->eventId = $mysqli->insert_id;
+		}
+
+	}
+	/**
+	 *@param resource $mysqli pointer to mySQL connection by reference
+	 * @throws mysqli_sql_exception when mySQL related error occur
+	 */
+	public function delete($mysqli){
+		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
+			throw (new mysqli_sql_exception("Input is not a mysqli object"));
+		}
+
+		if($this->eventId === null) {
+			throw(new mysqli_sql_exception("Unable to delete an event that does not exist"));
+		}
+
+		$query		="DELETE FROM event WHERE eventId = ?";
+		$statement  =$mysqli->prepare($query);
+		if($statement === false){
+			throw (new mysqli_sql_exception("Unable to prepare statement"));
+		}
+
+		$wasClean = $statement->bind_param("i", $this->eventId);
+		if($wasClean === false){
+			throw (new mysqli_sql_exception("Unable to bind parameters"));
+		}
+
+		if($statement->execute() === false) {
+			throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
+		}
+	}
+
 }
