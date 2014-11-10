@@ -1,25 +1,27 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: dameo_000
- * Date: 7/11/2014
- * Time: 08:50
+ * Class to create events.
+ * This class will manage the creation of events in which the event can join, this is a m to n relationship through the
+ * eventEvent intersection table.
+ *
+ * Created by Dameon Smith
  */
 
 class Event {
+	// This is the id for the event and is the primary key.
 	private $eventId;
-
+	// This is the event title showing what the event is called
 	private $eventTitle;
-
+	// This is the event date that will display the date and time that the event is happening
 	private $eventDate;
-
+	// THis is the event location and will record where the event is happening
 	private $eventLocation;
 
 	/**
-	 * @param mixed $eventId event id (or null if new object)
-	 * @param string $eventTitle event title
-	 * @param string $eventDate the date of the event
-	 * @param string $eventLocation where it is taking place
+	 * @param mixed $newEventId event id (or null if new object)
+	 * @param string $newEventTitle event title
+	 * @param string $newEventDate the date of the event
+	 * @param string $newEventLocation where it is taking place
 	 **/
 	public function __construct($newEventId, $newEventTitle, $newEventDate, $newEventLocation){
 		try {
@@ -86,7 +88,7 @@ class Event {
 	}
 
 	/**
-	 * @param resource $mysqli pointer to mySQL connection by reference
+	 * @param reeventTitle $mysqli pointer to mySQL connection by reference
 	 * @throws mysqli_sql_exception when mySQL related error occurs
 	 */
 
@@ -119,7 +121,7 @@ class Event {
 
 	}
 	/**
-	 *@param resource $mysqli pointer to mySQL connection by reference
+	 *@param reeventTitle $mysqli pointer to mySQL connection by reference
 	 * @throws mysqli_sql_exception when mySQL related error occur
 	 */
 	public function delete($mysqli){
@@ -159,11 +161,164 @@ class Event {
 		$query		="UPDATE event SET eventId = ?, eventTitle = ?, eventDate = ?, eventLocation = ?";
 		$statement  =$mysqli->prepare->$query;
 		if($statement === false){
-			throw(new mysqli_sql_exception("Unable to prepare statment"));
+			throw(new mysqli_sql_exception("Unable to prepare statement"));
 		}
 
 		$wasClean = $statement->bind_param("isss", $this->eventId, $this->eventTitle,
 																$this->eventDate, $this->eventLocation);
+
+		if($wasClean === false){
+			throw(new mysqli_sql_exception("Unable to bind parameters"));
+		}
+
+		if($statement->execute === false){
+			throw(new mysqli_sql_exception("Unable to execute mySQL statement."));
+		}
+	}
+
+	public static function getEventByEventId(&$mysqli, $eventId)
+	{
+		//handle degenerate cases
+		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
+			throw(new mysqli_sql_exception("input is not a mysqli object"));
+		}
+		// sanitize the EventDate before searching
+		$eventId = trim($eventId);
+		$eventId = filter_var($eventId, FILTER_VALIDATE_INT);
+		// create query template
+		$query = "SELECT eventId, eventTitle, eventDate, eventLocation FROM event WHERE evetntId = ?";
+		$statement = $mysqli->prepare($query);
+		if($statement === false) {
+			throw(new mysqli_sql_exception("Unable to prepare statement"));
+		}
+		//bind the email to the place holder in the template
+		$wasClean = $statement->bind_param("i", $eventId);
+		if($wasClean === false) {
+			throw(new mysqli_sql_exception("Unable to bind parameters"));
+		}
+		//execute the statement
+		if($statement->execute() === false) {
+			throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
+		}
+		//get result from the SELECT query
+		$result = $statement->get_result();
+		if($result === false) {
+			throw(new mysqli_sql_exception("Unable to get result set."));
+		}
+
+		$row = $result->fetch_assoc();
+
+// convert the associative array to a User
+		if($row !== null) {
+			try {
+				$event = new Event($row["eventId"], $row["eventTitle"],
+					$row["eventDate"], $row["eventLocation"]);
+			}
+			catch(Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new mysqli_sql_exception("Unable to convert row to User", 0, $exception));
+			}
+
+			// if we got here, the User is good - return it
+			return($event);
+		} else {
+			// 404 User not found - return null instead
+			return(null);
+		}
+	}
+
+	public static function getEventByEventTitle(&$mysqli, $eventTitle)
+	{
+
+		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
+			throw(new mysqli_sql_exception("input is not a mysqli object"));
+		}
+
+		$eventTitle = trim($eventTitle);
+		$eventTitle = filter_var($eventTitle, FILTER_SANITIZE_STRING);
+
+		$query = "SELECT eventId, eventTitle, eventDate, eventLocation FROM event WHERE eventTitle = ?";
+		$statement = $mysqli->prepare($query);
+		if($statement === false) {
+			throw(new mysqli_sql_exception("Unable to prepare statement"));
+		}
+
+		$wasClean = $statement->bind_param("s", $eventTitle);
+		if($wasClean === false) {
+			throw(new mysqli_sql_exception("Unable to bind parameters"));
+		}
+
+		if($statement->execute() === false) {
+			throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
+		}
+
+		$result = $statement->get_result();
+		if($result === false) {
+			throw(new mysqli_sql_exception("Unable to get result set."));
+		}
+		while(($row = $result->fetch_assoc()) !== null) {
+
+			try {
+				$event = new Event($row["eventId"], $row["eventTitle"], $row["eventDate"],
+					$row["eventLocation"]);
+			} catch(Exception $exception) {
+
+				throw(new mysqli_sql_exception("Unable to convert row to event", 0, $exception));
+			}
+		}
+
+		if($result->num_rows === 0) {
+			return(null);
+		} else {
+			return($event);
+		}
+	}
+
+	public static function getEventBy(&$mysqli, $eventDate)
+	{
+
+		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
+			throw(new mysqli_sql_exception("input is not a mysqli object"));
+		}
+
+		$eventDate = trim($eventDate);
+		$eventDate = filter_var($eventDate, FILTER_SANITIZE_STRING);
+
+		$query = "SELECT eventId, eventTitle, eventDate, eventLocation FROM event WHERE eventDate = ?";
+		$statement = $mysqli->prepare($query);
+		if($statement === false) {
+			throw(new mysqli_sql_exception("Unable to prepare statement"));
+		}
+
+		$wasClean = $statement->bind_param("s", $eventDate);
+		if($wasClean === false) {
+			throw(new mysqli_sql_exception("Unable to bind parameters"));
+		}
+
+		if($statement->execute() === false) {
+			throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
+		}
+
+		$result = $statement->get_result();
+		if($result === false) {
+			throw(new mysqli_sql_exception("Unable to get result set."));
+		}
+		while(($row = $result->fetch_assoc()) !== null) {
+
+			try {
+				$event = new Event($row["eventId"], $row["profileId"], $row["date"], $row["eventDate"], $row["eventTitle"],
+					$row["eventBody"]);
+			} catch(Exception $exception) {
+
+				throw(new mysqli_sql_exception("Unable to convert row to event", 0, $exception));
+			}
+		}
+
+		if($result->num_rows === 0) {
+			return(null);
+		} else {
+			return($event);
+		}
 	}
 
 }
