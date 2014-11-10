@@ -256,11 +256,15 @@ class Event {
 		if($result === false) {
 			throw(new mysqli_sql_exception("Unable to get result set."));
 		}
+
+		$eventTitleSearch = array();
+
 		while(($row = $result->fetch_assoc()) !== null) {
 
 			try {
 				$event = new Event($row["eventId"], $row["eventTitle"], $row["eventDate"],
 					$row["eventLocation"]);
+				$eventTitleSearch [] = $event;
 			} catch(Exception $exception) {
 
 				throw(new mysqli_sql_exception("Unable to convert row to event", 0, $exception));
@@ -270,11 +274,11 @@ class Event {
 		if($result->num_rows === 0) {
 			return(null);
 		} else {
-			return($event);
+			return($eventTitleSearch);
 		}
 	}
 
-	public static function getEventBy(&$mysqli, $eventDate)
+	public static function getEventByDate(&$mysqli, $eventDate)
 	{
 
 		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
@@ -303,11 +307,15 @@ class Event {
 		if($result === false) {
 			throw(new mysqli_sql_exception("Unable to get result set."));
 		}
+
+		$eventDateSearch = array();
+
 		while(($row = $result->fetch_assoc()) !== null) {
 
 			try {
 				$event = new Event($row["eventId"], $row["profileId"], $row["date"], $row["eventDate"], $row["eventTitle"],
 					$row["eventBody"]);
+				$eventDateSearch [] = $event;
 			} catch(Exception $exception) {
 
 				throw(new mysqli_sql_exception("Unable to convert row to event", 0, $exception));
@@ -317,8 +325,61 @@ class Event {
 		if($result->num_rows === 0) {
 			return(null);
 		} else {
-			return($event);
+			return($eventDateSearch);
 		}
 	}
+
+	public static function getEventByLocation(&$mysqli, $eventLocation)
+	{
+
+		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
+			throw(new mysqli_sql_exception("input is not a mysqli object"));
+		}
+
+		$eventLocation = trim($eventLocation);
+		$eventLocation = filter_var($eventLocation, FILTER_SANITIZE_STRING);
+
+		$query = "SELECT eventId, eventTitle, eventDate, eventLocation FROM event WHERE eventLocation = ?";
+		$statement = $mysqli->prepare($query);
+		if($statement === false) {
+			throw(new mysqli_sql_exception("Unable to prepare statement"));
+		}
+
+		$wasClean = $statement->bind_param("s", $eventLocation);
+		if($wasClean === false) {
+			throw(new mysqli_sql_exception("Unable to bind parameters"));
+		}
+
+		if($statement->execute() === false) {
+			throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
+		}
+
+		$result = $statement->get_result();
+		if($result === false) {
+			throw(new mysqli_sql_exception("Unable to get result set."));
+		}
+
+		$eventLocationSearch = array();
+
+		while(($row = $result->fetch_assoc()) !== null) {
+
+			try {
+				$event = new Event($row["eventId"], $row["profileId"], $row["date"], $row["eventDate"], $row["eventTitle"],
+					$row["eventBody"]);
+				$eventLocationSearch [] = $event;
+			} catch(Exception $exception) {
+
+				throw(new mysqli_sql_exception("Unable to convert row to event", 0, $exception));
+			}
+		}
+
+		if($result->num_rows === 0) {
+			return(null);
+		} else {
+			return($eventLocationSearch);
+		}
+	}
+
+
 
 }
