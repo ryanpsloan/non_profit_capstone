@@ -1,13 +1,14 @@
 <?php
 /**
- * Created by PhpStorm.
+ ** mySQL Enabled User
+ *
+ * This is a mySQL enabled container for User authentication at a nonprofit site.
+ *
+ *
  * User: Martin
- * Date: 11/7/2014
- * Time: 8:55 AM
  */
 //setup User Class and respective fields
-class User
-{
+class User {
 
 	 //userId for the User; this is the primary key
 	private $userId;
@@ -18,10 +19,13 @@ class User
 	//email for the User; this is a unique field
 	private $email;
 
+	//Hash of the password
 	private $passwordHash;
 
+	//salt used for hash
 	private $salt;
 
+	//authentication token used in new passwords
 	private $authToken;
 
 	//permissions for the user; this is a index field
@@ -510,6 +514,14 @@ class User
 			return (null);
 		}
 	}
+	/**
+	 * gets the User by userId
+	 *
+	 * @param resource $mysqli pointer to mySQL connection, by reference
+	 * @param int $userId userId to search for
+	 * @return mixed User found or null if not found
+	 * @throws mysqli_sql_exception when mySQL related errors occur
+	 **/
 
 	public static function getUserByUserId(&$mysqli, $userId)
 	{
@@ -517,7 +529,7 @@ class User
 		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
 			throw(new mysqli_sql_exception("input is not a mysqli object"));
 		}
-		//sanitize the postingId before searching
+		//sanitize the userId before searching
 		$userId = filter_var($userId, FILTER_VALIDATE_INT);
 		if($userId === null) {
 			throw(new mysqli_sql_exception("input is null"));
@@ -530,7 +542,7 @@ class User
 			throw(new mysqli_sql_exception ("unable to prepare statement"));
 		}
 
-		//bind the posting Id to the place holder in the template
+		//bind the user Id to the place holder in the template
 		$wasClean = $statement->bind_param("i", $userId);
 		if($wasClean === false) {
 			throw(new mysqli_sql_exception("unable to bind parameters"));
@@ -549,21 +561,88 @@ class User
 		//if not error code 404
 		$row = $result->fetch_assoc();
 
-		//covert the associative array to a postingId
+		//covert the associative array to a userId
 		if($row !== null) {
 			try {
-				$userId = new user($row["userId"], $row["userName"], $row["email"], $row["passwordHash"], $row["salt"],
+				$user = new user($row["userId"], $row["userName"], $row["email"], $row["passwordHash"], $row["salt"],
 					$row["authToken"], $row["permissions"]);
 			} catch(Exception $exception) {
 				//rethrow
 				throw(new mysqli_sql_exception ("unable to convert row to user", 0, $exception));
 
 			}
-			//if we get a postingId I'm lucky and show it
-			return ($userId);
+			//if we get a userId I'm lucky and show it
+			return ($user);
 		} else {
 			//404 User not found
 			return (null);
+		}
+	}
+
+	/**
+	 * gets the User by permissions
+	 *
+	 * @param resource $mysqli pointer to mySQL connection, by reference
+	 * @param int $permission permissions to search for
+	 * @return mixed User found or null if not found
+	 * @throws mysqli_sql_exception when mySQL related errors occur
+	 **/
+	public static function getUserByPermissions(&$mysqli, $permissions)
+	{
+		//handle degenerate cases
+		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
+			throw(new mysqli_sql_exception("input is not a mysqli object"));
+		}
+		//sanitize the UserId before searching
+		$permissions = trim($permissions);
+		$permissions = filter_var($permissions, FILTER_VALIDATE_INT);
+		$permissions = intval($permissions);
+		if($permissions === null) {
+			throw(new mysqli_sql_exception("input is null"));
+		}
+
+		//Create query template
+		$query = "SELECT userId, userName, email, passwordHash, salt, authToken, permissions FROM user WHERE permissions = ?";
+		$statement = $mysqli->prepare($query);
+		if($statement === false) {
+			throw(new mysqli_sql_exception ("unable to prepare statement"));
+		}
+
+		//bind the user Id to the place holder in the template
+		$wasClean = $statement->bind_param("i", $permissions);
+		if($wasClean === false) {
+			throw(new mysqli_sql_exception("unable to bind parameters"));
+		}
+		//execute the statement
+		if($statement->execute() === false) {
+			throw(new mysqli_sql_exception("unable to execute mySQL statement"));
+		}
+		// get result from the SELECT query
+		$result = $statement->get_result();
+		if($result === false) {
+			throw(new mysqli_sql_exception("unable to get result set"));
+		}
+
+		//many users can have different permissions.
+		//if there's a result, we can show it
+		//if not error code 404
+	while(($row = $result->fetch_assoc()) !== null) {
+
+		//covert the associative array to a userId
+		try {
+			$user = new user($row["userId"], $row["userName"], $row["email"], $row["passwordHash"], $row["salt"],
+				$row["authToken"], $row["permissions"]);
+		} catch(Exception $exception) {
+			//rethrow
+			throw(new mysqli_sql_exception ("unable to convert row to user", 0, $exception));
+		}
+	}
+			//if we get a userId I'm lucky and show it
+		If ($result->num_rows ===0) {
+				return (null);
+		} else {
+
+			return ($user);
 		}
 	}
 }
