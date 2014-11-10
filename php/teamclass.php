@@ -6,6 +6,7 @@ class Team{
 	/** Team description **/
 	private $teamCause;
 }
+
 	public function __construct($newTeamId, $newTeamName, $newTeamCause) {
 		try {
 			$this->setTeamId($newTeamId);
@@ -36,7 +37,74 @@ class Team{
 		}
 		$this->yeamd = $newTeamId;
 	}
+public function insert(&$mysqli) {
 
+	if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
+		throw(new mysqli_sql_exception("input is not a mysqli object"));
+	}
+
+	if($this->teamId !== null) {
+		throw(new mysqli_sql_exception("not a new team member"));
+	}
+	$query     = "INSERT INTO team(teamName, teamCause) VALUES(?, ?)";
+	$statement = $mysqli->prepare($query);
+	if($statement === false) {
+		throw(new mysqli_sql_exception("Unable to prepare statement"));
+	}
+	$wasClean = $statement->bind_param("ss", $this->teamName, $this->teamCause, ->team);
+        if($wasClean === false) {
+			  throw(new mysqli_sql_exception("Unable to bind parameters"));
+		  }
+
+        if($statement->execute() === false) {
+			  throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
+		  }
+
+        $this->teamId = $mysqli->insert_id;
+    }
+public function delete(&$mysqli) {
+
+	if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
+		throw(new mysqli_sql_exception("input is not a mysqli object"));
+	}
+
+	if($this->teamId === null) {
+		throw(new mysqli_sql_exception("Unable to delete a user that does not exist"));
+	}
+
+	$query     = "DELETE FROM team WHERE teamId = ?";
+	$statement = $mysqli->prepare($query);
+	if($statement === false) {
+		throw(new mysqli_sql_exception("Unable to prepare statement"));
+	}
+
+	$wasClean = $statement->bind_param("i", $this->teamId);
+	if($wasClean === false) {
+		throw(new mysqli_sql_exception("Unable to bind parameters"));
+	}
+
+		if($statement->execute() === false) {
+		throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
+	}
+}
+//* query//
+$query     = "UPDATE team SET teamName = ?, teamCause = ?, price = ? WHERE teamId = ?";
+$statement = $mysqli->prepare($query);
+if($statement === false) {
+	throw(new mysqli_sql_exception("Unable to prepare statement"));
+}
+
+
+$wasClean = $statement->bind_param("ssi",  $this->teamName, $this->teamCause, $this->teamId);
+if($wasClean === false) {
+	throw(new mysqli_sql_exception("Unable to bind parameters"));
+}
+
+if($statement->execute() === false) {
+	throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
+}
+}
+}
 
 /**
  * Created by PhpStorm.
