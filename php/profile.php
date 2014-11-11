@@ -653,7 +653,212 @@
 			  throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
 		  }
 	  }
+	  /**
+		* gets the Profile by profileId
+		*
+		* @param resource $mysqli pointer to mySQL connection, by reference
+		* @param int $profileId profileId to search for
+		* @return mixed Profile found or null if not found
+		* @throws mysqli_sql_exception when mySQL related errors occur
+		**/
 
+	  public static function getUserByProfileId(&$mysqli, $profileId)
+	  {
+		  //handle degenerate cases
+		  if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
+			  throw(new mysqli_sql_exception("input is not a mysqli object"));
+		  }
+		  //sanitize the profileId before searching
+		  $profileId = filter_var($profileId, FILTER_VALIDATE_INT);
+		  if($profileId === null) {
+			  throw(new mysqli_sql_exception("input is null"));
+		  }
+
+		  //Create query template
+		  $query = "SELECT profileId, userId, userTitle, firstName, midInit, lastName, bio, attention, street1, street2,
+			  					 city, state, zipCode FROM profile WHERE profileId = ?";
+		  $statement = $mysqli->prepare($query);
+		  if($statement === false) {
+			  throw(new mysqli_sql_exception ("unable to prepare statement"));
+		  }
+
+		  //bind the profile Id to the place holder in the template
+		  $wasClean = $statement->bind_param("i", $profileId);
+		  if($wasClean === false) {
+			  throw(new mysqli_sql_exception("unable to bind parameters"));
+		  }
+		  //execute the statement
+		  if($statement->execute() === false) {
+			  throw(new mysqli_sql_exception("unable to execute mySQL statement"));
+		  }
+		  // get result from the SELECT query
+		  $result = $statement->get_result();
+		  if($result === false) {
+			  throw(new mysqli_sql_exception("unable to get result set"));
+		  }
+		  //primary key can only one of two things null or integer
+		  //if there's a result, we can show it
+		  //if not error code 404
+		  $row = $result->fetch_assoc();
+
+		  //covert the associative array to a userId
+		  if($row !== null) {
+			  try {
+				  $profile = new profile($row["profileId"], $row["userId"], $row["userTitle"], $row["firstName"], $row["midInit"],
+					  							 $row["lastName"], $row["bio"], $row["attention"], $row["street1"], $row["street2"],
+					  							 $row["city"], $row["state"], $row["zipCode"]);
+			  } catch(Exception $exception) {
+				  //rethrow
+				  throw(new mysqli_sql_exception ("unable to convert row to user", 0, $exception));
+
+			  }
+			  //if we get a profileId I'm lucky and show it
+			  return ($profile);
+		  } else {
+			  //404 User not found
+			  return (null);
+		  }
+	  }
+
+  /** gets the Profile by userId
+  *
+  * @param resource $mysqli pointer to mySQL connection, by reference
+  * @param int $userId userId to search for
+  * @return int userID found
+  * @throws mysqli_sql_exception when mySQL related errors occur
+  **/
+
+	  public static function getUserByUserId(&$mysqli, $userId)
+	  {
+		  //handle degenerate cases
+		  if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
+			  throw(new mysqli_sql_exception("input is not a mysqli object"));
+		  }
+		  //sanitize the userId before searching
+		  $userId = trim($userId);
+		  $userId = filter_var($userId, FILTER_VALIDATE_INT);
+		  $userId = intval($userId);
+
+		  //Create query template
+		  $query = "SELECT profileId, userId, userTitle, firstName, midInit, lastName, bio, attention, street1, street2,
+			  					 city, state, zipCode FROM profile WHERE userId = ?";
+		  $statement = $mysqli->prepare($query);
+		  if($statement === false) {
+			  throw(new mysqli_sql_exception ("unable to prepare statement"));
+		  }
+
+		  //bind the user Id to the place holder in the template
+		  $wasClean = $statement->bind_param("i", $userId);
+		  if($wasClean === false) {
+			  throw(new mysqli_sql_exception("unable to bind parameters"));
+		  }
+		  //execute the statement
+		  if($statement->execute() === false) {
+			  throw(new mysqli_sql_exception("unable to execute mySQL statement"));
+		  }
+		  // get result from the SELECT query
+		  $result = $statement->get_result();
+		  if($result === false) {
+			  throw(new mysqli_sql_exception("unable to get result set"));
+		  }
+		  //primary key can only one of two things null or integer
+		  //if there's a result, we can show it
+		  //if not error code 404
+		  $row = $result->fetch_assoc();
+
+		  //covert the associative array to a profileId
+		  if($row !== null) {
+			  try {
+				  $profile = new profile($row["profileId"], $row["userId"], $row["userTitle"], $row["firstName"], $row["midInit"],
+					  $row["lastName"], $row["bio"], $row["attention"], $row["street1"], $row["street2"],
+					  $row["city"], $row["state"], $row["zipCode"]);
+			  } catch(Exception $exception) {
+				  //rethrow
+				  throw(new mysqli_sql_exception ("unable to convert row to user", 0, $exception));
+
+			  }
+			  //if we get a profileId I'm lucky and show it
+			  return ($profile);
+		  } else {
+			  //404 User not found
+			  return (null);
+		  }
+	  }
+
+	  /**
+		* gets the User by zipCode
+		*
+		* @param resource $mysqli pointer to mySQL connection, by reference
+		* @param int $zipCode  zipCode to search for
+		* @return int User found or null if not found
+		* @throws mysqli_sql_exception when mySQL related errors occur
+		**/
+	  public static function getUserByPermissions(&$mysqli, $zipCode) {
+
+		  //handle degenerate cases
+		  if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
+			  throw(new mysqli_sql_exception("input is not a mysqli object"));
+		  }
+		  //sanitize the zipCode before searching
+		  $zipCode = trim($zipCode);
+		  $zipCode = filter_var($zipCode, FILTER_VALIDATE_INT);
+		  $zipCode = intval($zipCode);
+		  if($zipCode === null) {
+			  throw(new mysqli_sql_exception("input is null"));
+		  }
+
+		  //Create query template
+		  $query = "SELECT profileId, userId, userTitle, firstName, midInit, lastName, bio, attention, street1, street2,
+			  					 city, state, zipCode FROM profile WHERE zipCode = ?";
+		  $statement = $mysqli->prepare($query);
+		  if($statement === false) {
+			  throw(new mysqli_sql_exception ("unable to prepare statement"));
+		  }
+
+		  //bind the profile Id to the place holder in the template
+		  $wasClean = $statement->bind_param("i", $zipCode);
+		  if($wasClean === false) {
+			  throw(new mysqli_sql_exception("unable to bind parameters"));
+		  }
+		  //execute the statement
+		  if($statement->execute() === false) {
+			  throw(new mysqli_sql_exception("unable to execute mySQL statement"));
+		  }
+		  // get result from the SELECT query
+		  $result = $statement->get_result();
+		  if($result === false) {
+			  throw(new mysqli_sql_exception("unable to get result set"));
+		  }
+
+		  //many users can have different zipCodes
+		  //if there's a result, we can show it
+		  //if not error code 404
+
+		  //userArrayCounter = 0
+		  $profileArray = array();
+		  while(($row = $result->fetch_assoc()) !== null) {
+
+			  //covert the associative array to a userId and repeat for all zipCodes
+			  try {
+				  $profile = new profile($row["profileId"], $row["userId"], $row["userTitle"], $row["firstName"], $row["midInit"],
+					  $row["lastName"], $row["bio"], $row["attention"], $row["street1"], $row["street2"],
+					  $row["city"], $row["state"], $row["zipCode"]);
+				  //build empty array for sql to fill
+				  $profileArray [] = $profile;
+
+			  } catch(Exception $exception) {
+				  //rethrow
+				  throw(new mysqli_sql_exception ("unable to convert row to user", 0, $exception));
+			  }
+		  }
+		  //if we get a userId I'm lucky and show it
+		  if ($result->num_rows ===0) {
+			  return (null);
+		  } else {
+
+			  return ($profileArray);
+		  }
+	  }
 
 
 
