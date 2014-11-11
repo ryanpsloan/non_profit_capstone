@@ -8,7 +8,8 @@
  **/
 
 //setup Profile Class and respective fields
-  class Profile {
+  class Profile
+  {
 
 	  //profileId for the Profile; this is the primary key
 	  private $profileId;
@@ -49,58 +50,61 @@
 	  //zipcode for profile
 	  private $zipCode;
 
-	/** constructor for the Profile
-	 *
-	 * @param mixed $newProfileId for profileId(or null if new object)
-	 * @param int $newUserId  for UserId
-	 * @param string $newUserTitle for userTitle
-	 * @param string $newFirstName for firstName
-	 * @param string $newMidInit for middleInitial
-	 * @param string $newLastName for lastName
-	 * @param string $newBio for biography
-	 * @param string $newAttention for attention
-	 * @param string $newStreet1 for street1
-	 * @param string $newStreet2 for street2
-	 * @param string $newCity for city
-	 * @param string $newState for state
-	 * @param int $newZipCode for Zip Code
-	 * @throws UnexpectedValueException when a parameter is of the wrong type
-	 * @throws RangeException when a parameter is invalid
-	 **/
+	  /** constructor for the Profile
+		*
+		* @param mixed  $newProfileId for profileId(or null if new object)
+		* @param int    $newUserId    for UserId
+		* @param string $newUserTitle for userTitle
+		* @param string $newFirstName for firstName
+		* @param string $newMidInit   for middleInitial
+		* @param string $newLastName  for lastName
+		* @param string $newBio       for biography
+		* @param string $newAttention for attention
+		* @param string $newStreet1   for street1
+		* @param string $newStreet2   for street2
+		* @param string $newCity      for city
+		* @param string $newState     for state
+		* @param int    $newZipCode   for Zip Code
+		* @throws UnexpectedValueException when a parameter is of the wrong type
+		* @throws RangeException when a parameter is invalid
+		**/
 
-	public function __construct($newProfileId, $newUserId, $newUserTitle, $newFirstName, $newMidInit, $newLastName,
-										 $newBio, $newAttention, $newStreet1, $newStreet2, $newCity, $newState, $newZipCode){
-		try {
-			$this->setProfileId($newProfileId);
-			$this->setUserId($newUserId);
-			$this->setUserTitle($newUserTitle);
-			$this->setFirstName($newFirstName);
-			$this->setMidInit($newMidInit);
-			$this->setLastName($newLastName);
-			$this->setBio($newBio);
-			$this->setAttention($newAttention);
-			$this->setStreet1($newStreet1);
-			$this->setStreet2($newStreet2);
-			$this->setCity($newCity);
-			$this->setState($newState);
-			$this->setZipCode($newZipCode);
+	  public function __construct($newProfileId, $newUserId, $newUserTitle, $newFirstName, $newMidInit, $newLastName,
+											$newBio, $newAttention, $newStreet1, $newStreet2, $newCity, $newState, $newZipCode)
+	  {
+		  try {
+			  $this->setProfileId($newProfileId);
+			  $this->setUserId($newUserId);
+			  $this->setUserTitle($newUserTitle);
+			  $this->setFirstName($newFirstName);
+			  $this->setMidInit($newMidInit);
+			  $this->setLastName($newLastName);
+			  $this->setBio($newBio);
+			  $this->setAttention($newAttention);
+			  $this->setStreet1($newStreet1);
+			  $this->setStreet2($newStreet2);
+			  $this->setCity($newCity);
+			  $this->setState($newState);
+			  $this->setZipCode($newZipCode);
 
-			// catch exceptions and rethrow to caller
-		} catch(UnexpectedValueException $unexpectedValue) {
-			throw(new UnexpectedValueException ("Unable to construct User", 0, $unexpectedValue));
+			  // catch exceptions and rethrow to caller
+		  } catch(UnexpectedValueException $unexpectedValue) {
+			  throw(new UnexpectedValueException ("Unable to construct User", 0, $unexpectedValue));
 
-		} catch(RangeException $range) {
-			throw(new RangeException("Unable to construct User", 0, $range));
-		}
+		  } catch(RangeException $range) {
+			  throw(new RangeException("Unable to construct User", 0, $range));
+		  }
 
-	}
+	  }
+
 	  /**
 		* gets the value of profileId
 		*
 		* @return mixed profileId (or null if new object)
 		**/
-	  public function getProfileId() {
-		  return($this->profileId);
+	  public function getProfileId()
+	  {
+		  return ($this->profileId);
 	  }
 
 	  /**
@@ -110,7 +114,8 @@
 		* @throws UnexpectedValueException if not an integer or null
 		* @throws RangeException if user id isn't positive
 		**/
-	  public function setProfileId($newProfileId) {
+	  public function setProfileId($newProfileId)
+	  {
 		  //set allow the profile id to be null if a new object
 		  if($newProfileId === null) {
 			  $this->profileId = null;
@@ -129,17 +134,21 @@
 		  //remove Profile Id from quarantine
 		  $this->profileId = $newProfileId;
 	  }
+
 	  /** Gets the value of contact Id
 		*
 		* @return  int value for contact Id
 		* @throws UnexpectedValueException if not an integer or null
 		* @throws RangeException if user id isn't positive
 		**/
-	  public function getUserId () {
-		  return($this->UserId);
+	  public function getUserId()
+	  {
+		  return ($this->UserId);
 	  }
+
 	  //verify that user id is an integer
-	  public function setUserId ($newUserId) {
+	  public function setUserId($newUserId)
+	  {
 		  if(filter_var($newUserId, FILTER_VALIDATE_INT) === false) {
 			  throw(new UnexpectedValueException("User id $newUserId is not numeric"));
 		  }
@@ -151,13 +160,15 @@
 		  //remove Profile Id from quarantine
 		  $this->userId = $newUserId;
 	  }
+
 	  /** get characters for the user title
 		*
 		* @ return string value for userTitle
 		*
 		**/
-	  public function getUserTitle () {
-		  return($this->userTitle);
+	  public function getUserTitle()
+	  {
+		  return ($this->userTitle);
 	  }
 
 	  /**
@@ -169,7 +180,8 @@
 		**/
 
 	  //verify userTitle is a string
-	  public function setUserTitle($newUserTitle) {
+	  public function setUserTitle($newUserTitle)
+	  {
 		  $newUserTitle = trim($newUserTitle);
 		  if(filter_var($newUserTitle, FILTER_SANITIZE_STRING) === false) {
 			  throw(new UnexpectedValueException("User title $newUserTitle is not a string"));
@@ -188,8 +200,9 @@
 		* @ return string value for firstName
 		*
 		**/
-	  public function getFirstName () {
-		  return($this->firstName);
+	  public function getFirstName()
+	  {
+		  return ($this->firstName);
 	  }
 
 	  /**
@@ -201,7 +214,8 @@
 		**/
 
 	  //verify firstName is a string
-	  public function setFirstName($newFirstName) {
+	  public function setFirstName($newFirstName)
+	  {
 		  $newFirstName = trim($newFirstName);
 		  if(filter_var($newFirstName, FILTER_SANITIZE_STRING) === false) {
 			  throw(new UnexpectedValueException("First Name $newFirstName is not a string"));
@@ -220,8 +234,9 @@
 		* @ return string value for midInit
 		*
 		**/
-	  public function getMidInit () {
-		  return($this->midInit);
+	  public function getMidInit()
+	  {
+		  return ($this->midInit);
 	  }
 
 	  /**
@@ -233,7 +248,8 @@
 		**/
 
 	  //verify midInit is a string
-	  public function setMidInit($newMidInit) {
+	  public function setMidInit($newMidInit)
+	  {
 		  $newMidInit = trim($newMidInit);
 		  if(filter_var($newMidInit, FILTER_SANITIZE_STRING) === false) {
 			  throw(new UnexpectedValueException("Middle Initial $newMidInit is not a string"));
@@ -252,8 +268,9 @@
 		* @ return string value for lastName
 		*
 		**/
-	  public function getlastName () {
-		  return($this->lastName);
+	  public function getlastName()
+	  {
+		  return ($this->lastName);
 	  }
 
 	  /**
@@ -265,7 +282,8 @@
 		**/
 
 	  //verify lastName is a string
-	  public function setLastName($newLastName) {
+	  public function setLastName($newLastName)
+	  {
 		  $newLastName = trim($newLastName);
 		  if(filter_var($newLastName, FILTER_SANITIZE_STRING) === false) {
 			  throw(new UnexpectedValueException("Last Name $newLastName is not a string"));
@@ -284,8 +302,9 @@
 		* @ return string value for bio
 		*
 		**/
-	  public function getBio () {
-		  return($this->bio);
+	  public function getBio()
+	  {
+		  return ($this->bio);
 	  }
 
 	  /**
@@ -297,7 +316,8 @@
 		**/
 
 	  //verify bio is a string
-	  public function setBio($newBio) {
+	  public function setBio($newBio)
+	  {
 		  $newBio = trim($newBio);
 		  if(filter_var($newBio, FILTER_SANITIZE_STRING) === false) {
 			  throw(new UnexpectedValueException("Biography $newBio is not a string"));
@@ -316,8 +336,9 @@
 		* @ return string value for attention
 		*
 		**/
-	  public function getAttention () {
-		  return($this->attention);
+	  public function getAttention()
+	  {
+		  return ($this->attention);
 	  }
 
 	  /**
@@ -329,7 +350,8 @@
 		**/
 
 	  //verify attention is a string
-	  public function setAttention($newAttention) {
+	  public function setAttention($newAttention)
+	  {
 		  $newAttention = trim($newAttention);
 		  if(filter_var($newAttention, FILTER_SANITIZE_STRING) === false) {
 			  throw(new UnexpectedValueException("Attention $newAttention is not a string"));
@@ -348,8 +370,9 @@
 		* @ return string value for street1
 		*
 		**/
-	  public function getStreet1 () {
-		  return($this->Street1);
+	  public function getStreet1()
+	  {
+		  return ($this->Street1);
 	  }
 
 	  /**
@@ -361,7 +384,8 @@
 		**/
 
 	  //verify street1 is a string
-	  public function setStreet1($newStreet1) {
+	  public function setStreet1($newStreet1)
+	  {
 		  $newStreet1 = trim($newStreet1);
 		  if(filter_var($newStreet1, FILTER_SANITIZE_STRING) === false) {
 			  throw(new UnexpectedValueException("Street $newStreet1 is not a string"));
@@ -380,8 +404,9 @@
 		* @ return string value for street2
 		*
 		**/
-	  public function getStreet2 () {
-		  return($this->Street2);
+	  public function getStreet2()
+	  {
+		  return ($this->Street2);
 	  }
 
 	  /**
@@ -393,7 +418,8 @@
 		**/
 
 	  //verify street2 is a string
-	  public function setStreet2($newStreet2) {
+	  public function setStreet2($newStreet2)
+	  {
 		  $newStreet2 = trim($newStreet2);
 		  if(filter_var($newStreet2, FILTER_SANITIZE_STRING) === false) {
 			  throw(new UnexpectedValueException("Street $newStreet2 is not a string"));
@@ -412,8 +438,9 @@
 		* @ return string value for city
 		*
 		**/
-	  public function getCity () {
-		  return($this->city);
+	  public function getCity()
+	  {
+		  return ($this->city);
 	  }
 
 	  /**
@@ -425,7 +452,8 @@
 		**/
 
 	  //verify city is a string
-	  public function setCity($newCity) {
+	  public function setCity($newCity)
+	  {
 		  $newCity = trim($newCity);
 		  if(filter_var($newCity, FILTER_SANITIZE_STRING) === false) {
 			  throw(new UnexpectedValueException("City $newCity is not a string"));
@@ -444,8 +472,9 @@
 		* @ return string value for state
 		*
 		**/
-	  public function getState () {
-		  return($this->state);
+	  public function getState()
+	  {
+		  return ($this->state);
 	  }
 
 	  /**
@@ -457,7 +486,8 @@
 		**/
 
 	  //verify state is a string
-	  public function setState($newState) {
+	  public function setState($newState)
+	  {
 		  $newState = trim($newState);
 		  if(filter_var($newState, FILTER_SANITIZE_STRING) === false) {
 			  throw(new UnexpectedValueException("State $newState is not a string"));
@@ -476,8 +506,9 @@
 		*
 		* @return int value for zipCode
 		**/
-	  public function getZipCode() {
-		  return($this->zipCode);
+	  public function getZipCode()
+	  {
+		  return ($this->zipCode);
 	  }
 
 	  /**
@@ -487,7 +518,8 @@
 		* @throws UnexpectedValueException if not an integer
 		* @throws RangeException if zipCode isn't positive
 		**/
-	  public function setZipCode($newZipCode) {
+	  public function setZipCode($newZipCode)
+	  {
 
 		  //first, ensure the zip code is an integer
 		  $newZipCode = trim($newZipCode);
@@ -503,4 +535,129 @@
 		  //remove Zip Code from quarantine
 		  $this->zipCode = $newZipCode;
 	  }
+
+	  /**
+		* inserts this Profile to mySQL
+		*
+		* @param resource $mysqli pointer to mySQL connection, by reference
+		* @throws mysqli_sql_exception when mySQL related errors occur
+		**/
+	  public function insert(&$mysqli)
+	  {
+		  // handle degenerate cases
+		  if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
+			  throw(new mysqli_sql_exception("input is not a mysqli object"));
+		  }
+
+		  // enforce the profileId is null (i.e., don't insert a user that already exists)
+		  if($this->profileId !== null) {
+			  throw(new mysqli_sql_exception("not a new user"));
+		  }
+
+		  // create query template
+		  $query = "INSERT INTO profile(userId, userTitle, firstName, midInit, lastName, bio, attention, street1,
+														street2, city, state, zipCode) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		  $statement = $mysqli->prepare($query);
+		  if($statement === false) {
+			  throw(new mysqli_sql_exception("Unable to prepare statement"));
+		  }
+
+		  // bind the member variables to the place holders in the template
+		  $wasClean = $statement->bind_param("issssssssssi", $this->userId, $this->userTitle, $this->firstName, $this->midInit,
+			  																  $this->lastName, $this->bio, $this->attention, $this->street1,
+			  																  $this->street2, $this->city, $this->state, $this->zipCode);
+		  if($wasClean === false) {
+			  throw(new mysqli_sql_exception("Unable to bind parameters"));
+		  }
+
+		  // execute the statement
+		  if($statement->execute() === false) {
+			  throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
+		  }
+
+	  }
+
+	  /**
+		* deletes this Profile from mySQL
+		*
+		* @param resource $mysqli pointer to mySQL connection, by reference
+		* @throws mysqli_sql_exception when mySQL related errors occur
+		**/
+	  public function delete(&$mysqli) {
+		  // handle degenerate cases
+		  if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
+			  throw(new mysqli_sql_exception("input is not a mysqli object"));
+		  }
+
+		  // enforce the profileId is not null (i.e., don't delete a user that hasn't been inserted)
+		  if($this->profileId === null) {
+			  throw(new mysqli_sql_exception("Unable to delete a user that does not exist"));
+		  }
+
+		  // create query template
+		  $query     = "DELETE FROM profile WHERE profileId = ?";
+		  $statement = $mysqli->prepare($query);
+		  if($statement === false) {
+			  throw(new mysqli_sql_exception("Unable to prepare statement"));
+		  }
+
+		  // bind the member variables to the place holder in the template
+		  $wasClean = $statement->bind_param("i", $this->profileId);
+		  if($wasClean === false) {
+			  throw(new mysqli_sql_exception("Unable to bind parameters"));
+		  }
+
+		  // execute the statement
+		  if($statement->execute() === false) {
+			  throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
+		  }
+	  }
+
+	  /**
+		* updates this Profile in mySQL
+		*
+		* @param resource $mysqli pointer to mySQL connection, by reference
+		* @throws mysqli_sql_exception when mySQL related errors occur
+		**/
+	  public function update(&$mysqli) {
+		  // handle degenerate cases
+		  if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
+			  throw(new mysqli_sql_exception("input is not a mysqli object"));
+		  }
+
+		  // enforce the profileId is not null (i.e., don't update a user that hasn't been inserted)
+		  if($this->profileId === null) {
+			  throw(new mysqli_sql_exception("Unable to update a user that does not exist"));
+		  }
+
+		  // create query template
+		  $query     = "UPDATE profile SET userId = ?, userTitle = ?, firstName = ?, midInit = ?, lastName = ?, bio = ?,
+													  attention = ?, street1 =?, street2 =?, city = ?, state = ?, zipCode = ?
+ 							 WHERE profileId = ?";
+		  $statement = $mysqli->prepare($query);
+		  if($statement === false) {
+			  throw(new mysqli_sql_exception("Unable to prepare statement"));
+		  }
+
+		  // bind the member variables to the place holders in the template
+		  $wasClean = $statement->bind_param("issssssssssii", $this->userId, $this->userTitle, $this->firstName, $this->midInit,
+			  																  $this->lastName, $this->bio, $this->attention, $this->street1,
+			  																  $this->street2, $this->city, $this->state, $this->zipCode,
+			  																  $this->profileId);
+		  if($wasClean === false) {
+			  throw(new mysqli_sql_exception("Unable to bind parameters"));
+		  }
+
+		  // execute the statement
+		  if($statement->execute() === false) {
+			  throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
+		  }
+	  }
+
+
+
+
+
+
+
   }
