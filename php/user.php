@@ -1,6 +1,6 @@
 <?php
 /**
- ** mySQL Enabled User
+ * mySQL Enabled User
  *
  * This is a mySQL enabled container for User authentication at a nonprofit site.
  *
