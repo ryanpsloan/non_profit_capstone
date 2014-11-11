@@ -80,53 +80,49 @@ class eventTest extends UnitTestCase {
 		$this->event->insert($this->mysqli);
 		//fourth verify user was inserted
 		$this->assertNotNull($this->event->eventId);
-		$this->assertTrue($this->article->articleId > 0);
+		$this->assertTrue($this->event->eventId > 0);
 		//fifth delete the article
-		$this->article->delete($this->mysqli);
-		$this->article = null;
+		$this->event->delete($this->mysqli);
+		$this->event = null;
 		//finally try to get the user and assert we didn't get a thing
-		$hopefulArticle = Article::getArticleBySource($this->mysqli, $this->SOURCE);
-		$this->assertNull($hopefulArticle);
+		$hopefulEvent = Event::getEventByEventId($this->mysqli, $this->EVENTID);
+		$this->assertNull($hopefulEvent);
 	}
 	// test deleting an Article
-	public function testDeleteArticle(){
+	public function testDeleteEvent(){
 		//first verify connection to mySQL
 		$this->assertNotNull($this->mysqli);
 		//second create a user to post to mySQL
-		$this->article = new Article(null, $this->PROFILEID, $this->DATE, $this->SOURCE,
-			$this->ARTICLETITLE, $this->ARTICLEBODY);
+		$this->event = new Event(null, $this->EVENTTITLE, $this->EVENTDATE, $this->EVENTLOCATION);
 		// third, insert the user to mySQL
-		$this->article->insert($this->mysqli);
+		$this->event->insert($this->mysqli);
 		// fourth verify the Article was inserted
-		$this->assertNotNull($this->article->articleId);
-		$this->assertTrue ($this->article->articleId);
+		$this->assertNotNull($this->event->eventId);
+		$this->assertTrue ($this->event->eventId);
 		//fifth, delete the article
-		$this->article->delete($this->mysqli);
-		$this->article = null;
+		$this->event->delete($this->mysqli);
+		$this->event = null;
 		//finally, try to get the user and assert we didn't get a thing
-		$hopefulArticle = Article::getArticleBySource($this->mysqli, $this->SOURCE);
-		$this->assertNull($hopefulArticle);
+		$hopefulEvent = Event::getEventByEventId($this->mysqli, $this->EVENTID);
+		$this->assertNull($hopefulEvent);
 	}
 	// test grabbing a User from mySQL
-	public function testGetArticleBySource(){
+	public function testGetEventByEventId(){
 		// first verify mySQL connection
 		$this->assertNotNull($this->mysqli);
 		//second create a user to post to mySQL
-		$this->article = new Article(null, $this->PROFILEID, $this->DATE, $this->SOURCE,
-			$this->ARTICLETITLE, $this->ARTICLEBODY);
+		$this->event = new Event(null, $this->EVENTTITLE, $this->EVENTDATE, $this->EVENTLOCATION);
 		// third insert user to mySQL
-		$this->article->insert($this->mysqli);
+		$this->event->insert($this->mysqli);
 		//fourth, get the user using the static method
-		$staticArticle = Article::getArticleBySource($this->mysqli, $this->SOURCE);
+		$staticEvent = Event::getEventbyEventId($this->mysqli, $this->SOURCE);
 		// finally compare the fields
-		$dateString = $staticArticle->date->format("Y-m-d H:i:s");
-		$this->assertNotNull($staticArticle->articleId);
-		$this->assertTrue($staticArticle->articleId > 0);
-		$this->assertIdentical($staticArticle->profileId,			$this->PROFILEID);
-		$this->assertIdentical($dateString,								$this->DATE);
-		$this->assertIdentical($staticArticle->source,				$this->SOURCE);
-		$this->assertIdentical($staticArticle->articleTitle,		$this->ARTICLETITLE);
-		$this->assertIdentical($staticArticle->articleBody,			$this->ARTICLEBODY);
+		$dateString = $staticEvent->eventDate->format("Y-m-d H:i:s");
+		$this->assertNotNull($staticArticle->eventId);
+		$this->assertTrue($staticArticle->eventId > 0);
+		$this->assertIdentical($staticArticle->profileId,			$this->EVENTTITLE);
+		$this->assertIdentical($dateString,								$this->EVENTDATE);
+		$this->assertIdentical($staticArticle->source,				$this->EVENTLOCATION);
 	}
 }
 ?>

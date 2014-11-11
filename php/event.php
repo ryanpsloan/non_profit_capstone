@@ -35,6 +35,19 @@ class Event {
 			throw(new RangeException("Unable to construct Event", 0, $range));
 		}
 	}
+
+	public function __get($name)
+	{
+		$data = array("eventId" => $this->eventId,
+						  "eventTitle" => $this->eventTitle,
+						  "eventDate" => $this->eventDate,
+						  "eventLocation" => $this->eventLocation);
+		if(array_key_exists($name, $data)) {
+			return $data[$name];
+		} else {
+			throw(new InvalidArgumentException("Unable to get $name"));
+		}
+	}
 	/**
 	 * @param mixed $newEventId event id (or null if new object)
 	 * @throws UnexpectedValueException if not an integer or null
