@@ -600,12 +600,12 @@ class User {
 	 * gets the User by permissions
 	 *
 	 * @param resource $mysqli pointer to mySQL connection, by reference
-	 * @param int $permission permissions to search for
-	 * @return mixed User found or null if not found
+	 * @param int $permissions permissions to search for
+	 * @return int User found or null if not found
 	 * @throws mysqli_sql_exception when mySQL related errors occur
 	 **/
-	public static function getUserByPermissions(&$mysqli, $permissions)
-	{
+	public static function getUserByPermissions(&$mysqli, $permissions) {
+
 		//handle degenerate cases
 		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
 			throw(new mysqli_sql_exception("input is not a mysqli object"));
