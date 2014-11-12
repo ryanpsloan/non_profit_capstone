@@ -45,8 +45,7 @@ class UserIdTest extends UnitTestCase
 	}
 
 	//Teardown (), a method to delete the test record and disconnect from mySQL
-	public function tearDown()
-	{
+	public function tearDown(){
 		// delete the user if we can
 		if($this->user !== null) {
 			$this->user->delete($this->mysqli);
@@ -124,6 +123,34 @@ class UserIdTest extends UnitTestCase
 		$hopefulUserId = User::getUserByUserId($this->mysqli, $this->email);
 		$this->assertNull($hopefulUserId);
 	}
+	// test grabbing a user id from mySQL
+	public function testGetUserByUserId() {
+
+		// first, verify mySQL connected OK
+		$this->assertNotNull($this->mysqli);
+
+		// second, create a contact Id to post to mySQL
+		$this->user = new User(null, $this->userName, $this->email, $this->passwordHash, $this->salt, $this->authToken, $this->permissions);
+
+		// third, insert the user to mySQL
+		$this->user->insert($this->mysqli);
+
+		// fourth, get the user using the static method
+		$staticUser = User::getUserByUserId($this->mysqli, $this->user->getUserId());
+
+		// finally, compare the fields
+		$this->assertNotNull($staticUser->getUserId ());
+		$this->assertTrue($staticUser->getUserId () > 0);
+		$this->assertIdentical($staticUser->getUserId(),	 				$this->user->getUserId());
+		$this->assertIdentical($staticUser->getUserName(),					$this->userName);
+		$this->assertIdentical($staticUser->getEmail(), 					$this->email);
+		$this->assertIdentical($staticUser->getPasswordHash(),			$this->passwordHash);
+		$this->assertIdentical($staticUser->getSalt(),						$this->salt);
+		$this->assertIdentical($staticUser->getAuthToken(), 				$this->authToken);
+		$this->assertIdentical($staticUser->getPermissions(), 			$this->permissions);
+
+	}
+
 
 
 
