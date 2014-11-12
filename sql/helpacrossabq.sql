@@ -1,11 +1,14 @@
 
 -- create drop tables to test database
-
+DROP TABLE IF EXISTS commentTeam;
+DROP TABLE IF EXISTS commentEvent;
+DROP TABLE IF EXISTS commentUser;
 DROP TABLE IF EXISTS userTeam;
 DROP TABLE IF EXISTS teamEvent;
 DROP TABLE IF EXISTS userEvent;
 DROP TABLE IF EXISTS teamCause;
 DROP TABLE IF EXISTS userCause;
+DROP TABLE IF EXISTS comment;
 DROP TABLE IF EXISTS event;
 DROP TABLE IF EXISTS team;
 DROP TABLE IF EXISTS cause;
@@ -74,7 +77,7 @@ CREATE TABLE event (
 );
 
 CREATE TABLE comment (
-	comentId INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	commentId INT UNSIGNED NOT NULL AUTO_INCREMENT,
 	commentText VARCHAR(2048) NOT NULL,
 	commentDate DATETIME NOT NULL,
 	INDEX (commentDate),
@@ -137,6 +140,10 @@ CREATE TABLE userTeam (
 	banStatus TINYINT UNSIGNED NOT NULL,
 	INDEX(profileId),
 	INDEX(teamId),
+	INDEX(roleInTeam),
+	INDEX(commentPermission),
+	INDEX(invitePermission),
+	INDEX(banStatus),
 	PRIMARY KEY (profileId, teamId),
 	FOREIGN KEY (profileId) REFERENCES profile (profileId),
 	FOREIGN KEY (teamId) REFERENCES team (teamId)
