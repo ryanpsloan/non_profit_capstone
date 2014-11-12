@@ -60,6 +60,7 @@ class User {
 			throw(new UnexpectedValueException ("Unable to construct User", 0, $unexpectedValue));
 
 		} catch(RangeException $range) {
+			$range->getMessage();
 			throw(new RangeException("Unable to construct User", 0, $range));
 		}
 
@@ -311,6 +312,7 @@ class User {
 
 		// execute the statement
 		if($statement->execute() === false) {
+			var_dump($statement);
 			throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
 		}
 

@@ -13,9 +13,9 @@ require_once("/etc/apache2/capstone-mysql/helpabq.php");
 //then require class under scrutiny
 require_once("../php/user.php");
 
-//the ContactIdTest for all our testsclass ContactIdTest extends UnitTestCase {
-class UserIdTest extends UnitTestCase
-{
+//the UserIdTest for all our testsclass UserIdTest extends UnitTestCase {
+class UserIdTest extends UnitTestCase{
+
 	//variable to hold the test database row
 	private $mysqli = null;
 	//variable to hold the test database row
@@ -54,13 +54,15 @@ class UserIdTest extends UnitTestCase
 	}
 
 		// test creating a new user Id and inserting it to mySQL
-		public function testInsertNewUserId() {
+	public function testInsertNewUserId() {
+
 		// first, verify mySQL connected OK
 		$this->assertNotNull($this->mysqli);
+
 		// second, create a user to post to mySQL
 		$this->user = new User(null, $this->userName, $this->email, $this->passwordHash, $this->salt, $this->authToken, $this->permissions);
 
-		// third, insert the posting Id to mySQL
+		// third, insert the user to mySQL
 		$this->user->insert($this->mysqli);
 
 		// finally, compare the fields
@@ -73,18 +75,18 @@ class UserIdTest extends UnitTestCase
 		$this->assertIdentical($this->user->getAuthToken(),						$this->authToken);
 		$this->assertIdentical($this->user->getPermissions() ,					$this->permissions);
 	}
-// test updating a User Id in mySQL
+// test updating a User in mySQL
 	public function testUpdateUserId() {
 		// verify mySQL connected OK
 		$this->assertNotNull($this->mysqli);
 
-		// create a user Id to post to mySQL
+		// create a user to post to mySQL
 		$this->user = new User(null, $this->userName, $this->email, $this->passwordHash, $this->salt, $this->authToken, $this->permissions);
 
-		// third, insert the user id to mySQL
+		// third, insert the user to mySQL
 		$this->user->insert($this->mysqli);
 
-		// fourth, update the user id and post the changes to mySQL
+		// fourth, update the user and post the changes to mySQL
 		$newEmail = "moluevan@yahoo.com";
 		$this->user->setEmail($newEmail);
 		$this->user->update($this->mysqli);
@@ -105,21 +107,21 @@ class UserIdTest extends UnitTestCase
 		// first, verify mySQL connected OK
 		$this->assertNotNull($this->mysqli);
 
-		// second, create a User Id to post to mySQL
+		// second, create a User to post to mySQL
 		$this->user = new User(null, $this->userName, $this->email, $this->passwordHash, $this->salt, $this->authToken, $this->permissions);
 
-		// third, insert the User Id to mySQL
+		// third, insert the User to mySQL
 		$this->user->insert($this->mysqli);
 
-		// fourth, verify the User Id was inserted
+		// fourth, verify the User was inserted
 		$this->assertNotNull($this->user->getUserId());
 		$this->assertTrue($this->user->getUserId() > 0);
 
-		// fifth, delete the user id
+		// fifth, delete the user
 		$this->user->delete($this->mysqli);
 		$this->user = null;
 
-		// finally, try to get the posting id and assert we didn't get a thing
+		// finally, try to get the user id and assert we didn't get a thing
 		$hopefulUserId = User::getUserByUserId($this->mysqli, $this->email);
 		$this->assertNull($hopefulUserId);
 	}
@@ -129,7 +131,7 @@ class UserIdTest extends UnitTestCase
 		// first, verify mySQL connected OK
 		$this->assertNotNull($this->mysqli);
 
-		// second, create a contact Id to post to mySQL
+		// second, create a user to post to mySQL
 		$this->user = new User(null, $this->userName, $this->email, $this->passwordHash, $this->salt, $this->authToken, $this->permissions);
 
 		// third, insert the user to mySQL
@@ -150,18 +152,6 @@ class UserIdTest extends UnitTestCase
 		$this->assertIdentical($staticUser->getPermissions(), 			$this->permissions);
 
 	}
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

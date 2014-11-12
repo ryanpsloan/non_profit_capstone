@@ -47,7 +47,7 @@
 	  //state for profile
 	  private $state;
 
-	  //zipcode for profile
+	  //zipCode for profile
 	  private $zipCode;
 
 	  /** constructor for the Profile
@@ -64,7 +64,7 @@
 		* @param string $newStreet2   for street2
 		* @param string $newCity      for city
 		* @param string $newState     for state
-		* @param int    $newZipCode   for Zip Code
+		* @param string $newZipCode   for Zip Code
 		* @throws UnexpectedValueException when a parameter is of the wrong type
 		* @throws RangeException when a parameter is invalid
 		**/
@@ -135,15 +135,15 @@
 		  $this->profileId = $newProfileId;
 	  }
 
-	  /** Gets the value of contact Id
+	  /** Gets the value of user Id
 		*
-		* @return  int value for contact Id
+		* @return  int value for user Id
 		* @throws UnexpectedValueException if not an integer or null
 		* @throws RangeException if user id isn't positive
 		**/
 	  public function getUserId()
 	  {
-		  return ($this->UserId);
+		  return ($this->userId);
 	  }
 
 	  //verify that user id is an integer
@@ -372,7 +372,7 @@
 		**/
 	  public function getStreet1()
 	  {
-		  return ($this->Street1);
+		  return ($this->street1);
 	  }
 
 	  /**
@@ -406,7 +406,7 @@
 		**/
 	  public function getStreet2()
 	  {
-		  return ($this->Street2);
+		  return ($this->street2);
 	  }
 
 	  /**
@@ -521,17 +521,14 @@
 	  public function setZipCode($newZipCode)
 	  {
 
-		  //first, ensure the zip code is an integer
+		  //first, ensure the zip code is a number
 		  $newZipCode = trim($newZipCode);
-		  if(filter_var($newZipCode, FILTER_VALIDATE_INT) === false) {
+		  $verifyRegExp = array("options" => array("regexp" => "/^[\d]{5}(-[\d]{4})?$/"));
+		  if(filter_var($newZipCode, FILTER_VALIDATE_REGEXP, $verifyRegExp) === false) {
 			  throw(new UnexpectedValueException("Zip Code $newZipCode is not numeric"));
 		  }
 
-		  // second, convert the zipCode to an integer and enforce it's positive
-		  $newZipCode = intval($newZipCode);
-		  if($newZipCode <= 0) {
-			  throw(new RangeException ("Zip Code $newZipCode is not positive"));
-		  }
+
 		  //remove Zip Code from quarantine
 		  $this->zipCode = $newZipCode;
 	  }
@@ -555,15 +552,15 @@
 		  }
 
 		  // create query template
-		  $query = "INSERT INTO profile(userId, userTitle, firstName, midInit, lastName, bio, attention, street1,
+		  $query			= "INSERT INTO profile(userId, userTitle, firstName, midInit, lastName, bio, attention, street1,
 														street2, city, state, zipCode) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-		  $statement = $mysqli->prepare($query);
+		  $statement	= $mysqli->prepare($query);
 		  if($statement === false) {
 			  throw(new mysqli_sql_exception("Unable to prepare statement"));
 		  }
 
 		  // bind the member variables to the place holders in the template
-		  $wasClean = $statement->bind_param("issssssssssi", $this->userId, $this->userTitle, $this->firstName, $this->midInit,
+		  $wasClean = $statement->bind_param("isssssssssss", $this->userId, $this->userTitle, $this->firstName, $this->midInit,
 			  																  $this->lastName, $this->bio, $this->attention, $this->street1,
 			  																  $this->street2, $this->city, $this->state, $this->zipCode);
 		  if($wasClean === false) {
@@ -574,6 +571,9 @@
 		  if($statement->execute() === false) {
 			  throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
 		  }
+
+		  // update the primary key
+		  $this->profileId = $mysqli->insert_id;
 
 	  }
 
@@ -640,7 +640,7 @@
 		  }
 
 		  // bind the member variables to the place holders in the template
-		  $wasClean = $statement->bind_param("issssssssssii", $this->userId, $this->userTitle, $this->firstName, $this->midInit,
+		  $wasClean = $statement->bind_param("isssssssssssi", $this->userId, $this->userTitle, $this->firstName, $this->midInit,
 			  																  $this->lastName, $this->bio, $this->attention, $this->street1,
 			  																  $this->street2, $this->city, $this->state, $this->zipCode,
 			  																  $this->profileId);
@@ -662,7 +662,7 @@
 		* @throws mysqli_sql_exception when mySQL related errors occur
 		**/
 
-	  public static function getUserByProfileId(&$mysqli, $profileId)
+	  public static function getProfileByProfileId(&$mysqli, $profileId)
 	  {
 		  //handle degenerate cases
 		  if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
@@ -728,7 +728,7 @@
   * @throws mysqli_sql_exception when mySQL related errors occur
   **/
 
-	  public static function getUserByUserId(&$mysqli, $userId)
+	  public static function getProfileByUserId(&$mysqli, $userId)
 	  {
 		  //handle degenerate cases
 		  if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
@@ -786,14 +786,14 @@
 	  }
 
 	  /**
-		* gets the User by zipCode
+		* gets the Profile by zipCode
 		*
 		* @param resource $mysqli pointer to mySQL connection, by reference
 		* @param int $zipCode  zipCode to search for
-		* @return int User found or null if not found
+		* @return int Profile found or null if not found
 		* @throws mysqli_sql_exception when mySQL related errors occur
 		**/
-	  public static function getUserByPermissions(&$mysqli, $zipCode) {
+	  public static function getProfileByZipCode(&$mysqli, $zipCode) {
 
 		  //handle degenerate cases
 		  if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
