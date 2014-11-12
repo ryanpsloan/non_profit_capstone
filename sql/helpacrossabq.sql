@@ -73,6 +73,14 @@ CREATE TABLE event (
 	PRIMARY KEY (eventId)
 );
 
+CREATE TABLE comment (
+	comentId INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	commentText VARCHAR(2048) NOT NULL,
+	commentDate DATETIME NOT NULL,
+	INDEX (commentDate),
+	PRIMARY KEY (commentId)
+);
+
 CREATE TABLE userCause (
 	profileId INT UNSIGNED NOT NULL,
 	causeId INT UNSIGNED NOT NULL,
@@ -97,7 +105,7 @@ CREATE TABLE userEvent (
 	profileId INT UNSIGNED NOT NULL,
 	eventId	INT UNSIGNED NOT NULL,
 	userEventRole TINYINT NOT NULL,
-	postingPermissions TINYINT NOT NULL,
+	commentPermission TINYINT NOT NULL,
 	banStatus TINYINT NOT NULL,
 	INDEX (profileId),
 	INDEX (eventId),
@@ -110,7 +118,7 @@ CREATE TABLE teamEvent (
 	teamId INT UNSIGNED NOT NULL,
 	eventId INT UNSIGNED NOT NULL,
 	teamStatus TINYINT NOT NULL,
-	postingPermissions TINYINT NOT NULL,
+	commentPermission TINYINT NOT NULL,
 	banStatus TINYINT NOT NULL,
 	PRIMARY KEY (teamId, eventId),
 	INDEX (teamId),
@@ -124,6 +132,9 @@ CREATE TABLE userTeam (
 	teamId INT UNSIGNED NOT NULL,
 	roleInTeam TINYINT UNSIGNED NOT NULL,
 	teamPermission TINYINT UNSIGNED NOT NULL,
+	commentPermission TINYINT UNSIGNED NOT NULL,
+	invitePermission TINYINT UNSIGNED NOT NULL,
+	banStatus TINYINT UNSIGNED NOT NULL,
 	INDEX(profileId),
 	INDEX(teamId),
 	PRIMARY KEY (profileId, teamId),
@@ -131,4 +142,33 @@ CREATE TABLE userTeam (
 	FOREIGN KEY (teamId) REFERENCES team (teamId)
 );
 
+CREATE TABLE commentUser(
+	profileId INT UNSIGNED NOT NULL,
+	commentId INT UNSIGNED NOT NULL,
+	INDEX(profileId),
+	INDEX(commentId),
+	PRIMARY KEY (profileId, commentId),
+	FOREIGN KEY (profileId) REFERENCES profile(profileId),
+	FOREIGN KEY (commentId) REFERENCES comment(commentId)
+);
+
+CREATE TABLE commentEvent(
+	eventId INT UNSIGNED NOT NULL,
+	commentId INT UNSIGNED NOT NULL,
+	INDEX(eventId),
+	INDEX(commentId),
+	PRIMARY KEY(eventId, commentId),
+	FOREIGN KEY (eventId) REFERENCES event(eventId),
+	FOREIGN KEY (commentId) REFERENCES comment(commentId)
+);
+
+CREATE TABLE commentTeam(
+	teamId INT UNSIGNED NOT NULL,
+	commentId INT UNSIGNED NOT NULL,
+	INDEX (teamId),
+	INDEX (commentId),
+	PRIMARY KEY (teamId, commentId),
+	FOREIGN KEY (teamId) REFERENCES team(teamId),
+	FOREIGN KEY (commentId) REFERENCES comment(commentId)
+);
 -- Comment for test.
