@@ -77,18 +77,40 @@ class Event {
 
 		$this->eventTitle = $newEventTitle;
 	}
-
+	
 	/**
-	 * @param string $newEventDate eventDate
-	 * @throws UnexpectedValueException if date is not valid
-	 */
-	public function  setEventDate($newEventDate){
-		$newEventDate = trim($newEventDate);
-		if (($newEventDate = DateTime::createFromFormat("Y-m-d H:i:s", $newEventDate)) === false){
-			throw(new UnexpectedValueException("The date $newEventDate is not a valid date."));
+	 * sets the value of date created
+	 *
+	 * @param mixed $newEventDate object or string with the date created
+	 * @throws RangeException if date is not a valid date
+	 **/
+	public function setEventDate($newEventDate)
+	{
+		// zeroth, allow a DateTime object to be directly assigned
+		if(gettype($newEventDate) === "object" && get_class($newEventDate) === "DateTime") {
+			$this->eventDate = $newEventDate;
+			return;
 		}
+
+		// treat the date as a mySQL date string
+		$newEventDate = trim($newEventDate);
+		if((preg_match("/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/", $newEventDate, $matches)) !== 1) {
+			throw(new RangeException("$newEventDate is not a valid date"));
+		}
+
+		// verify the date is really a valid calendar date
+		$year  = intval($matches[1]);
+		$month = intval($matches[2]);
+		$day   = intval($matches[3]);
+		if(checkdate($month, $day, $year) === false) {
+			throw(new RangeException("$newEventDate is not a Gregorian date"));
+		}
+
+		// finally, take the date out of quarantine
+		$newEventDate = DateTime::createFromFormat("Y-m-d H:i:s", $newEventDate);
 		$this->eventDate = $newEventDate;
 	}
+
 
 	/**
 	 * @param string $newEventLocation eventLocation
@@ -121,16 +143,19 @@ class Event {
 			throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
 		}
 
-		$wasClean = $statement->bind_param("sss", $this->eventTitle, $this->eventDate, $this->eventLocation);
+		$dateString = $this->eventDate->format("Y-m-d H:i:s");
+
+		$wasClean = $statement->bind_param("sss", $this->eventTitle, $dateString, $this->eventLocation);
+
 		if($wasClean === false) {
 			throw(new mysqli_sql_exception("Unable to bind parameters"));
 		}
 
 		if($statement->execute() === false) {
 			throw (new mysqli_sql_exception("Unable to execute mySQL insert statement"));
-
-			$this->eventId = $mysqli->insert_id;
 		}
+
+		$this->eventId = $mysqli->insert_id;
 
 	}
 	/**
@@ -171,6 +196,13 @@ class Event {
 			throw (new mysqli_sql_exception("Cannot update object that does not exist"));
 		}
 
+		// Convert date to strings
+		if($this->eventDate === null) {
+			$dateCreated = null;
+		} else {
+			$eventDate = $this->eventDate->format("Y-d-m H:i:s");
+		}
+
 		$query		="UPDATE event SET eventId = ?, eventTitle = ?, eventDate = ?, eventLocation = ?";
 		$statement  =$mysqli->prepare->$query;
 		if($statement === false){
@@ -195,11 +227,14 @@ class Event {
 		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
 			throw(new mysqli_sql_exception("input is not a mysqli object"));
 		}
+
 		// sanitize the EventDate before searching
 		$eventId = trim($eventId);
 		$eventId = filter_var($eventId, FILTER_VALIDATE_INT);
+
 		// create query template
-		$query = "SELECT eventId, eventTitle, eventDate, eventLocation FROM event WHERE evetntId = ?";
+		$query = "SELECT eventId, eventTitle, eventDate, eventLocation FROM event WHERE eventId = ?";
+
 		$statement = $mysqli->prepare($query);
 		if($statement === false) {
 			throw(new mysqli_sql_exception("Unable to prepare statement"));
@@ -218,6 +253,7 @@ class Event {
 		if($result === false) {
 			throw(new mysqli_sql_exception("Unable to get result set."));
 		}
+
 
 		$row = $result->fetch_assoc();
 
