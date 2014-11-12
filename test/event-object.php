@@ -20,7 +20,7 @@ class eventTest extends UnitTestCase {
 	public function setUp() {
 		// connect to mySQL
 		mysqli_report (MYSQLI_REPORT_STRICT);
-		$this->mysqli = new mysqli("localhost", "helpabq", "lillymiragefenceirsfind","helpabq");
+		$this->mysqli = new mysqli("localhost", "helpabq","helpabq");
 		$this->EVENTDATE = DateTime::createFromFormat("Y-m-d H:i:s", "1995-12-12 12:12:12");
 	}
 	// tearDown() is a method that is run after each test
