@@ -248,6 +248,14 @@ class User {
 	}
 
 	/**
+	 * gets the value of permissions
+	 *
+	 * @return int value of permissions
+	 **/
+	public function getPermissions() {
+		return($this->permissions);
+	}
+	/**
 	 * sets the value for permissions
 	 *
 	 * @param int $newPermissions permissions
