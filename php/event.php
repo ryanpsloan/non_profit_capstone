@@ -123,7 +123,7 @@ class Event {
 	}
 
 	/**
-	 * @param reeventTitle $mysqli pointer to mySQL connection by reference
+	 * @param eventTitle $mysqli pointer to mySQL connection by reference
 	 * @throws mysqli_sql_exception when mySQL related error occurs
 	 */
 
@@ -156,10 +156,9 @@ class Event {
 		}
 
 		$this->eventId = $mysqli->insert_id;
-
 	}
 	/**
-	 *@param reeventTitle $mysqli pointer to mySQL connection by reference
+	 *@param eventTitle $mysqli pointer to mySQL connection by reference
 	 * @throws mysqli_sql_exception when mySQL related error occur
 	 */
 	public function delete($mysqli){
