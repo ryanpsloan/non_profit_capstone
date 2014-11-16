@@ -89,10 +89,10 @@
 
 			  // catch exceptions and rethrow to caller
 		  } catch(UnexpectedValueException $unexpectedValue) {
-			  throw(new UnexpectedValueException ("Unable to construct User", 0, $unexpectedValue));
+			  throw(new UnexpectedValueException ("Unable to construct Profile", 0, $unexpectedValue));
 
 		  } catch(RangeException $range) {
-			  throw(new RangeException("Unable to construct User", 0, $range));
+			  throw(new RangeException("Unable to construct Profile", 0, $range));
 		  }
 
 	  }

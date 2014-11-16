@@ -150,8 +150,8 @@ CREATE TABLE userTeam (
 );
 
 CREATE TABLE commentUser(
-	profileId INT UNSIGNED NOT NULL,
 	commentId INT UNSIGNED NOT NULL,
+	profileId INT UNSIGNED NOT NULL,
 	INDEX(profileId),
 	INDEX(commentId),
 	PRIMARY KEY (profileId, commentId),
