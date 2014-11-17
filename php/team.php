@@ -41,7 +41,7 @@ class Team
 		if($newTeamId <= 0) {
 			throw(new RangeException("team Id $newTeamId is not positive"));
 		}
-		$this->yeamd = $newTeamId;
+		$this->teamId = $newTeamId;
 	}
 
 	public function insert(&$mysqli)
