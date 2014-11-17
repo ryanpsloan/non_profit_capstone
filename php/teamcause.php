@@ -3,7 +3,7 @@
  * This class will create the relationship between the team and the cause tables
  * Connects the team and the cause tables
  *
- * @author Dameon Smith
+ * @author Dameon Smith <dameonsmith76@gmail.com>
  **/
 
 require_once("../php/team.php");
@@ -19,11 +19,18 @@ class TeamCause{
 	**/
 	private $causeId;
 
+	/**
+	 * Creates the team cause object
+	 *
+	 * @param mixed $newTeamId
+	 * @param mixed $newCauseId
+	 */
+
 	public function __construct($newTeamId, $newCauseId){
 		try{
-			$this->teamId = $newTeamId;
+			$this->setTeamId($newTeamId);
 
-			$this->causeId = $newCauseId;
+			$this->setCauseId($newCauseId);
 		} catch(UnexpectedValueException $unexpectedValue) {
 				 throw(new UnexpectedValueException("Could not construct object TeamCause", 0, $unexpectedValue));
 			 } catch(RangeException $range) {
@@ -44,8 +51,7 @@ class TeamCause{
 	public function setTeamId($newTeamId)
 	{
 		if($this->teamId === null) {
-			$this->teamId = null;
-			return;
+			throw (new UnexpectedValueException("teamId cannot be null"));
 		}
 
 		if(filter_var($newTeamId, FILTER_VALIDATE_INT) === false) {
@@ -63,23 +69,22 @@ class TeamCause{
 	/**
 	 * Sets the value of causeId from cause class
 	 *
-	 * @param mixed $newCauseId team id (or null if new object)
+	 * @param mixed $newCauseId cause id (or null if new object)
 	 * @throws UnexpectedValueException if not an integer or null
 	 * @throws RangeException if Cause id is not positive
 	 **/
 	public function setCauseId($newCauseId){
-		if($this->teamId === null) {
-			$this->teamId = null;
-			return;
+		if($this->causeId === null) {
+			throw (new UnexpectedValueException("causeId does not exist"));
 		}
 
 		if(filter_var($newCauseId, FILTER_VALIDATE_INT) === false) {
-			throw(new UnexpectedValueException("teamId $newCauseId is not numeric"));
+			throw(new UnexpectedValueException("causeId $newCauseId is not numeric"));
 		}
 
 		$newCauseId = intval($newCauseId);
 		if($newCauseId <= 0) {
-			throw(new RangeException("teamId $newCauseId is not positive."));
+			throw(new RangeException("causeId $newCauseId is not positive."));
 		}
 
 		$this->causeId = $newCauseId;
@@ -137,13 +142,17 @@ class TeamCause{
 			throw(new mysqli_sql_exception("Unable to delete an Cause that does not exist"));
 		}
 
-		$query		="DELETE FROM teamCause WHERE causeId = ?";
+		if($this->teamId === null){
+			throw(new mysqli_sql_exception("Unable to delete a Team that does not exist"));
+		}
+
+		$query		="DELETE FROM teamCause WHERE causeId = ? AND teamId = ?";
 		$statement  =$mysqli->prepare($query);
 		if($statement === false){
 			throw (new mysqli_sql_exception("Unable to prepare statement"));
 		}
 
-		$wasClean = $statement->bind_param("i", $this->causeId);
+		$wasClean = $statement->bind_param("ii", $this->causeId, $this->teamId);
 		if($wasClean === false){
 			throw (new mysqli_sql_exception("Unable to bind parameters"));
 		}
@@ -167,7 +176,10 @@ class TeamCause{
 		}
 
 		if($this->causeId === null){
-			throw (new mysqli_sql_exception("Cannot update object that does not exist"));
+			throw (new mysqli_sql_exception("Cannot update cause that does not exist"));
+		}
+		if($this->teamId === null){
+			throw (new mysqli_sql_exception("Cannot update team that does not exist"));
 		}
 
 		$query		="UPDATE teamCause SET teamId = ?, causeId = ?";

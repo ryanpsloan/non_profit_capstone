@@ -4,20 +4,30 @@
  * This class will manage the creation of events in which the event can join, this is a m to n relationship through the
  * eventEvent intersection table.
  *
- * @author Dameon Smith
+ * @author Dameon Smith <dameonsmith76@gmail.com>
  */
 
 class Event {
-	// This is the id for the event and is the primary key.
+	/**
+	* This is the id for the event and is the primary key.
+	*/
 	private $eventId;
-	// This is the event title showing what the event is called
+	/**
+	* This is the event title showing what the event is called
+	*/
 	private $eventTitle;
-	// This is the event date that will display the date and time that the event is happening
+	/**
+	* This is the event date that will display the date and time that the event is happening
+	*/
 	private $eventDate;
-	// THis is the event location and will record where the event is happening
+	/**
+	 * This is the event location and will record where the event is happening
+	 */
 	private $eventLocation;
 
 	/**
+	 * Creates the Event object
+	 *
 	 * @param mixed $newEventId event id (or null if new object)
 	 * @param string $newEventTitle event title
 	 * @param string $newEventDate the date of the event

@@ -3,27 +3,44 @@
  * This is the class that will connect event and team and allow them to draw permissions from eachother
  * Connecting class for event and team
  *
- * @author Dameon Smith
+ * @author Dameon Smith <dameonsmith76@gmail.com>
  */
 
 require_once("../php/event.php");
 require_once("../php/team.php");
 
 
-class TeamEvent
-{
-	// The id and foreign key for team
+class TeamEvent {
+	/**
+	 * The id and foreign key for team
+	 */
 	private $teamId;
-	// The id and foreign key for Event
+	/**
+	 * The id and foreign key for Event
+	 */
 	private $eventId;
-	// The status for the team, whether the team is the creator or not
+	/**
+    * The status for the team, whether the team is the creator or not
+	 */
 	private $teamStatus;
-	// The comment permissions teams have within events
+	/**
+	 * The comment permissions teams have within events
+	 */
 	private $commentPermission;
-	// The ban status of a team within an event
+	/**
+	 * The ban status of a team within an event
+	 */
 	private $banStatus;
 
-
+	/**
+	 * Creates the TeamEvent object
+	 *
+	 * @param mixed $newTeamId team id (or null if new object)
+	 * @param mixed $newEventId event id (or null if new object)
+	 * @param mixed $newTeamStatus teams role in event
+	 * @param mixed $newCommentPermission the permission to comment
+	 * @param mixed $newBanStatus whether team is banned in event or not
+	 **/
 	public function __construct($newTeamId, $newEventId, $newTeamStatus, $newCommentPermission, $newBanStatus)
 	{
 		try {
@@ -80,6 +97,8 @@ class TeamEvent
 	}
 
 	/**
+	 * Sets the event id within the object
+	 *
 	 * @param mixed $newEventId event id (or null if new object)
 	 * @throws UnexpectedValueException if not an integer or null
 	 * @throws RangeException if event id is not positive
@@ -103,6 +122,8 @@ class TeamEvent
 	}
 
 	/**
+	 * Sets the teams role and status for an event
+	 *
 	 * @param $newTeamStatus
 	 * @throws UnexpectedValueException if not an integer or null
 	 * @throws RangeException if team status is not positive
@@ -127,20 +148,22 @@ class TeamEvent
 	}
 
 	/**
+	 * Sets the ability for a team to comment on an event
+	 *
 	 * @param $newCommentPermission
 	 * @throws UnexpectedValueException if not an integer or null
 	 * @throws RangeException if team status is not positive
 	 */
 
+	// todo make sure the commentpermission cannot be null
 	public function setCommentPermission($newCommentPermission)
 	{
 		if($newCommentPermission === null) {
-			$newCommentPermission = null;
-			return;
+			throw(new UnexpectedValueException("Comment permission $newCommentPermission cannot by null"));
 		}
 
 		if(filter_var($newCommentPermission, FILTER_SANITIZE_INT) === false) {
-			throw(new UnexpectedValueException("Comment permission $$newCommentPermission is not numeric"));
+			throw(new UnexpectedValueException("Comment permission $newCommentPermission is not numeric"));
 		}
 
 		if($newCommentPermission <= 0) {
@@ -151,11 +174,13 @@ class TeamEvent
 	}
 
 	/**
-	 * @param $newBanStatus
+	 * Sets whether the user is banned or not
+	 *
+	 * @param mixed $newBanStatus sets whether the user is banned or not
 	 * @throws UnexpectedValueException if not an integer or null
 	 * @throws RangeException if team status is not positive
 	 */
-
+	// todo ban status cannot be null
 	public function setBanStatus($newBanStatus)
 	{
 		if($newBanStatus === null) {
@@ -164,17 +189,19 @@ class TeamEvent
 		}
 
 		if(filter_var($newBanStatus, FILTER_SANITIZE_INT) === false) {
-			throw(new UnexpectedValueException("Comment permission $newBanStatus is not numeric"));
+			throw(new UnexpectedValueException("Ban status $newBanStatus is not numeric"));
 		}
 
 		if($newBanStatus <= 0) {
-			throw(new RangeException("Comment permission is not positive"));
+			throw(new RangeException("Ban status is not positive"));
 		}
 
 		$this->banStatus = $newBanStatus;
 	}
 
 	/**
+	 * Inserts the values in to mySQL
+	 *
 	 * @param TeamEvent $mysqli pointer to mySQL connection by reference
 	 * @throws mysqli_sql_exception when mySQL related error occurs
 	 */
@@ -183,12 +210,12 @@ class TeamEvent
 			throw(new mysqli_sql_exception("This is not a valid mysqli object"));
 		}
 
-		if($this->eventId !== null){
-			throw(new mysqli_sql_exception("Not a new TeamEvent relationship"));
+		if($this->eventId === null){
+			throw(new mysqli_sql_exception("This event does not exist"));
 		}
 
-		if($this->teamId !== null){
-			throw(new mysqli_sql_exception("Not a new TeamEvent Relationship"));
+		if($this->teamId === null){
+			throw(new mysqli_sql_exception("This team does not exist"));
 		}
 
 		$query = "INSERT INTO teamEvent(eventId, teamId, teamStatus, commentPermission, banStatus)
@@ -223,13 +250,17 @@ class TeamEvent
 			throw(new mysqli_sql_exception("Unable to delete an event that does not exist"));
 		}
 
-		$query		="DELETE FROM teamEvent WHERE eventId = ?";
+		if($this->teamId === null) {
+			throw(new mysqli_sql_exception("Unable to delete a team that does not exist"));
+		}
+
+		$query		="DELETE FROM teamEvent WHERE eventId = ? AND teamId = ?";
 		$statement  =$mysqli->prepare($query);
 		if($statement === false){
 			throw (new mysqli_sql_exception("Unable to prepare statement"));
 		}
 
-		$wasClean = $statement->bind_param("i", $this->eventId);
+		$wasClean = $statement->bind_param("ii", $this->eventId, $this->teamId);
 		if($wasClean === false){
 			throw (new mysqli_sql_exception("Unable to bind parameters"));
 		}
@@ -251,7 +282,11 @@ class TeamEvent
 		}
 
 		if($this->eventId === null){
-			throw (new mysqli_sql_exception("Cannot update object that does not exist"));
+			throw (new mysqli_sql_exception("Cannot update event object that does not exist"));
+		}
+
+		if($this->teamId === null){
+			throw (new mysqli_sql_exception("cannot update team object that does not exist"));
 		}
 
 		$query		="UPDATE teamEvent SET eventId = ?, teamId = ?, teamStatus = ?, commentPermission = ?, banStatus = ?";
@@ -281,6 +316,8 @@ class TeamEvent
 		// sanitize the eventId before searching
 		$eventId = trim($eventId);
 		$eventId = filter_var($eventId, FILTER_VALIDATE_INT);
+
+
 
 		// create query template
 		$query = "SELECT eventId, teamId, teamStatus, commentPermission, banStatus FROM teamEvent WHERE eventId = ?";
