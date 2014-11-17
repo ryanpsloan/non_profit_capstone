@@ -1,4 +1,4 @@
-	<?php
+<?php
 /**
  * mySQL Enabled User
  *
@@ -60,7 +60,6 @@ class User {
 			throw(new UnexpectedValueException ("Unable to construct User", 0, $unexpectedValue));
 
 		} catch(RangeException $range) {
-			$range->getMessage();
 			throw(new RangeException("Unable to construct User", 0, $range));
 		}
 
@@ -249,14 +248,6 @@ class User {
 	}
 
 	/**
-	 * gets the value of permissions
-	 *
-	 * @return int value of permissions
-	 **/
-	public function getPermissions() {
-		return($this->permissions);
-	}
-	/**
 	 * sets the value for permissions
 	 *
 	 * @param int $newPermissions permissions
@@ -312,7 +303,6 @@ class User {
 
 		// execute the statement
 		if($statement->execute() === false) {
-			var_dump($statement);
 			throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
 		}
 
@@ -593,12 +583,12 @@ class User {
 	 * gets the User by permissions
 	 *
 	 * @param resource $mysqli pointer to mySQL connection, by reference
-	 * @param int $permissions permissions to search for
-	 * @return int User found or null if not found
+	 * @param int $permission permissions to search for
+	 * @return mixed User found or null if not found
 	 * @throws mysqli_sql_exception when mySQL related errors occur
 	 **/
-	public static function getUserByPermissions(&$mysqli, $permissions) {
-
+	public static function getUserByPermissions(&$mysqli, $permissions)
+	{
 		//handle degenerate cases
 		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
 			throw(new mysqli_sql_exception("input is not a mysqli object"));
