@@ -58,6 +58,18 @@ class Team {
 		}
 		$this->yeamd = $newTeamId;
 	}
+
+
+	public function setTeamName ($newTeamName){
+		if($newTeamName === null){
+			throw(new UnexpectedValueException("TeamName cannot be null"));
+		}
+
+	}
+
+
+
+
 	public function insert(&$mysqli) {
 
 		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
