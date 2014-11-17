@@ -71,7 +71,8 @@ class Team
 		$this->teamId = $mysqli->insert_id;
 	}
 
-	public function delete(&$mysqli) {
+	public function delete(&$mysqli)
+	{
 
 		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
 			throw(new mysqli_sql_exception("input is not a mysqli object"));
@@ -96,23 +97,27 @@ class Team
 			throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
 		}
 	}
-	//* query//
-	$query = "UPDATE team SET teamName = ?, teamCause = ?, price = ? WHERE teamId = ?";
-	$statement = $mysqli->prepare($query);
-	if($statement === false) {
-	throw(new mysqli_sql_exception("Unable to prepare statement"));
+
+	public function update($mysqli)
+	{
+		//* query//
+		$query = "UPDATE team SET teamName = ?, teamCause = ?, price = ? WHERE teamId = ?";
+		$statement = $mysqli->prepare($query);
+		if($statement === false) {
+			throw(new mysqli_sql_exception("Unable to prepare statement"));
+		}
+
+
+		$wasClean = $statement->bind_param("ssi", $this->teamName, $this->teamCause, $this->teamId);
+		if($wasClean === false) {
+			throw(new mysqli_sql_exception("Unable to bind parameters"));
+		}
+
+		if($statement->execute() === false) {
+			throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
+		}
 	}
-
-
-$wasClean = $statement->bind_param("ssi",  $this->teamName, $this->teamCause, $this->teamId);
-if($wasClean === false) {
-	throw(new mysqli_sql_exception("Unable to bind parameters"));
-}
-
-if($statement->execute() === false) {
-	throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
-}
-}
+	}
 /**
  * Created by PhpStorm.
  * User: Cass
