@@ -24,13 +24,13 @@ class TeamEvent
 	private $banStatus;
 
 
-	public function __construct($newTeamId, $newEventId, $newTeamStatus, $newcommentPermission, $newBanStatus)
+	public function __construct($newTeamId, $newEventId, $newTeamStatus, $newCommentPermission, $newBanStatus)
 	{
 		try {
 			$this->setTeamId($newTeamId);
 			$this->setEventId($newEventId);
 			$this->setTeamStatus($newTeamStatus);
-			$this->setcommentPermission($newcommentPermission);
+			$this->setcommentPermission($newCommentPermission);
 			$this->setBanStatus($newBanStatus);
 		} catch(UnexpectedValueException $unexpectedValue) {
 			throw(new UnexpectedValueException("Could not construct object TeamEvent", 0, $unexpectedValue));
@@ -272,6 +272,59 @@ class TeamEvent
 	}
 
 	public static function getTeamEventByEventId($mysqli, $eventId){
+		//handle degenerate cases
+		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
+			throw(new mysqli_sql_exception("input is not a mysqli object"));
+		}
+
+		// sanitize the eventId before searching
+		$eventId = trim($eventId);
+		$eventId = filter_var($eventId, FILTER_VALIDATE_INT);
+
+		// create query template
+		$query = "SELECT eventId, teamId, teamStatus, commentPermission, banStatus FROM teamEvent WHERE eventId = ?";
+
+		$statement = $mysqli->prepare($query);
+		if($statement === false) {
+			throw(new mysqli_sql_exception("Unable to prepare statement"));
+		}
+		//bind the eventId to the place holder in the template
+		$wasClean = $statement->bind_param("i", $eventId);
+		if($wasClean === false) {
+			throw(new mysqli_sql_exception("Unable to bind parameters"));
+		}
+		//execute the statement
+		if($statement->execute() === false) {
+			throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
+		}
+		//get result from the SELECT query
+		$result = $statement->get_result();
+		if($result === false) {
+			throw(new mysqli_sql_exception("Unable to get result set."));
+		}
+
+		//turn the results into an array
+		$eventTitleSearch = array();
+
+		// Loop through the array and display the results
+		while(($row = $result->fetch_assoc()) !== null) {
+
+			try {
+				$event = new Event($row["eventId"], $row["eventTitle"], $row["eventDate"],
+					$row["eventLocation"]);
+				$eventTitleSearch [] = $event;
+			} catch(Exception $exception) {
+
+				throw(new mysqli_sql_exception("Unable to convert row to event", 0, $exception));
+			}
+		}
+
+		if($result->num_rows === 0) {
+			return(null);
+		} else {
+			return($eventTitleSearch);
+		}
+
 
 	}
 }

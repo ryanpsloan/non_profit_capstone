@@ -123,7 +123,7 @@ class Event {
 	}
 
 	/**
-	 * @param eventTitle $mysqli pointer to mySQL connection by reference
+	 * @param event $mysqli pointer to mySQL connection by reference
 	 * @throws mysqli_sql_exception when mySQL related error occurs
 	 */
 
@@ -158,7 +158,7 @@ class Event {
 		$this->eventId = $mysqli->insert_id;
 	}
 	/**
-	 *@param eventTitle $mysqli pointer to mySQL connection by reference
+	 *@param event $mysqli pointer to mySQL connection by reference
 	 * @throws mysqli_sql_exception when mySQL related error occur
 	 */
 	public function delete($mysqli){
@@ -186,6 +186,10 @@ class Event {
 		}
 	}
 
+	/**
+	 * @param resource $mysqli pointer to mySQL connection, by reference
+	 * @throws mysqli_sql_exception when mySQL related errors occur
+	 **/
 	public function update($mysqli){
 		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli"){
 			throw (new mysqli_sql_exception("Input is not a mysqli object"));
