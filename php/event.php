@@ -381,16 +381,15 @@ class Event {
 		}
 	}
 
-	public static function getEventByLocation(&$mysqli, $eventLocation)
-	{
-
+	public static function getEventByLocation(&$mysqli, $eventLocation){
+		// handle the degenerate cases
 		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
 			throw(new mysqli_sql_exception("input is not a mysqli object"));
 		}
-
+		// sanitize the inputs
 		$eventLocation = trim($eventLocation);
 		$eventLocation = filter_var($eventLocation, FILTER_SANITIZE_STRING);
-
+		// create the query template
 		$query = "SELECT eventId, eventTitle, eventDate, eventLocation FROM event WHERE eventLocation = ?";
 		$statement = $mysqli->prepare($query);
 		if($statement === false) {
@@ -411,8 +410,10 @@ class Event {
 			throw(new mysqli_sql_exception("Unable to get result set."));
 		}
 
+		// turn the results into an array
 		$eventLocationSearch = array();
 
+		// Loop through the array and display the results
 		while(($row = $result->fetch_assoc()) !== null) {
 
 			try {
