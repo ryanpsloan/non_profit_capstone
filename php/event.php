@@ -4,7 +4,7 @@
  * This class will manage the creation of events in which the event can join, this is a m to n relationship through the
  * eventEvent intersection table.
  *
- * Created by Dameon Smith
+ * @author Dameon Smith
  */
 
 class Event {

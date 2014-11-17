@@ -3,7 +3,7 @@
  * This is the class that will connect event and team and allow them to draw permissions from eachother
  * Connecting class for event and team
  *
- * Author: Dameon Smith
+ * @author Dameon Smith
  */
 
 require_once("../php/event.php");
@@ -45,9 +45,9 @@ class TeamEvent
 	{
 		$data = array("teamId"        => $this->teamId,
 						  "eventId"       => $this->eventId,
-						  "eventTitle"    => $this->teamStatus,
-						  "eventDate"     => $this->commentPermission,
-						  "eventLocation" => $this->banStatus);
+						  "teamStatus"    => $this->teamStatus,
+						  "commentPermission"     => $this->commentPermission,
+						  "banStatus" => $this->banStatus);
 		if(array_key_exists($name, $data)) {
 			return $data[$name];
 		} else {
@@ -208,15 +208,12 @@ class TeamEvent
 		if($statement->execute() === false){
 			throw(new mysqli_sql_exception("Unable to execute statement"));
 		}
-
-		$this->eventId = $mysqli->insert_id;
-		$this->teamId = $mysqli->insert_id;
 	}
 
 	/**
 	 * @param TeamEvent $mysqli pointer to mySQL connection by reference
 	 * @throws mysqli_sql_exception when mySQL related error occurs
-	 */
+	 **/
 	public function delete($mysqli){
 		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
 			throw (new mysqli_sql_exception("Input is not a mysqli object"));
@@ -316,7 +313,7 @@ class TeamEvent
 			try {
 				$teamEvent = new TeamEvent($row["eventId"], $row["teamId"], $row["teamStatus"], $row["commentPermission"],
 				$row["banStatus"]);
-				$eventTitleSearch [] = $teamEvent;
+				$eventIdSearch [] = $teamEvent;
 			} catch(Exception $exception) {
 
 				throw(new mysqli_sql_exception("Unable to convert row to event", 0, $exception));

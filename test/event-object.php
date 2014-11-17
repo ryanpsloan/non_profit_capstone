@@ -4,10 +4,6 @@ require_once("/usr/lib/php5/simpletest/autorun.php");
 //then require the class under scrutiny
 // ../ means go up one directory
 require_once("../php/event.php");
-
-// grab the shared mySQLi object
-require_once("/etc/apache2/capstone-mysql/helpabq.php");
-
 //the articleTest is a container for all our tests
 class eventTest extends UnitTestCase {
 	//variable to hold the mySQL connection
@@ -23,7 +19,8 @@ class eventTest extends UnitTestCase {
 	//here, we use it to connect to mySQL and to calculate salt, authentication token and hash if we need it
 	public function setUp() {
 		// connect to mySQL
-		$this->mysqli = MysqliConfiguration::getMySqli();
+		mysqli_report (MYSQLI_REPORT_STRICT);
+		$this->mysqli = new mysqli("localhost", "helpabq", "lillymiragefenceirsfind","helpabq");
 		$this->EVENTDATE = DateTime::createFromFormat("Y-m-d H:i:s", "1995-12-12 12:12:12");
 	}
 	// tearDown() is a method that is run after each test

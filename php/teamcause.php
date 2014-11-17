@@ -3,16 +3,20 @@
  * This class will create the relationship between the team and the cause tables
  * Connects the team and the cause tables
  *
- * Author: Dameon Smith
- */
+ * @author Dameon Smith
+ **/
 
 require_once("../php/team.php");
 require_once("../php/cause.php");
 
 class TeamCause{
-	// The team id that links the team to the causes
+	/**
+	* The team id that links the team to the causes
+	**/
 	private $teamId;
-	//The cause id that links the causes to the teams
+	/**
+	* The cause id that links the causes to the teams
+	**/
 	private $causeId;
 
 	public function __construct($newTeamId, $newCauseId){
@@ -28,9 +32,11 @@ class TeamCause{
 
 	}
 
-	// Need to insert the get or call function here.
+	// TODO: Need to insert the get or call function here.
 
 	/**
+	 * Sets the value of teamId from team class
+	 *
 	 * @param mixed $newTeamId team id (or null if new object)
 	 * @throws UnexpectedValueException if not an integer or null
 	 * @throws RangeException if Cause id is not positive
@@ -55,6 +61,8 @@ class TeamCause{
 	}
 
 	/**
+	 * Sets the value of causeId from cause class
+	 *
 	 * @param mixed $newCauseId team id (or null if new object)
 	 * @throws UnexpectedValueException if not an integer or null
 	 * @throws RangeException if Cause id is not positive
@@ -78,9 +86,11 @@ class TeamCause{
 	}
 
 	/**
+	 * Inserts the values into mySQL
+	 *
 	 * @param TeamCause $mysqli pointer to mySQL connection by reference
 	 * @throws mysqli_sql_exception when mySQL related error occurs
-	 */
+	 **/
 	public function insert(&$mysqli){
 		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli"){
 			throw(new mysqli_sql_exception("This is not a valid mysqli object"));
@@ -110,12 +120,11 @@ class TeamCause{
 		if($statement->execute() === false){
 			throw(new mysqli_sql_exception("Unable to execute statement"));
 		}
-
-		$this->causeId = $mysqli->insert_id;
-		$this->teamId = $mysqli->insert_id;
 	}
 
 	/**
+	 * Deletes the objects from mySQL
+	 *
 	 * @param TeamCause $mysqli pointer to mySQL connection by reference
 	 * @throws mysqli_sql_exception when mySQL related error occurs
 	 */
@@ -146,6 +155,8 @@ class TeamCause{
 	}
 
 	/**
+	 * Updates the values within mySQL
+	 *
 	 * @param resource $mysqli pointer to mySQL connection, by reference
 	 * @throws mysqli_sql_exception when mySQL related errors occur
 	 **/
@@ -175,6 +186,15 @@ class TeamCause{
 			throw(new mysqli_sql_exception("Unable to execute mySQL statement."));
 		}
 	}
+
+	/**
+	 * Creates static method to allow access to class without constructor
+	 *
+	 * @param $mysqli mysqli object
+	 * @param mixed $teamId
+	 * @return array|null
+	 * @throw mysqli_sql_exception if unable to properly execute statement
+	 */
 	
 	public static function getTeamCauseByTeamId($mysqli,$teamId){
 		//handle degenerate cases
@@ -229,6 +249,15 @@ class TeamCause{
 			return($teamIdSearch);
 		}
 	}
+
+	/**
+	 * Allows for access to class with out constructor
+	 *
+	 * @param $mysqli mysqli object
+	 * @param mixed $causeId
+	 * @return array|null
+	 * @throw mysqli_sql_exception if unable to execute method
+	 */
 
 	public static function getTeamCauseByCauseId($mysqli,$causeId){
 		//handle degenerate cases
