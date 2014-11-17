@@ -244,6 +244,10 @@ class TeamEvent
 
 	}
 
+	/**
+	 * @param resource $mysqli pointer to mySQL connection, by reference
+	 * @throws mysqli_sql_exception when mySQL related errors occur
+	 **/
 	public function update($mysqli){
 		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli"){
 			throw (new mysqli_sql_exception("Input is not a mysqli object"));
@@ -304,15 +308,15 @@ class TeamEvent
 		}
 
 		//turn the results into an array
-		$eventTitleSearch = array();
+		$eventIdSearch = array();
 
 		// Loop through the array and display the results
 		while(($row = $result->fetch_assoc()) !== null) {
 
 			try {
-				$event = new Event($row["eventId"], $row["eventTitle"], $row["eventDate"],
-					$row["eventLocation"]);
-				$eventTitleSearch [] = $event;
+				$teamEvent = new TeamEvent($row["eventId"], $row["teamId"], $row["teamStatus"], $row["commentPermission"],
+				$row["banStatus"]);
+				$eventTitleSearch [] = $teamEvent;
 			} catch(Exception $exception) {
 
 				throw(new mysqli_sql_exception("Unable to convert row to event", 0, $exception));
@@ -322,7 +326,7 @@ class TeamEvent
 		if($result->num_rows === 0) {
 			return(null);
 		} else {
-			return($eventTitleSearch);
+			return($eventIdSearch);
 		}
 
 

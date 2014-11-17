@@ -176,5 +176,57 @@ class TeamCause{
 		}
 	}
 	
-	
+	public static function getTeamCauseByTeamId($mysqli,$teamId){
+		//handle degenerate cases
+		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
+			throw(new mysqli_sql_exception("input is not a mysqli object"));
+		}
+
+		// sanitize the teamId before searching
+		$teamId = trim($teamId);
+		$teamId = filter_var($teamId, FILTER_VALIDATE_INT);
+
+		// create query template
+		$query = "SELECT teamId, causeId FROM teamCause WHERE teamId = ?";
+
+		$statement = $mysqli->prepare($query);
+		if($statement === false) {
+			throw(new mysqli_sql_exception("Unable to prepare statement"));
+		}
+		//bind the teamId to the place holder in the template
+		$wasClean = $statement->bind_param("i", $teamId);
+		if($wasClean === false) {
+			throw(new mysqli_sql_exception("Unable to bind parameters"));
+		}
+		//execute the statement
+		if($statement->execute() === false) {
+			throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
+		}
+		//get result from the SELECT query
+		$result = $statement->get_result();
+		if($result === false) {
+			throw(new mysqli_sql_exception("Unable to get result set."));
+		}
+
+		//turn the results into an array
+		$teamIdSearch = array();
+
+		// Loop through the array and display the results
+		while(($row = $result->fetch_assoc()) !== null) {
+
+			try {
+				$team = new TeamCause($row["teamId"], $row["causeId"]);
+				$teamIdSearch [] = $team;
+			} catch(Exception $exception) {
+
+				throw(new mysqli_sql_exception("Unable to convert row to teamCause", 0, $exception));
+			}
+		}
+
+		if($result->num_rows === 0) {
+			return(null);
+		} else {
+			return($teamIdSearch);
+		}
+	}
 }
