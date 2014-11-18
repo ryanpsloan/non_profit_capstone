@@ -59,12 +59,48 @@ class Team {
 		$this->yeamd = $newTeamId;
 	}
 
+	public function getTeamName() {
+		return($this->teamName);
+	}
 
 	public function setTeamName ($newTeamName){
 		if($newTeamName === null){
 			throw(new UnexpectedValueException("TeamName cannot be null"));
 		}
 
+		$newTeamName = trim($newTeamName);
+		if(filter_var($newTeamName, FILTER_SANITIZE_STRING) === false) {
+			throw(new UnexpectedValueException("TeamName $newTeamName is not a string"));
+		}
+		//verify userTitle is less than 64 characters
+		$newTeamNameLength = strlen($newTeamName);
+		if($newTeamNameLength > 65) {
+			throw(new RangeException("Team name $newTeamName is longer than 64 characters"));
+		}
+		//remove UserTitle from quarantine
+		$this->teamName = $newTeamName;
+	}
+
+	public function getTeamCause() {
+		return($this->teamCause);
+	}
+
+	public function setTeamCause ($newTeamCause){
+		if($newTeamCause === null){
+			throw(new UnexpectedValueException("TeamCause cannot be null"));
+		}
+
+		$newTeamCause = trim($newTeamCause);
+		if(filter_var($newTeamCause, FILTER_SANITIZE_STRING) === false) {
+			throw(new UnexpectedValueException("TeamCause $newTeamCause is not a string"));
+		}
+		//verify userTitle is less than 64 characters
+		$newTeamCauseLength = strlen($newTeamCause);
+		if($newTeamCauseLength > 65) {
+			throw(new RangeException("Team cause $newTeamCause is longer than 64 characters"));
+		}
+		//remove UserTitle from quarantine
+		$this->teamCause = $newTeamCause;
 	}
 
 
@@ -122,13 +158,13 @@ class Team {
 
 	public function update($mysqli){
 		//* query to find Team ID//
-		$query = "UPDATE team SET teamName = ?, teamCause = ?, price = ? WHERE teamId = ?";
+		$query = "UPDATE team SET teamId = null, teamName = ?, teamCause = ? WHERE teamId = ?";
 		$statement = $mysqli->prepare($query);
 		if($statement === false) {
 			throw(new mysqli_sql_exception("Unable to prepare statement"));
 		}
 
-		$wasClean = $statement->bind_param("ssi", $this->teamName, $this->teamCause, $this->teamId);
+		$wasClean = $statement->bind_param("iss", $this->teamId, $this->teamName, $this->teamCause);
 		if($wasClean === false) {
 			throw(new mysqli_sql_exception("Unable to bind parameters"));
 		}

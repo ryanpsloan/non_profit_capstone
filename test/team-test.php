@@ -8,13 +8,14 @@ require_once("/etc/apache2/capstone-mysql/helpabq.php");
 require_once("../php/team.php");
 
 // the teamTest is a container for all our tests
-class teamTest extends UnitTestCase {
+class TeamTest extends UnitTestCase {
 	// variable to hold the mySQL connection
 	private $mysqli = null;
 	// variable to hold the test database row
 	private $team   = null;
 
 	// a few "global" variables for creating test data
+	private $TEAMID		= null;
 	private $TEAMNAME   	= "Run DMC";
 	private $TEAMCAUSE   = "homeless coders";
 
@@ -47,33 +48,32 @@ class teamTest extends UnitTestCase {
 		$this->team->insert($this->mysqli);
 
 		// finally, compare the fields
-		$this->assertNotNull($this->team->GetteamId());
-		$this->assertTrue($this->team->GetteamId() > 0);
-		$this->assertIdentical($this->teamName-GetTeamName(),  		$this->TEAMNAME);
-		$this->assertIdentical($this->team->GetTeamCause(),    		$this->TEAMCAUSE);
+		$this->assertNotNull($this->team->getTeamId());
+		$this->assertTrue($this->team->getTeamId() > 0);
+		$this->assertIdentical($this->team->getTeamName(),  		$this->TEAMNAME);
+		$this->assertIdentical($this->team->getTeamCause(),    		$this->TEAMCAUSE);
 	}
 
 	// test updating a team in mySQL
-	public function testUpdateTeam($teamName, $newTeamCause) {
+	public function testUpdateTeam() {
 		// verify mySQL connected OK
 		$this->assertNotNull($this->mysqli);
 
 		// create a team to post to mySQL
-		$this->team = new team(null, $this->TEAMNAME, $this->TEAMCAUSE);
+		$this->team = new Team(null, $this->TEAMNAME, $this->TEAMCAUSE);
 
 		// insert the team to mySQL
 		$this->team->insert($this->mysqli);
 
 		// update the team and post the changes to mySQL
-		$newTeamName = "DMC";
-		$this->team->setteamName($newTeamName);
-		$this->team->update($this->mysqli);
-
-		// compare the fields
-		$this->assertNotNull($this->teamId->getTeamId());
-		$this->assertIdentical($this->team->getTeamName(), 			$newTeamName);
-		$this->assertIdentical($this->team->getTeamCause(), 			$newTeamCause);
-	}
+		$this->assertNotNull($this->team->newTeamId);
+		$this->assertTrue($this->team->newTeamId > 0);
+		//fifth delete the article
+		$this->team->delete($this->mysqli);
+		$this->team = null;
+		//finally try to get the event and assert we didn't get a thing
+		$hopefulTeam = Team::getTeamByTeamId($this->mysqli, $this->TEAMID);
+		$this->assertNull($hopefulEvent);}
 
 	// test deleting a team
 	public function testDeleteTeam() {
@@ -87,20 +87,20 @@ class teamTest extends UnitTestCase {
 		$this->team->insert($this->mysqli);
 
 		// verify the team was inserted
-		$this->assertNotNull($this->team->getteamId());
-		$this->assertTrue($this->team->getteamId() > 0);
+		$this->assertNotNull($this->team->getTeamId());
+		$this->assertTrue($this->team->getTeamId() > 0);
 
 		// delete the team
 		$this->team->delete($this->mysqli);
 		$this->team = null;
 
 		// try to get the team and assert we didn't get a thing
-		$hopefulteam = team::getteamByTeamId($this->mysqli, $this->TeamId);
-		$this->assertNull($hopefulteam);
+		$hopefulTeam = team::getteamByTeamId($this->mysqli, $this->TeamId);
+		$this->assertNull($hopefulTeam);
 	}
 
 	// test grabbing a team from mySQL
-	public function testGetteamByTeamName() {
+	public function testGetTeamByTeamName() {
 		// verify mySQL connected OK
 		$this->assertNotNull($this->mysqli);
 
