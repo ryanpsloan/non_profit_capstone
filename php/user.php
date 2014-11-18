@@ -248,6 +248,15 @@ class User {
 	}
 
 	/**
+	 * gets the value of permissions
+	 *
+	 * @return int value of permissions (or null if active User)
+	 **/
+	public function getPermissions() {
+		return($this->permissions);
+	}
+
+	/**
 	 * sets the value for permissions
 	 *
 	 * @param int $newPermissions permissions
@@ -255,6 +264,12 @@ class User {
 	 * @throws RangeException if permissions isn't positive
 	 **/
 	public function setPermissions($newPermissions) {
+
+		// zeroth, set allow the authentication token to be null if an active object
+		if($newPermissions === null) {
+			$this->permissions = null;
+			return;
+		}
 
 		//first, ensure the user id is an integer
 		if(filter_var($newPermissions, FILTER_VALIDATE_INT) === false) {
@@ -303,7 +318,9 @@ class User {
 
 		// execute the statement
 		if($statement->execute() === false) {
+			var_dump($statement);
 			throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
+
 		}
 
 		// update the null userId with what mySQL just gave us

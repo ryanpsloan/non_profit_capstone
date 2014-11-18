@@ -73,7 +73,7 @@ class UserIdTest extends UnitTestCase{
 		$this->assertIdentical($this->user->getPasswordHash(),					$this->passwordHash);
 		$this->assertIdentical($this->user->getSalt(),								$this->salt);
 		$this->assertIdentical($this->user->getAuthToken(),						$this->authToken);
-		$this->assertIdentical($this->user->getPermissions() ,					$this->permissions);
+		$this->assertIdentical($this->user->getPermissions(),						$this->permissions);
 	}
 // test updating a User in mySQL
 	public function testUpdateUserId() {
