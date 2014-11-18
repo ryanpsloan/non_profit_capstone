@@ -137,8 +137,7 @@ class Event {
 	 * @throws mysqli_sql_exception when mySQL related error occurs
 	 */
 
-	public function insert(&$mysqli)
-	{
+	public function insert(&$mysqli)	{
 		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
 			throw(new mysqli_sql_exception("Input is not a mysqli object"));
 		}
@@ -243,8 +242,7 @@ class Event {
 	 * @throws mysqli_sql_exception if the object cannot be created
 	 **/
 
-	public static function getEventByEventId(&$mysqli, $eventId)
-	{
+	public static function getEventByEventId(&$mysqli, $eventId) {
 		//handle degenerate cases
 		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
 			throw(new mysqli_sql_exception("input is not a mysqli object"));
@@ -279,7 +277,7 @@ class Event {
 
 		$row = $result->fetch_assoc();
 
-// convert the associative array to a User
+		// convert the associative array to a User
 		if($row !== null) {
 			try {
 				$event = new Event($row["eventId"], $row["eventTitle"],
@@ -306,8 +304,7 @@ class Event {
 	 * @return mysqli shared mysqli object
 	 * @throws mysqli_sql_exception if the object cannot be created
 	 **/
-	public static function getEventByEventTitle(&$mysqli, $eventTitle)
-	{
+	public static function getEventByEventTitle(&$mysqli, $eventTitle) {
 
 		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
 			throw(new mysqli_sql_exception("input is not a mysqli object"));
@@ -365,8 +362,7 @@ class Event {
 	 * @return mysqli shared mysqli object
 	 * @throws mysqli_sql_exception if the object cannot be created
 	 **/
-	public static function getEventByDate(&$mysqli, $eventDate)
-	{
+	public static function getEventByDate(&$mysqli, $eventDate) {
 
 		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
 			throw(new mysqli_sql_exception("input is not a mysqli object"));

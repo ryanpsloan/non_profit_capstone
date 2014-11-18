@@ -105,7 +105,7 @@ class User {
 	 * @ return string value for user name
 	 *
 	 **/
-	public function getUserName () {
+	public function getUserName() {
 		return($this->userName);
 	}
 
