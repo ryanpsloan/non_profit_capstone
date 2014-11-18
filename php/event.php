@@ -234,6 +234,15 @@ class Event {
 		}
 	}
 
+	/**
+	 * gets the mysqli object, creating it if necessary
+	 *
+	 * @param $mysqli
+	 * @param mixed $eventId
+	 * @return mysqli shared mysqli object
+	 * @throws mysqli_sql_exception if the object cannot be created
+	 **/
+
 	public static function getEventByEventId(&$mysqli, $eventId)
 	{
 		//handle degenerate cases
@@ -289,6 +298,14 @@ class Event {
 		}
 	}
 
+	/**
+	 * gets the mysqli object, creating it if necessary
+	 *
+	 * @param $mysqli
+	 * @param mixed $eventTitle
+	 * @return mysqli shared mysqli object
+	 * @throws mysqli_sql_exception if the object cannot be created
+	 **/
 	public static function getEventByEventTitle(&$mysqli, $eventTitle)
 	{
 
@@ -340,6 +357,14 @@ class Event {
 		}
 	}
 
+	/**
+	 * gets the mysqli object, creating it if necessary
+	 *
+	 * @param $mysqli
+	 * @param mixed $eventDate
+	 * @return mysqli shared mysqli object
+	 * @throws mysqli_sql_exception if the object cannot be created
+	 **/
 	public static function getEventByDate(&$mysqli, $eventDate)
 	{
 
@@ -391,6 +416,14 @@ class Event {
 		}
 	}
 
+	/**
+	 * gets the mysqli object, creating it if necessary
+	 *
+	 * @param $mysqli
+	 * @param $eventLocation
+	 * @return mysqli shared mysqli object
+	 * @throws mysqli_sql_exception if the object cannot be created
+	 **/
 	public static function getEventByLocation(&$mysqli, $eventLocation){
 		// handle the degenerate cases
 		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {

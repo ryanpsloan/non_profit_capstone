@@ -291,4 +291,69 @@ class userEvent {
 			throw(new mysqli_sql_exception("Unable to execute mySQL statement."));
 		}
 	}
+
+	/**
+	 * gets the mysqli object, creating it if necessary
+	 *
+	 * @return mysqli shared mysqli object
+	 * @throws mysqli_sql_exception if the object cannot be created
+	 **/
+	public static function getUserEventByEventId($mysqli, $eventId){
+		//handle degenerate cases
+		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
+			throw(new mysqli_sql_exception("input is not a mysqli object"));
+		}
+
+		// sanitize the eventId before searching
+		$eventId = trim($eventId);
+		$eventId = filter_var($eventId, FILTER_VALIDATE_INT);
+
+
+
+		// create query template
+		$query = "SELECT profileId,eventId, userEventRole, commentPermission, banStatus FROM userEvent WHERE eventId = ?";
+
+		$statement = $mysqli->prepare($query);
+		if($statement === false) {
+			throw(new mysqli_sql_exception("Unable to prepare statement"));
+		}
+		//bind the eventId to the place holder in the template
+		$wasClean = $statement->bind_param("i", $eventId);
+		if($wasClean === false) {
+			throw(new mysqli_sql_exception("Unable to bind parameters"));
+		}
+		//execute the statement
+		if($statement->execute() === false) {
+			throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
+		}
+		//get result from the SELECT query
+		$result = $statement->get_result();
+		if($result === false) {
+			throw(new mysqli_sql_exception("Unable to get result set."));
+		}
+
+		//turn the results into an array
+		$eventIdSearch = array();
+
+		// Loop through the array and display the results
+		while(($row = $result->fetch_assoc()) !== null) {
+
+			try {
+				$userEvent = new UserEvent( $row["profileId"], $row["eventId"], $row["userEventRole"], $row["commentPermission"],
+					$row["banStatus"]);
+				$eventIdSearch [] = $userEvent;
+			} catch(Exception $exception) {
+
+				throw(new mysqli_sql_exception("Unable to convert row to event", 0, $exception));
+			}
+		}
+
+		if($result->num_rows === 0) {
+			return(null);
+		} else {
+			return($eventIdSearch);
+		}
+
+
+	}
 }
