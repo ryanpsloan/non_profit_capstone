@@ -21,8 +21,8 @@ class TeamTest extends UnitTestCase {
 
 	// setUp() is a method that is run before each test
 	// here, we use it to connect to mySQL and to calculate the salt, hash, and authenticationToken
-	public function setUp()
-	{
+	public function setUp() {
+
 		// connect to mySQL
 		$this->mysqli = MysqliConfiguration::getMysqli();
 	}
@@ -50,7 +50,7 @@ class TeamTest extends UnitTestCase {
 		// finally, compare the fields
 		$this->assertNotNull($this->team->getTeamId());
 		$this->assertTrue($this->team->getTeamId() > 0);
-		$this->assertIdentical($this->team->getTeamName(),  		$this->TEAMNAME);
+		$this->assertIdentical($this->team->getTeamName(),  			$this->TEAMNAME);
 		$this->assertIdentical($this->team->getTeamCause(),    		$this->TEAMCAUSE);
 	}
 
@@ -66,14 +66,15 @@ class TeamTest extends UnitTestCase {
 		$this->team->insert($this->mysqli);
 
 		// update the team and post the changes to mySQL
-		$this->assertNotNull($this->team->newTeamId);
-		$this->assertTrue($this->team->newTeamId > 0);
+		$this->assertNotNull($this->team->newTeamId());
+		$this->assertTrue($this->team->newTeamId() > 0);
 		//fifth delete the article
 		$this->team->delete($this->mysqli);
 		$this->team = null;
-		//finally try to get the event and assert we didn't get a thing
+		//finally try to get the team and assert we didn't get a thing
 		$hopefulTeam = Team::getTeamByTeamId($this->mysqli, $this->TEAMID);
-		$this->assertNull($hopefulEvent);}
+		$this->assertNull($hopefulTeam);
+	}
 
 	// test deleting a team
 	public function testDeleteTeam() {
@@ -95,7 +96,7 @@ class TeamTest extends UnitTestCase {
 		$this->team = null;
 
 		// try to get the team and assert we didn't get a thing
-		$hopefulTeam = team::getteamByTeamId($this->mysqli, $this->TeamId);
+		$hopefulTeam = team::getteamByTeamId($this->mysqli, $this->TEAMID);
 		$this->assertNull($hopefulTeam);
 	}
 
@@ -116,7 +117,7 @@ class TeamTest extends UnitTestCase {
 		// finally, compare the fields
 		$this->assertNotNull($staticteam->getteamId());
 		$this->assertIdentical($staticteam->getteamName(),              $this->team->getteamName());
-		$this->assertIdentical($staticteam->getteamCasue(),               $this->TEAMCAUSE);
+		$this->assertIdentical($staticteam->getteamCasue(),             $this->TEAMCAUSE);
 	}
 }
 ?>
