@@ -59,6 +59,8 @@ class userEvent {
 		}
 	}
 
+	// todo add get method
+
 	/**
 	 * Sets the value of profileId from profile class
 	 *
@@ -66,8 +68,7 @@ class userEvent {
 	 * @throws UnexpectedValueException if not an integer or null
 	 * @throws RangeException if Cause id is not positive
 	 **/
-	public function setProfileId($newProfileId)
-	{
+	public function setProfileId($newProfileId) {
 		if($this->profileId === null) {
 			throw (new UnexpectedValueException("profileId does not exist"));
 		}
@@ -116,8 +117,7 @@ class userEvent {
 	 * @throws RangeException if team status is not positive
 	 */
 
-	public function setUserEventRole($newUserEventRole)
-	{
+	public function setUserEventRole($newUserEventRole) {
 		if($newUserEventRole === null) {
 			throw(new UnexpectedValueException("userEvent Roll Must not be Null"));
 		}
@@ -140,8 +140,7 @@ class userEvent {
 	 * @throws UnexpectedValueException if not an integer or null
 	 * @throws RangeException if team status is not positive
 	 */
-	public function setCommentPermission($newCommentPermission)
-	{
+	public function setCommentPermission($newCommentPermission) {
 		if($newCommentPermission === null) {
 			throw (new UnexpectedValueException("commentPermission must not be null"));
 		}
@@ -164,8 +163,7 @@ class userEvent {
 	 * @throws UnexpectedValueException if not an integer or null
 	 * @throws RangeException if team status is not positive
 	 */
-	public function setBanStatus($newBanStatus)
-	{
+	public function setBanStatus($newBanStatus) {
 		if($newBanStatus === null) {
 			throw (new UnexpectedValueException("banStatus must not be null"));
 		}
@@ -187,7 +185,7 @@ class userEvent {
 	 * @param TeamEvent $mysqli pointer to mySQL connection by reference
 	 * @throws mysqli_sql_exception when mySQL related error occurs
 	 */
-	public function insert(&$mysqli){
+	public function insert(&$mysqli) {
 		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli"){
 			throw(new mysqli_sql_exception("This is not a valid mysqli object"));
 		}
@@ -225,7 +223,7 @@ class userEvent {
 	 * @param TeamCause $mysqli pointer to mySQL connection by reference
 	 * @throws mysqli_sql_exception when mySQL related error occurs
 	 */
-	public function delete($mysqli){
+	public function delete($mysqli) {
 		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
 			throw (new mysqli_sql_exception("Input is not a mysqli object"));
 		}
@@ -295,6 +293,8 @@ class userEvent {
 	/**
 	 * gets the mysqli object, creating it if necessary
 	 *
+	 *	@param $mysqli
+	 * @param mixed $eventId
 	 * @return mysqli shared mysqli object
 	 * @throws mysqli_sql_exception if the object cannot be created
 	 **/

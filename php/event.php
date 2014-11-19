@@ -46,8 +46,7 @@ class Event {
 		}
 	}
 
-	public function __get($name)
-	{
+	public function __get($name) {
 		$data = array("eventId" => $this->eventId,
 						  "eventTitle" => $this->eventTitle,
 						  "eventDate" => $this->eventDate,
@@ -58,7 +57,10 @@ class Event {
 			throw(new InvalidArgumentException("Unable to get $name"));
 		}
 	}
+
 	/**
+	 * assigns the value for eventId
+	 *
 	 * @param mixed $newEventId event id (or null if new object)
 	 * @throws UnexpectedValueException if not an integer or null
 	 * @throws RangeException if event id is not positive
@@ -94,8 +96,7 @@ class Event {
 	 * @param mixed $newEventDate object or string with the date created
 	 * @throws RangeException if date is not a valid date
 	 **/
-	public function setEventDate($newEventDate)
-	{
+	public function setEventDate($newEventDate) {
 		// zeroth, allow a DateTime object to be directly assigned
 		if(gettype($newEventDate) === "object" && get_class($newEventDate) === "DateTime") {
 			$this->eventDate = $newEventDate;
@@ -129,14 +130,17 @@ class Event {
 		$newEventLocation = trim($newEventLocation);
 		$newEventLocation = filter_var($newEventLocation, FILTER_SANITIZE_STRING);
 
+		// todo add the exception for Locations that are too long
+
 		$this->eventLocation = $newEventLocation;
 	}
 
 	/**
+	 * Inserts the event object into mysql
+	 *
 	 * @param event $mysqli pointer to mySQL connection by reference
 	 * @throws mysqli_sql_exception when mySQL related error occurs
 	 */
-
 	public function insert(&$mysqli)	{
 		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
 			throw(new mysqli_sql_exception("Input is not a mysqli object"));
@@ -166,7 +170,10 @@ class Event {
 
 		$this->eventId = $mysqli->insert_id;
 	}
+
 	/**
+	 * deletes the event object from mysql by grabbing the event Id
+	 *
 	 *@param event $mysqli pointer to mySQL connection by reference
 	 * @throws mysqli_sql_exception when mySQL related error occur
 	 */
@@ -196,6 +203,8 @@ class Event {
 	}
 
 	/**
+	 * updates the objects values in mysql
+	 *
 	 * @param resource $mysqli pointer to mySQL connection, by reference
 	 * @throws mysqli_sql_exception when mySQL related errors occur
 	 **/
@@ -234,14 +243,13 @@ class Event {
 	}
 
 	/**
-	 * gets the mysqli object, creating it if necessary
+	 * gets the mysqli object using the eventId, creating it if necessary
 	 *
 	 * @param $mysqli
 	 * @param mixed $eventId
 	 * @return mysqli shared mysqli object
 	 * @throws mysqli_sql_exception if the object cannot be created
 	 **/
-
 	public static function getEventByEventId(&$mysqli, $eventId) {
 		//handle degenerate cases
 		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
@@ -277,7 +285,7 @@ class Event {
 
 		$row = $result->fetch_assoc();
 
-		// convert the associative array to a User
+		// convert the associative array to a Event
 		if($row !== null) {
 			try {
 				$event = new Event($row["eventId"], $row["eventTitle"],
@@ -285,19 +293,19 @@ class Event {
 			}
 			catch(Exception $exception) {
 				// if the row couldn't be converted, rethrow it
-				throw(new mysqli_sql_exception("Unable to convert row to User", 0, $exception));
+				throw(new mysqli_sql_exception("Unable to convert row to Event", 0, $exception));
 			}
 
-			// if we got here, the User is good - return it
+			// if we got here, the Event is good - return it
 			return($event);
 		} else {
-			// 404 User not found - return null instead
+			// 404 Event not found - return null instead
 			return(null);
 		}
 	}
 
 	/**
-	 * gets the mysqli object, creating it if necessary
+	 * gets the mysqli object using the event title, creating it if necessary
 	 *
 	 * @param $mysqli
 	 * @param mixed $eventTitle
@@ -355,14 +363,14 @@ class Event {
 	}
 
 	/**
-	 * gets the mysqli object, creating it if necessary
+	 * gets the mysqli object by finding the date, creating it if necessary
 	 *
 	 * @param $mysqli
 	 * @param mixed $eventDate
 	 * @return mysqli shared mysqli object
 	 * @throws mysqli_sql_exception if the object cannot be created
 	 **/
-	public static function getEventByDate(&$mysqli, $eventDate) {
+	public static function getEventByEventDate(&$mysqli, $eventDate) {
 
 		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
 			throw(new mysqli_sql_exception("input is not a mysqli object"));
@@ -396,8 +404,8 @@ class Event {
 		while(($row = $result->fetch_assoc()) !== null) {
 
 			try {
-				$event = new Event($row["eventId"], $row["profileId"], $row["date"], $row["eventDate"], $row["eventTitle"],
-					$row["eventBody"]);
+				$event = new Event($row["eventId"], $row["eventDate"], $row["eventTitle"],
+					$row["eventLocation"]);
 				$eventDateSearch [] = $event;
 			} catch(Exception $exception) {
 
@@ -413,14 +421,14 @@ class Event {
 	}
 
 	/**
-	 * gets the mysqli object, creating it if necessary
+	 * gets the mysqli object by finding the location, creating it if necessary
 	 *
 	 * @param $mysqli
 	 * @param $eventLocation
 	 * @return mysqli shared mysqli object
 	 * @throws mysqli_sql_exception if the object cannot be created
 	 **/
-	public static function getEventByLocation(&$mysqli, $eventLocation){
+	public static function getEventByEventLocation(&$mysqli, $eventLocation){
 		// handle the degenerate cases
 		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
 			throw(new mysqli_sql_exception("input is not a mysqli object"));

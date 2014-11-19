@@ -200,7 +200,7 @@ class TeamCause{
 	}
 
 	/**
-	 * Creates static method to allow access to class without constructor
+	 * gets the mysqli object using the TeamId, creating it if necessary
 	 *
 	 * @param $mysqli mysqli object
 	 * @param mixed $teamId
@@ -263,7 +263,7 @@ class TeamCause{
 	}
 
 	/**
-	 * Allows for access to class with out constructor
+	 * gets the mysqli object using the causeId, creating it if necessary
 	 *
 	 * @param $mysqli mysqli object
 	 * @param mixed $causeId
