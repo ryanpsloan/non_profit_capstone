@@ -65,14 +65,27 @@ class TeamTest extends UnitTestCase {
 		// insert the team to mySQL
 		$this->team->insert($this->mysqli);
 
+		// fourth, update the user and post the changes to mySQL
+		$newTeamCause = "feeding the coders";
+		$this->team->setTeamCause($newTeamCause);
+		$this->team->update($this->mysqli);
+
+
 		// update the team and post the changes to mySQL
-		$this->assertNotNull($this->team->newTeamId());
-		$this->assertTrue($this->team->newTeamId() > 0);
+		$this->assertNotNull($this->team->getTeamId());
+		$this->assertTrue($this->team->getTeamId() > 0);
+		$this->assertIdentical($this->team->getTeamName(),	               			$this->TEAMNAME);
+		$this->assertIdentical($this->team->getTeamCause(),			               $newTeamCause);
+
+
+
+
 		//fifth delete the article
 		$this->team->delete($this->mysqli);
 		$this->team = null;
+
 		//finally try to get the team and assert we didn't get a thing
-		$hopefulTeam = Team::getTeamByTeamId($this->mysqli, $this->TEAMID);
+		$hopefulTeam = Team::getTeamByTeamId($this->mysqli, $this->TEAMCAUSE);
 		$this->assertNull($hopefulTeam);
 	}
 
@@ -101,23 +114,26 @@ class TeamTest extends UnitTestCase {
 	}
 
 	// test grabbing a team from mySQL
-	public function testGetTeamByTeamName() {
+	public function testGetTeamByTeamId () {
 		// verify mySQL connected OK
 		$this->assertNotNull($this->mysqli);
 
 		// create a team to post to mySQL
-		$this->team = new team(null, $this->TEAMNAME, $this->TEAMCAUSE);
+		$this->team = new Team(null, $this->TEAMNAME, $this->TEAMCAUSE);
 
 		// third, insert the team to mySQL
 		$this->team->insert($this->mysqli);
 
 		// fourth, get the team using the static method
-		$staticteam = team::getteamByTeamName($this->mysqli, $this->TEAMNAME);
+		$staticTeam = Team::getTeamByTeamId($this->mysqli, $this->team->getTeamId());
 
 		// finally, compare the fields
-		$this->assertNotNull($staticteam->getteamId());
-		$this->assertIdentical($staticteam->getteamName(),              $this->team->getteamName());
-		$this->assertIdentical($staticteam->getteamCasue(),             $this->TEAMCAUSE);
+		// finally, compare the fields
+		$this->assertNotNull($staticTeam->getTeamId ());
+		$this->assertTrue($staticTeam->getTeamId () > 0);
+		$this->assertIdentical($staticTeam->getTeamId(),	 					$this->team->getTeamId());
+		$this->assertIdentical($staticTeam->getTeamName(),						$this->TEAMNAME);
+		$this->assertIdentical($staticTeam->getTeamCause(), 					$this->TEAMCAUSE);
 	}
 }
 ?>

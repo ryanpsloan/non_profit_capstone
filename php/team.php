@@ -56,7 +56,7 @@ class Team {
 		if($newTeamId <= 0) {
 			throw(new RangeException("team Id $newTeamId is not positive"));
 		}
-		$this->yeamd = $newTeamId;
+		$this->teamId = $newTeamId;
 	}
 
 	public function getTeamName() {
@@ -158,13 +158,25 @@ class Team {
 
 	public function update($mysqli){
 		//* query to find Team ID//
-		$query = "UPDATE team SET teamId = null, teamName = ?, teamCause = ? WHERE teamId = ?";
+
+		// handle degenerate cases
+		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
+			throw(new mysqli_sql_exception("input is not a mysqli object"));
+		}
+
+		// enforce the teamId is not null (i.e., don't update a team that hasn't been inserted)
+		if($this->teamId === null) {
+			throw(new mysqli_sql_exception("Unable to update a team that does not exist"));
+		}
+
+
+		$query = "UPDATE team SET teamName = ?, teamCause = ? WHERE teamId = ?";
 		$statement = $mysqli->prepare($query);
 		if($statement === false) {
 			throw(new mysqli_sql_exception("Unable to prepare statement"));
 		}
 
-		$wasClean = $statement->bind_param("iss", $this->teamId, $this->teamName, $this->teamCause);
+		$wasClean = $statement->bind_param("ssi", $this->teamName, $this->teamCause, $this->teamId);
 		if($wasClean === false) {
 			throw(new mysqli_sql_exception("Unable to bind parameters"));
 		}
@@ -173,6 +185,211 @@ class Team {
 			throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
 		}
 	}
+	/**
+	 * gets the Team by userId
+	 *
+	 * @param resource $mysqli pointer to mySQL connection, by reference
+	 * @param int $teamId teamId to search for
+	 * @return mixed teamId found or null if not found
+	 * @throws mysqli_sql_exception when mySQL related errors occur
+	 **/
+
+	public static function getTeamByTeamId(&$mysqli, $teamId)
+	{
+		//handle degenerate cases
+		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
+			throw(new mysqli_sql_exception("input is not a mysqli object"));
+		}
+		//sanitize the teamId before searching
+		$teamId = filter_var($teamId, FILTER_VALIDATE_INT);
+		if($teamId === null) {
+			throw(new mysqli_sql_exception("input is null"));
+		}
+
+		//Create query template
+		$query = "SELECT teamId, teamName, teamCause FROM team WHERE teamId = ?";
+		$statement = $mysqli->prepare($query);
+		if($statement === false) {
+			throw(new mysqli_sql_exception ("unable to prepare statement"));
+		}
+
+		//bind the team Id to the place holder in the template
+		$wasClean = $statement->bind_param("i", $teamId);
+		if($wasClean === false) {
+			throw(new mysqli_sql_exception("unable to bind parameters"));
+		}
+		//execute the statement
+		if($statement->execute() === false) {
+			throw(new mysqli_sql_exception("unable to execute mySQL statement"));
+		}
+		// get result from the SELECT query
+		$result = $statement->get_result();
+		if($result === false) {
+			throw(new mysqli_sql_exception("unable to get result set"));
+		}
+		//primary key can only one of two things null or integer
+		//if there's a result, we can show it
+		//if not error code 404
+		$row = $result->fetch_assoc();
+
+		//covert the associative array to a userId
+		if($row !== null) {
+			try {
+				$team = new team($row["teamId"], $row["teamName"], $row["teamCause"]);
+			} catch(Exception $exception) {
+				//rethrow
+				throw(new mysqli_sql_exception ("unable to convert row to team", 0, $exception));
+
+			}
+			//if we get a teamId I'm lucky and show it
+			return ($team);
+		} else {
+			//404 User not found
+			return (null);
+		}
+	}
+
+	/**
+	 * gets the Team by teamName
+	 *
+	 * @param resource $mysqli pointer to mySQL connection, by reference
+	 * @param int $teamName teamName to search for
+	 * @return mixed teamName found or null if not found
+	 * @throws mysqli_sql_exception when mySQL related errors occur
+	 **/
+
+	public static function getTeamByTeamName(&$mysqli, $teamName)
+	{
+		//handle degenerate cases
+		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
+			throw(new mysqli_sql_exception("input is not a mysqli object"));
+		}
+
+		//sanitize the teamName before searching
+		$teamName = trim($teamName);
+		$teamName = filter_var($teamName, FILTER_SANITIZE_STRING);
+		if($teamName === null) {
+			throw(new mysqli_sql_exception("input is null"));
+		}
+
+		//Create query template
+		$query = "SELECT teamId, teamName, teamCause FROM team WHERE teamName = ?";
+		$statement = $mysqli->prepare($query);
+		if($statement === false) {
+			throw(new mysqli_sql_exception ("unable to prepare statement"));
+		}
+
+		//bind the team Id to the place holder in the template
+		$wasClean = $statement->bind_param("s", $teamName);
+		if($wasClean === false) {
+			throw(new mysqli_sql_exception("unable to bind parameters"));
+		}
+		//execute the statement
+		if($statement->execute() === false) {
+			throw(new mysqli_sql_exception("unable to execute mySQL statement"));
+		}
+		// get result from the SELECT query
+		$result = $statement->get_result();
+		if($result === false) {
+			throw(new mysqli_sql_exception("unable to get result set"));
+		}
+		//Unique can only one of two things null or string
+		//if there's a result, we can show it
+		//if not error code 404
+		$row = $result->fetch_assoc();
+
+		//covert the associative array to a userId
+		if($row !== null) {
+			try {
+				$team = new team($row["teamId"], $row["teamName"], $row["teamCause"]);
+			} catch(Exception $exception) {
+				//rethrow
+				throw(new mysqli_sql_exception ("unable to convert row to team", 0, $exception));
+
+			}
+			//if we get a teamId I'm lucky and show it
+			return ($team);
+		} else {
+			//404 User not found
+			return (null);
+		}
+	}
+
+
+	/**
+	 * gets the Team by teamCause
+	 *
+	 * @param resource $mysqli pointer to mySQL connection, by reference
+	 * @param string $teamCause teamCause to search for
+	 * @return string teamCause found or null if not found
+	 * @throws mysqli_sql_exception when mySQL related errors occur
+	 **/
+	public static function getTeamByTeamCause(&$mysqli, $teamCause) {
+
+		//handle degenerate cases
+		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
+			throw(new mysqli_sql_exception("input is not a mysqli object"));
+		}
+		//sanitize the teamCause before searching
+		$teamCause = trim($teamCause);
+		$teamCause = filter_var($teamCause, FILTER_SANITIZE_STRING);
+		if($teamCause === null) {
+			throw(new mysqli_sql_exception("input is null"));
+		}
+
+		//Create query template
+		$query = "SELECT teamId, teamName, teamCause FROM team WHERE teamCause = ?";
+		$statement = $mysqli->prepare($query);
+		if($statement === false) {
+			throw(new mysqli_sql_exception ("unable to prepare statement"));
+		}
+
+		//bind the teamId to the place holder in the template
+		$wasClean = $statement->bind_param("s", $teamCause);
+		if($wasClean === false) {
+			throw(new mysqli_sql_exception("unable to bind parameters"));
+		}
+		//execute the statement
+		if($statement->execute() === false) {
+			throw(new mysqli_sql_exception("unable to execute mySQL statement"));
+		}
+		// get result from the SELECT query
+		$result = $statement->get_result();
+		if($result === false) {
+			throw(new mysqli_sql_exception("unable to get result set"));
+		}
+
+		//many teams can have different teamCauses
+		//if there's a result, we can show it
+		//if not error code 404
+
+		//teamArrayCounter = 0
+		$teamCauseArray = array();
+		while(($row = $result->fetch_assoc()) !== null) {
+
+			//covert the associative array to a teamId and repeat for all teamNames
+			try {
+				$team = new team($row["teamId"], $row["teamName"], $row["teamCause"]);
+				//build empty array for sql to fill
+				$teamCauseArray [] = $team;
+
+			} catch(Exception $exception) {
+				//rethrow
+				throw(new mysqli_sql_exception ("unable to convert row to user", 0, $exception));
+			}
+		}
+		//if we get a teamId I'm lucky and show it
+		if ($result->num_rows ===0) {
+			return (null);
+		} else {
+
+			return ($teamCauseArray);
+		}
+	}
+
+
+
+
 }
 
 

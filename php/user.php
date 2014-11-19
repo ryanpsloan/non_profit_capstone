@@ -596,7 +596,7 @@ class User {
 		}
 	}
 
-	/**
+	 /**
 	 * gets the User by permissions
 	 *
 	 * @param resource $mysqli pointer to mySQL connection, by reference
