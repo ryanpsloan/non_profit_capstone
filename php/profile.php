@@ -798,8 +798,8 @@
 		  }
 		  //sanitize the zipCode before searching
 		  $zipCode = trim($zipCode);
-		  $zipCode = filter_var($zipCode, FILTER_VALIDATE_INT);
-		  $zipCode = intval($zipCode);
+		  $verifyRegExp = array("options" => array("regexp" => "/^[\d]{5}(-[\d]{4})?$/"));
+		  $zipCode =(filter_var($zipCode, FILTER_VALIDATE_REGEXP, $verifyRegExp) === false);
 		  if($zipCode === null) {
 			  throw(new mysqli_sql_exception("input is null"));
 		  }
