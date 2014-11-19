@@ -238,6 +238,8 @@ class TeamEvent {
 	}
 
 	/**
+	 * Deletes the object from mySQL
+	 *
 	 * @param TeamEvent $mysqli pointer to mySQL connection by reference
 	 * @throws mysqli_sql_exception when mySQL related error occurs
 	 **/
@@ -273,6 +275,8 @@ class TeamEvent {
 	}
 
 	/**
+	 * Updates the object within mySQL
+	 *
 	 * @param resource $mysqli pointer to mySQL connection, by reference
 	 * @throws mysqli_sql_exception when mySQL related errors occur
 	 **/
