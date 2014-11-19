@@ -20,7 +20,7 @@ class Comment{
 	 */
 	private $commentDate;
 
-	public function __constructor($newCommentId, $newCommentText, $newCommentDate){
+	public function __construct($newCommentId, $newCommentText, $newCommentDate){
 		try{
 			$this->setCommentId($newCommentId);
 

@@ -12,10 +12,10 @@ require_once("../php/profile.php");
 require_once("../php/comment.php");
 
 //then require class under scrutiny
-require_once("../php/commentUser.php");
+require_once("../php/commentuser.php");
 
 //the UserTeamTest for all our testsclass UserTeamTest extends UnitTestCase {
-class UserTeamTest extends UnitTestCase{
+class CommentUserTest extends UnitTestCase{
 
 	//variable to hold the test database row
 	private $mysqli = null;
