@@ -47,7 +47,7 @@
 	  //state for profile
 	  private $state;
 
-	  //zipcode for profile
+	  //zipCode for profile
 	  private $zipCode;
 
 	  /** constructor for the Profile
@@ -64,7 +64,7 @@
 		* @param string $newStreet2   for street2
 		* @param string $newCity      for city
 		* @param string $newState     for state
-		* @param int    $newZipCode   for Zip Code
+		* @param int    $newZipCode   for ZipCode
 		* @throws UnexpectedValueException when a parameter is of the wrong type
 		* @throws RangeException when a parameter is invalid
 		**/
@@ -89,10 +89,10 @@
 
 			  // catch exceptions and rethrow to caller
 		  } catch(UnexpectedValueException $unexpectedValue) {
-			  throw(new UnexpectedValueException ("Unable to construct User", 0, $unexpectedValue));
+			  throw(new UnexpectedValueException ("Unable to construct Profile", 0, $unexpectedValue));
 
 		  } catch(RangeException $range) {
-			  throw(new RangeException("Unable to construct User", 0, $range));
+			  throw(new RangeException("Unable to construct Profile", 0, $range));
 		  }
 
 	  }
@@ -102,8 +102,7 @@
 		*
 		* @return mixed profileId (or null if new object)
 		**/
-	  public function getProfileId()
-	  {
+	  public function getProfileId() {
 		  return ($this->profileId);
 	  }
 
@@ -114,8 +113,7 @@
 		* @throws UnexpectedValueException if not an integer or null
 		* @throws RangeException if user id isn't positive
 		**/
-	  public function setProfileId($newProfileId)
-	  {
+	  public function setProfileId($newProfileId) {
 		  //set allow the profile id to be null if a new object
 		  if($newProfileId === null) {
 			  $this->profileId = null;
@@ -143,7 +141,7 @@
 		**/
 	  public function getUserId()
 	  {
-		  return ($this->UserId);
+		  return ($this->userId);
 	  }
 
 	  //verify that user id is an integer
@@ -155,7 +153,7 @@
 		  //ensures user id is positive
 		  $newUserId = intval($newUserId);
 		  if($newUserId <= 0) {
-			  throw(new RangeException ("contact id $newUserId is not positive"));
+			  throw(new RangeException ("user id $newUserId is not positive"));
 		  }
 		  //remove Profile Id from quarantine
 		  $this->userId = $newUserId;
@@ -166,8 +164,7 @@
 		* @ return string value for userTitle
 		*
 		**/
-	  public function getUserTitle()
-	  {
+	  public function getUserTitle()	  {
 		  return ($this->userTitle);
 	  }
 
@@ -268,7 +265,7 @@
 		* @ return string value for lastName
 		*
 		**/
-	  public function getlastName()
+	  public function getLastName()
 	  {
 		  return ($this->lastName);
 	  }
@@ -372,7 +369,7 @@
 		**/
 	  public function getStreet1()
 	  {
-		  return ($this->Street1);
+		  return ($this->street1);
 	  }
 
 	  /**
@@ -406,7 +403,7 @@
 		**/
 	  public function getStreet2()
 	  {
-		  return ($this->Street2);
+		  return ($this->street2);
 	  }
 
 	  /**
@@ -521,17 +518,14 @@
 	  public function setZipCode($newZipCode)
 	  {
 
-		  //first, ensure the zip code is an integer
+		  //first, ensure the zip code is a number
 		  $newZipCode = trim($newZipCode);
-		  if(filter_var($newZipCode, FILTER_VALIDATE_INT) === false) {
+
+		  $verifyRegExp = array("options" => array("regexp" => "/^[\d]{5}(-[\d]{4})?$/"));
+		  if(filter_var($newZipCode, FILTER_VALIDATE_REGEXP, $verifyRegExp) === false) {
 			  throw(new UnexpectedValueException("Zip Code $newZipCode is not numeric"));
 		  }
 
-		  // second, convert the zipCode to an integer and enforce it's positive
-		  $newZipCode = intval($newZipCode);
-		  if($newZipCode <= 0) {
-			  throw(new RangeException ("Zip Code $newZipCode is not positive"));
-		  }
 		  //remove Zip Code from quarantine
 		  $this->zipCode = $newZipCode;
 	  }
@@ -551,7 +545,7 @@
 
 		  // enforce the profileId is null (i.e., don't insert a user that already exists)
 		  if($this->profileId !== null) {
-			  throw(new mysqli_sql_exception("not a new user"));
+			  throw(new mysqli_sql_exception("not a new profile"));
 		  }
 
 		  // create query template
@@ -563,7 +557,7 @@
 		  }
 
 		  // bind the member variables to the place holders in the template
-		  $wasClean = $statement->bind_param("issssssssssi", $this->userId, $this->userTitle, $this->firstName, $this->midInit,
+		  $wasClean = $statement->bind_param("isssssssssss", $this->userId, $this->userTitle, $this->firstName, $this->midInit,
 			  																  $this->lastName, $this->bio, $this->attention, $this->street1,
 			  																  $this->street2, $this->city, $this->state, $this->zipCode);
 		  if($wasClean === false) {
@@ -574,6 +568,9 @@
 		  if($statement->execute() === false) {
 			  throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
 		  }
+
+		  // update the primary key
+		  $this->profileId = $mysqli->insert_id;
 
 	  }
 
@@ -591,7 +588,7 @@
 
 		  // enforce the profileId is not null (i.e., don't delete a user that hasn't been inserted)
 		  if($this->profileId === null) {
-			  throw(new mysqli_sql_exception("Unable to delete a user that does not exist"));
+			  throw(new mysqli_sql_exception("Unable to delete a profile that does not exist"));
 		  }
 
 		  // create query template
@@ -627,7 +624,7 @@
 
 		  // enforce the profileId is not null (i.e., don't update a user that hasn't been inserted)
 		  if($this->profileId === null) {
-			  throw(new mysqli_sql_exception("Unable to update a user that does not exist"));
+			  throw(new mysqli_sql_exception("Unable to update a profile that does not exist"));
 		  }
 
 		  // create query template
@@ -640,7 +637,7 @@
 		  }
 
 		  // bind the member variables to the place holders in the template
-		  $wasClean = $statement->bind_param("issssssssssii", $this->userId, $this->userTitle, $this->firstName, $this->midInit,
+		  $wasClean = $statement->bind_param("isssssssssssi", $this->userId, $this->userTitle, $this->firstName, $this->midInit,
 			  																  $this->lastName, $this->bio, $this->attention, $this->street1,
 			  																  $this->street2, $this->city, $this->state, $this->zipCode,
 			  																  $this->profileId);
@@ -662,7 +659,7 @@
 		* @throws mysqli_sql_exception when mySQL related errors occur
 		**/
 
-	  public static function getUserByProfileId(&$mysqli, $profileId)
+	  public static function getProfileByProfileId(&$mysqli, $profileId)
 	  {
 		  //handle degenerate cases
 		  if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
@@ -728,7 +725,7 @@
   * @throws mysqli_sql_exception when mySQL related errors occur
   **/
 
-	  public static function getUserByUserId(&$mysqli, $userId)
+	  public static function getProfileByUserId(&$mysqli, $userId)
 	  {
 		  //handle degenerate cases
 		  if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
@@ -793,7 +790,7 @@
 		* @return int User found or null if not found
 		* @throws mysqli_sql_exception when mySQL related errors occur
 		**/
-	  public static function getUserByPermissions(&$mysqli, $zipCode) {
+	  public static function getProfileByZipCode(&$mysqli, $zipCode) {
 
 		  //handle degenerate cases
 		  if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
@@ -816,7 +813,7 @@
 		  }
 
 		  //bind the profile Id to the place holder in the template
-		  $wasClean = $statement->bind_param("i", $zipCode);
+		  $wasClean = $statement->bind_param("s", $zipCode);
 		  if($wasClean === false) {
 			  throw(new mysqli_sql_exception("unable to bind parameters"));
 		  }
