@@ -303,12 +303,12 @@ class UserTeam {
 		}
 
 		// enforce the profileId is null (i.e., don't insert a user that already exists)
-		if($this->profileId !== null) {
+		if($this->profileId === null) {
 			throw(new mysqli_sql_exception("not a new user"));
 		}
 
 		// enforce the teamId is null (i.e., don't insert a user that already exists)
-		if($this->teamId !== null) {
+		if($this->teamId === null) {
 			throw(new mysqli_sql_exception("not a new user"));
 		}
 

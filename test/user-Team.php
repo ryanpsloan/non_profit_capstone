@@ -178,7 +178,7 @@ class UserTeamTest extends UnitTestCase{
 		$this->userTeam->insert($this->mysqli);
 
 		// fourth, get the userTeam using the static method
-		$staticUserTeam = User::getUserByProfileTeamId($this->mysqli, $this->userTeam->getProfileId(), $this->userTeam->getTeamId());
+		$staticUserTeam = UserTeam::getUserTeamByProfileTeamId($this->mysqli, $this->userTeam->getProfileId(), $this->userTeam->getTeamId());
 
 		// finally, compare the fields
 		$this->assertNotNull($staticUserTeam->getProfileId());
