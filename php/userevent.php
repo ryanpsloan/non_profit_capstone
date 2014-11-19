@@ -60,6 +60,19 @@ class userEvent {
 	}
 
 	// todo add get method
+	public function __get($name)
+	{
+		$data = array("profileId"    		     => $this->profileId,
+						  "eventId"      			  => $this->eventId,
+						  "userEventRole"   		  => $this->userEventRole,
+						  "commentPermission"     => $this->commentPermission,
+						  "banStatus" => $this->banStatus);
+		if(array_key_exists($name, $data)) {
+			return $data[$name];
+		} else {
+			throw(new InvalidArgumentException("Unable to get $name"));
+		}
+	}
 
 	/**
 	 * Sets the value of profileId from profile class
@@ -291,7 +304,7 @@ class userEvent {
 	}
 
 	/**
-	 * gets the mysqli object, creating it if necessary
+	 * gets the mysqli Event object, creating it if necessary
 	 *
 	 *	@param $mysqli
 	 * @param mixed $eventId
@@ -354,6 +367,6 @@ class userEvent {
 			return($eventIdSearch);
 		}
 
-
 	}
+	//TODO: add static method for finding by profile Id
 }

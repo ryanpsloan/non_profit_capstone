@@ -39,7 +39,15 @@ class TeamCause{
 
 	}
 
-	// TODO: Need to insert the get or call function here.
+	public function __get($name) {
+		$data = array("teamId" => $this->teamId,
+						  "causeId" => $this->causeId);
+		if(array_key_exists($name, $data)) {
+			return $data[$name];
+		} else {
+			throw(new InvalidArgumentException("Unable to get $name"));
+		}
+	}
 
 	/**
 	 * Sets the value of teamId from team class

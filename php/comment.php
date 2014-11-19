@@ -34,7 +34,17 @@ class Comment{
 		}
 	}
 
-	// todo add get method
+	public function __get($name)
+	{
+		$data = array("commentId"        => $this->commentId,
+						  "commentText"       => $this->commentText,
+						  "commentDate"    => $this->commentDate);
+		if(array_key_exists($name, $data)) {
+			return $data[$name];
+		} else {
+			throw(new InvalidArgumentException("Unable to get $name"));
+		}
+	}
 
 	/**
 	 * assigns the value for commentId

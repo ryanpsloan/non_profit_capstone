@@ -124,6 +124,8 @@ class Event {
 
 
 	/**
+	 * sets the value of EventLocation in the table
+	 *
 	 * @param string $newEventLocation eventLocation
 	 */
 	public function setEventLocation($newEventLocation){
