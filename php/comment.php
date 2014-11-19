@@ -174,6 +174,7 @@ class Comment{
 		}
 
 		$wasClean = $statement->bind_param("i", $this->commentId);
+		var_dump($this);
 		if($wasClean === false){
 			throw (new mysqli_sql_exception("Unable to bind parameters"));
 		}

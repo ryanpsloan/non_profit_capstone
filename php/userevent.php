@@ -59,7 +59,6 @@ class userEvent {
 		}
 	}
 
-	// todo add get method
 	public function __get($name)
 	{
 		$data = array("profileId"    		     => $this->profileId,
