@@ -9,7 +9,7 @@
 require_once("../php/team.php");
 require_once("../php/comment.php");
 
-class commentTeam {
+class CommentTeam {
 		/**
 		 * Primary key that links the team to this table
 		 */
