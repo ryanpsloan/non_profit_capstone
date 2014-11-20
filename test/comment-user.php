@@ -27,7 +27,7 @@ class CommentUserTest extends UnitTestCase{
 	private $user = null;
 	private $profile = null;
 	private $comment = null;
-	private $differentComment = null;
+
 
 	//setUp () is the first step in unit testing and is a method to run before each test
 	//here it connects to mySQL

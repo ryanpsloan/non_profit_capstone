@@ -22,7 +22,6 @@ class CommentTeam {
 	public function __construct($newTeamId, $newCommentId){
 		try{
 			$this->setTeamId($newTeamId);
-
 			$this->setCommentId($newCommentId);
 		} catch (UnexpectedValueException $unexpectedValue){
 			throw(new UnexpectedValueException("Unable to construct commentTeam object", 0, $unexpectedValue));
@@ -50,7 +49,7 @@ class CommentTeam {
 	 **/
 	public function setTeamId($newTeamId)
 	{
-		if($this->teamId === null) {
+		if($newTeamId === null) {
 			throw (new UnexpectedValueException("teamId cannot be null"));
 		}
 
@@ -328,4 +327,74 @@ class CommentTeam {
 		}
 
 	}
+
+	/**
+	 * gets the CommentUser by profileId and commentId
+	 *
+	 * @param resource $mysqli pointer to mySQL connection, by reference
+	 * @param int $profileId and $commentId  profileId and teamId to search for
+	 * @return int profile and comment found or null if not found
+	 * @throws mysqli_sql_exception when mySQL related errors occur
+	 **/
+
+	public static function getCommentTeamByTeamCommentId(&$mysqli, $teamId, $commentId) {
+
+		//handle degenerate cases
+		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
+			throw(new mysqli_sql_exception("input is not a mysqli object"));
+		}
+		//sanitize the teamId and commentId before searching
+		$teamId = filter_var($teamId, FILTER_VALIDATE_INT);
+		if($teamId === null) {
+			throw(new mysqli_sql_exception("input is null"));
+		}
+
+		$commentId = filter_var($commentId, FILTER_VALIDATE_INT);
+		if($commentId === null) {
+			throw(new mysqli_sql_exception("input is null"));
+		}
+
+		//Create query template
+		$query = "SELECT teamId, commentId FROM commentTeam WHERE teamId = ? AND commentId = ?";
+		$statement = $mysqli->prepare($query);
+		if($statement === false) {
+			throw(new mysqli_sql_exception ("unable to prepare statement"));
+		}
+
+		//bind the teamId and commentId to the place holder in the template
+		$wasClean = $statement->bind_param("ii", $teamId, $commentId);
+		if($wasClean === false) {
+			throw(new mysqli_sql_exception("unable to bind parameters"));
+		}
+		//execute the statement
+		if($statement->execute() === false) {
+			throw(new mysqli_sql_exception("unable to execute mySQL statement"));
+		}
+		// get result from the SELECT query
+		$result = $statement->get_result();
+		if($result === false) {
+			throw(new mysqli_sql_exception("unable to get result set"));
+		}
+		//primary key can only one of two things null or integer
+		//if there's a result, we can show it
+		//if not error code 404
+		$row = $result->fetch_assoc();
+
+		//covert the associative array to a userId
+		if($row !== null) {
+			try {
+				$commentTeam = new commentTeam($row["teamId"], $row["commentId"]);
+			} catch(Exception $exception) {
+				//rethrow
+				throw(new mysqli_sql_exception ("unable to convert row to team", 0, $exception));
+
+			}
+			//if we get a profileId and commentId I'm lucky and show it
+			return ($commentTeam);
+		} else {
+			//404 User not found
+			return (null);
+		}
+	}
+
 }
