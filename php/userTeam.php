@@ -82,6 +82,7 @@ class UserTeam {
 	 * @throws UnexpectedValueException if not an integer or null
 	 * @throws RangeException if profile id isn't positive
 	 **/
+
 	public function setProfileId($newProfileId) {
 
 		//first, ensure the profile id is an integer
@@ -146,6 +147,7 @@ class UserTeam {
 	 * @throws UnexpectedValueException if not an integer or null
 	 * @throws RangeException if roleInTeam isn't positive
 	 **/
+
 	public function setRoleInTeam($newRoleInTeam) {
 
 		//first, ensure the roleInTeam is an integer
@@ -309,7 +311,7 @@ class UserTeam {
 
 		// enforce the teamId is null (i.e., don't insert a user that already exists)
 		if($this->teamId === null) {
-			throw(new mysqli_sql_exception("not a new user"));
+			throw(new mysqli_sql_exception("not a new team"));
 		}
 
 		// create query template
@@ -391,7 +393,7 @@ class UserTeam {
 		}
 
 		if($this->teamId === null) {
-			throw(new mysqli_sql_exception("Unable to update a user that does not exist"));
+			throw(new mysqli_sql_exception("Unable to update a team that does not exist"));
 		}
 
 		// create query template
@@ -425,7 +427,7 @@ class UserTeam {
 	 **/
 
 	public static function getUserTeamByProfileTeamId(&$mysqli, $profileId, $teamId) {
-		//handle degene11rate cases
+		//handle degenerate cases
 		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
 			throw(new mysqli_sql_exception("input is not a mysqli object"));
 		}

@@ -27,6 +27,7 @@ class CommentUserTest extends UnitTestCase{
 	private $user = null;
 	private $profile = null;
 	private $comment = null;
+	private $differentComment = null;
 
 	//setUp () is the first step in unit testing and is a method to run before each test
 	//here it connects to mySQL
@@ -49,7 +50,6 @@ class CommentUserTest extends UnitTestCase{
 
 		$this->comment = new Comment(null, "waiting on unit test", new DateTime());
 		$this->comment->insert($this->mysqli);
-
 	}
 
 	//Teardown (), a method to delete the test record and disconnect from mySQL
@@ -97,34 +97,7 @@ class CommentUserTest extends UnitTestCase{
 		$this->assertIdentical($this->commentUser->getCommentId(),							$this->comment->commentId);
 
 	}
-// test updating a profile and comment in mySQL
-	public function testUpdateCommentUser() {
-		// verify mySQL connected OK
-		$this->assertNotNull($this->mysqli);
 
-		// create a user comment to post to mySQL
-		$this->commentUser = new CommentUser($this->profile->getProfileId(), $this->comment->commentId);
-
-		// third, insert the commentUser to mySQL
-		$this->commentUser->insert($this->mysqli);
-
-		// fourth, update the commentUser and post the changes to mySQL
-		$differentComment = new Comment(null, "test update comment", new DateTime());
-		$differentComment->insert($this->mysqli);
-		$this->commentUser->setCommentId($differentComment->commentId);
-		$this->commentUser->update($this->mysqli);
-
-		// finally, compare the fields
-		$this->assertNotNull($this->commentUser->getProfileId());
-		$this->assertTrue($this->commentUser->getProfileId() > 0);
-		$this->assertNotNull($this->commentUser->getCommentId());
-		$this->assertTrue($this->commentUser->getCommentId() > 0);
-		$this->assertIdentical($this->commentUser->getProfileId(),							$this->profile->getProfileId());
-		$this->assertIdentical($this->commentUser->getCommentId(),							$differentComment->commentId);
-
-		// tear down the different comment
-		$differentComment->delete($this->mysqli);
-	}
 	// test deleting a CommentUser
 	public function testDeleteCommentUser() {
 		// first, verify mySQL connected OK
@@ -147,7 +120,7 @@ class CommentUserTest extends UnitTestCase{
 		$this->commentUser = null;
 
 		// finally, try to get the userTeam and assert we didn't get a thing
-		$hopefulUserCommentId = CommentUser::getCommentUserByCommentId ($this->mysqli, $this->commentId);
+		$hopefulUserCommentId = CommentUser::getCommentUserByProfileCommentId ($this->mysqli, $this->profile->getProfileId(), $this->comment->commentId);
 		$this->assertNull($hopefulUserCommentId);
 	}
 	// test grabbing a userTeam from mySQL
@@ -166,7 +139,7 @@ class CommentUserTest extends UnitTestCase{
 		$staticCommentUser = CommentUser::getCommentUserByProfileCommentId($this->mysqli, $this->commentUser->getProfileId(),
 																								 $this->commentUser->getCommentId());
 
-		// finally, compare the fields
+		// finally, compare the fields to upload
 		$this->assertNotNull($staticCommentUser->getProfileId());
 		$this->assertTrue($staticCommentUser->getProfileId() > 0);
 		$this->assertNotNull($staticCommentUser->getCommentId());
@@ -177,9 +150,3 @@ class CommentUserTest extends UnitTestCase{
 
 
 }
-/**
- * Created by PhpStorm.
- * User: Martin
- * Date: 11/17/2014
- * Time: 6:43 PM
- */ 

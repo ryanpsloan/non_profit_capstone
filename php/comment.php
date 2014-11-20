@@ -181,6 +181,7 @@ class Comment{
 		}
 
 		if($statement->execute() === false) {
+			var_dump($statement->error);
 			throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
 		}
 	}

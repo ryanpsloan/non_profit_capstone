@@ -186,51 +186,6 @@ class CommentUser {
 	}
 
 	/**
-	 * updates this profile and comment in mySQL
-	 *
-	 * @param resource $mysqli pointer to mySQL connection, by reference
-	 * @throws mysqli_sql_exception when mySQL related errors occur
-	 **/
-
-	public function update(&$mysqli) {
-		// handle degenerate cases
-		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
-			throw(new mysqli_sql_exception("input is not a mysqli object"));
-		}
-
-		// enforce the profileId and commentId is not null (i.e., don't update a user that hasn't been inserted)
-		if($this->profileId === null) {
-			throw(new mysqli_sql_exception("Unable to update a user that does not exist"));
-		}
-
-		if($this->commentId === null) {
-			throw(new mysqli_sql_exception("Unable to update a user that does not exist"));
-		}
-
-		// create query template
-		$query     = "UPDATE commentUser SET profileId = ?, commentId = ?	WHERE profileId = ? AND commentId = ?";
-		$statement = $mysqli->prepare($query);
-		echo "<p>before execution</p>";
-		var_dump($this);
-		if($statement === false) {
-			throw(new mysqli_sql_exception("Unable to prepare statement"));
-		}
-
-		//fixme because dameon said so
-		// bind the member variables to the place holders in the template
-		$wasClean = $statement->bind_param("iiii", $this->profileId, $this->commentId, $this->profileId, $this->commentId);
-		if($wasClean === false) {
-			throw(new mysqli_sql_exception("Unable to bind parameters"));
-		}
-		echo "<p>after execution</p>";
-		var_dump($this);
-		// execute the statement
-		if($statement->execute() === false) {
-			throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
-		}
-	}
-
-	/**
 	 * gets the CommentUser by profileId and commentId
 	 *
 	 * @param resource $mysqli pointer to mySQL connection, by reference
