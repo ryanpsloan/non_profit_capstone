@@ -155,7 +155,6 @@ class TeamEvent {
 	 * @throws RangeException if team status is not positive
 	 */
 
-	// todo make sure the commentpermission cannot be null
 	public function setCommentPermission($newCommentPermission)
 	{
 		if($newCommentPermission === null) {
@@ -180,12 +179,10 @@ class TeamEvent {
 	 * @throws UnexpectedValueException if not an integer or null
 	 * @throws RangeException if team status is not positive
 	 */
-	// todo ban status cannot be null
 	public function setBanStatus($newBanStatus)
 	{
 		if($newBanStatus === null) {
-			$newBanStatus = null;
-			return;
+			throw(new UnexpectedValueException("Ban Status Cannot be Null"));
 		}
 
 		if(filter_var($newBanStatus, FILTER_SANITIZE_INT) === false) {
@@ -238,6 +235,8 @@ class TeamEvent {
 	}
 
 	/**
+	 * Deletes the object from mySQL
+	 *
 	 * @param TeamEvent $mysqli pointer to mySQL connection by reference
 	 * @throws mysqli_sql_exception when mySQL related error occurs
 	 **/
@@ -273,6 +272,8 @@ class TeamEvent {
 	}
 
 	/**
+	 * Updates the object within mySQL
+	 *
 	 * @param resource $mysqli pointer to mySQL connection, by reference
 	 * @throws mysqli_sql_exception when mySQL related errors occur
 	 **/
@@ -307,6 +308,14 @@ class TeamEvent {
 		}
 	}
 
+	/**
+	 * gets the mysqli object using the EventId, creating it if necessary
+	 *
+	 * @param $mysqli mysqli object
+	 * @param mixed $eventId
+	 * @return array|null
+	 * @throw mysqli_sql_exception if unable to properly execute statement
+	 */
 	public static function getTeamEventByEventId($mysqli, $eventId){
 		//handle degenerate cases
 		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
@@ -363,6 +372,6 @@ class TeamEvent {
 			return($eventIdSearch);
 		}
 
-
 	}
+	//TODO: add static method for find by Team ID
 }

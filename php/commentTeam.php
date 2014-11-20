@@ -1,47 +1,39 @@
 <?php
 /**
- * This class will create the relationship between the team and the cause tables
- * Connects the team and the cause tables
+ * creates the connections between comments and teams
+ * Relationship between the teams and their comments
  *
  * @author Dameon Smith <dameonsmith76@gmail.com>
- **/
+ */
 
 require_once("../php/team.php");
-require_once("../php/cause.php");
+require_once("../php/comment.php");
 
-class TeamCause{
-	/**
-	* The team id that links the team to the causes
-	**/
-	private $teamId;
-	/**
-	* The cause id that links the causes to the teams
-	**/
-	private $causeId;
+class commentTeam {
+		/**
+		 * Primary key that links the team to this table
+		 */
+		private $teamId;
+		/**
+		 * Primary key that link the comments to this table
+		 */
+		private $commentId;
 
-	/**
-	 * Creates the team cause object
-	 *
-	 * @param mixed $newTeamId
-	 * @param mixed $newCauseId
-	 */
-
-	public function __construct($newTeamId, $newCauseId){
+	public function __construct($newTeamId, $newCommentId){
 		try{
 			$this->setTeamId($newTeamId);
 
-			$this->setCauseId($newCauseId);
-		} catch(UnexpectedValueException $unexpectedValue) {
-				 throw(new UnexpectedValueException("Could not construct object TeamCause", 0, $unexpectedValue));
-			 } catch(RangeException $range) {
-			throw(new RangeException("Could not construct object TeamCause", 0, $range));
+			$this->setCommentId($newCommentId);
+		} catch (UnexpectedValueException $unexpectedValue){
+			throw(new UnexpectedValueException("Unable to construct commentTeam object", 0, $unexpectedValue));
+		} catch (RangeException $rangeException){
+			throw(new RangeException("Unable to construct commentTeam object", 0, $rangeException));
 		}
-
 	}
 
 	public function __get($name) {
 		$data = array("teamId" => $this->teamId,
-						  "causeId" => $this->causeId);
+						  "commentId" => $this->commentId);
 		if(array_key_exists($name, $data)) {
 			return $data[$name];
 		} else {
@@ -75,56 +67,56 @@ class TeamCause{
 	}
 
 	/**
-	 * Sets the value of causeId from cause class
+	 * assigns the value for commentId
 	 *
-	 * @param mixed $newCauseId cause id (or null if new object)
+	 * @param mixed $newCommentId comment id (or null if new object)
 	 * @throws UnexpectedValueException if not an integer or null
-	 * @throws RangeException if Cause id is not positive
+	 * @throws RangeException if comment id is not positive
 	 **/
-	public function setCauseId($newCauseId){
-		if($this->causeId === null) {
-			throw (new UnexpectedValueException("causeId does not exist"));
+	public function setCommentId($newCommentId){
+		if($newCommentId === null){
+			throw(new UnexpectedValueException("commentId cannot be null."));
 		}
 
-		if(filter_var($newCauseId, FILTER_VALIDATE_INT) === false) {
-			throw(new UnexpectedValueException("causeId $newCauseId is not numeric"));
+		if(filter_var($newCommentId, FILTER_VALIDATE_INT) === false){
+			throw(new UnexpectedValueException("commentId $newCommentId is not numeric"));
 		}
 
-		$newCauseId = intval($newCauseId);
-		if($newCauseId <= 0) {
-			throw(new RangeException("causeId $newCauseId is not positive."));
+		$newCommentId = intval($newCommentId);
+		if($newCommentId <= 0) {
+			throw(new RangeException("commentId $newCommentId is not positive"));
 		}
 
-		$this->causeId = $newCauseId;
+		$this->commentId = $newCommentId;
 	}
 
 	/**
-	 * Inserts the values into mySQL
+	 * Inserts the values in to mySQL
 	 *
-	 * @param TeamCause $mysqli pointer to mySQL connection by reference
+	 * @param CommentTeam $mysqli pointer to mySQL connection by reference
 	 * @throws mysqli_sql_exception when mySQL related error occurs
-	 **/
+	 */
 	public function insert(&$mysqli){
 		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli"){
 			throw(new mysqli_sql_exception("This is not a valid mysqli object"));
 		}
 
-		if($this->teamId !== null){
-			throw(new mysqli_sql_exception("Not a new TeamCause Relationship"));
+		if($this->teamId === null){
+			throw(new mysqli_sql_exception("This team does not exist"));
 		}
 
-		if($this->causeId !== null){
-			throw(new mysqli_sql_exception("Not a new TeamCause relationship"));
+		if($this->commentId === null){
+			throw(new mysqli_sql_exception("This comment does not exist"));
 		}
 
-
-		$query = "INSERT INTO teamCause(teamId, causeId) VALUES (?, ?)";
+		$query = "INSERT INTO commentTeam(teamId, commentId)
+		VALUES (?, ?)";
 		$statement = $mysqli->prepare($query);
 		if($statement === false) {
 			throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
 		}
 
-		$wasClean = $statement->bind_param("ii", $this->teamId, $this->causeId);
+		$wasClean = $statement->bind_param("ii", $this->teamId, $this->commentId);
 
 		if($wasClean === false){
 			throw(new mysqli_sql_exception("Unable to bind parameters"));
@@ -134,33 +126,32 @@ class TeamCause{
 			throw(new mysqli_sql_exception("Unable to execute statement"));
 		}
 	}
-
 	/**
-	 * Deletes the objects from mySQL
+	 * Deletes the object from mySQL
 	 *
-	 * @param TeamCause $mysqli pointer to mySQL connection by reference
+	 * @param CommentTeam $mysqli pointer to mySQL connection by reference
 	 * @throws mysqli_sql_exception when mySQL related error occurs
-	 */
+	 **/
 	public function delete($mysqli){
 		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
 			throw (new mysqli_sql_exception("Input is not a mysqli object"));
 		}
 
-		if($this->causeId === null) {
-			throw(new mysqli_sql_exception("Unable to delete an Cause that does not exist"));
+		if($this->teamId === null) {
+			throw(new mysqli_sql_exception("Unable to delete a team that does not exist"));
 		}
 
-		if($this->teamId === null){
-			throw(new mysqli_sql_exception("Unable to delete a Team that does not exist"));
+		if($this->commentId === null) {
+			throw(new mysqli_sql_exception("Unable to delete a comment that does not exist"));
 		}
 
-		$query		="DELETE FROM teamCause WHERE causeId = ? AND teamId = ?";
+		$query		="DELETE FROM commentTeam WHERE teamId = ? AND commentId = ?";
 		$statement  =$mysqli->prepare($query);
 		if($statement === false){
 			throw (new mysqli_sql_exception("Unable to prepare statement"));
 		}
 
-		$wasClean = $statement->bind_param("ii", $this->causeId, $this->teamId);
+		$wasClean = $statement->bind_param("ii", $this->teamId, $this->commentId);
 		if($wasClean === false){
 			throw (new mysqli_sql_exception("Unable to bind parameters"));
 		}
@@ -168,35 +159,35 @@ class TeamCause{
 		if($statement->execute() === false) {
 			throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
 		}
-		
+
 	}
 
 	/**
-	 * Updates the values within mySQL
+	 * Updates the object within mySQL
 	 *
 	 * @param resource $mysqli pointer to mySQL connection, by reference
 	 * @throws mysqli_sql_exception when mySQL related errors occur
 	 **/
-
 	public function update($mysqli){
 		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli"){
 			throw (new mysqli_sql_exception("Input is not a mysqli object"));
 		}
 
-		if($this->causeId === null){
-			throw (new mysqli_sql_exception("Cannot update cause that does not exist"));
-		}
 		if($this->teamId === null){
-			throw (new mysqli_sql_exception("Cannot update team that does not exist"));
+			throw (new mysqli_sql_exception("cannot update team object that does not exist"));
 		}
 
-		$query		="UPDATE teamCause SET teamId = ?, causeId = ?";
+		if($this->commentId === null){
+			throw (new mysqli_sql_exception("Cannot update comment object that does not exist"));
+		}
+
+		$query		="UPDATE commentTeam SET teamId = ?, commentId = ?";
 		$statement  =$mysqli->prepare->$query;
 		if($statement === false){
 			throw(new mysqli_sql_exception("Unable to prepare statement"));
 		}
 
-		$wasClean = $statement->bind_param("ii", $this->causeId, $this->teamId);
+		$wasClean = $statement->bind_param("ii", $this->teamId, $this->commentId);
 
 		if($wasClean === false){
 			throw(new mysqli_sql_exception("Unable to bind parameters"));
@@ -215,8 +206,7 @@ class TeamCause{
 	 * @return array|null
 	 * @throw mysqli_sql_exception if unable to properly execute statement
 	 */
-	
-	public static function getTeamCauseByTeamId($mysqli,$teamId){
+	public static function getCommentTeamByTeamId($mysqli, $teamId){
 		//handle degenerate cases
 		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
 			throw(new mysqli_sql_exception("input is not a mysqli object"));
@@ -226,8 +216,10 @@ class TeamCause{
 		$teamId = trim($teamId);
 		$teamId = filter_var($teamId, FILTER_VALIDATE_INT);
 
+
+
 		// create query template
-		$query = "SELECT teamId, causeId FROM teamCause WHERE teamId = ?";
+		$query = "SELECT teamId, commentId FROM commentTeam WHERE teamId = ?";
 
 		$statement = $mysqli->prepare($query);
 		if($statement === false) {
@@ -255,11 +247,11 @@ class TeamCause{
 		while(($row = $result->fetch_assoc()) !== null) {
 
 			try {
-				$team = new TeamCause($row["teamId"], $row["causeId"]);
-				$teamIdSearch [] = $team;
+				$commentTeam = new CommentTeam($row["teamId"], $row["commentId"]);
+				$teamIdSearch [] = $commentTeam;
 			} catch(Exception $exception) {
 
-				throw(new mysqli_sql_exception("Unable to convert row to teamCause", 0, $exception));
+				throw(new mysqli_sql_exception("Unable to convert row to team", 0, $exception));
 			}
 		}
 
@@ -268,36 +260,39 @@ class TeamCause{
 		} else {
 			return($teamIdSearch);
 		}
+
+
 	}
 
 	/**
-	 * gets the mysqli object using the causeId, creating it if necessary
+	 * gets the mysqli object using the CommentId, creating it if necessary
 	 *
 	 * @param $mysqli mysqli object
-	 * @param mixed $causeId
+	 * @param mixed $commentId
 	 * @return array|null
-	 * @throw mysqli_sql_exception if unable to execute method
+	 * @throw mysqli_sql_exception if unable to properly execute statement
 	 */
-
-	public static function getTeamCauseByCauseId($mysqli,$causeId){
+	public static function getCommentTeamByCommentId($mysqli, $commentId){
 		//handle degenerate cases
 		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
 			throw(new mysqli_sql_exception("input is not a mysqli object"));
 		}
 
 		// sanitize the teamId before searching
-		$causeId = trim($causeId);
-		$causeId = filter_var($causeId, FILTER_VALIDATE_INT);
+		$commentId = trim($commentId);
+		$commentId = filter_var($commentId, FILTER_VALIDATE_INT);
+
+
 
 		// create query template
-		$query = "SELECT teamId, causeId FROM teamCause WHERE causeId = ?";
+		$query = "SELECT teamId, commentId FROM commentTeam WHERE commentId = ?";
 
 		$statement = $mysqli->prepare($query);
 		if($statement === false) {
 			throw(new mysqli_sql_exception("Unable to prepare statement"));
 		}
 		//bind the teamId to the place holder in the template
-		$wasClean = $statement->bind_param("i", $causeId);
+		$wasClean = $statement->bind_param("i", $commentId);
 		if($wasClean === false) {
 			throw(new mysqli_sql_exception("Unable to bind parameters"));
 		}
@@ -312,24 +307,25 @@ class TeamCause{
 		}
 
 		//turn the results into an array
-		$causeIdSearch = array();
+		$commentIdSearch = array();
 
 		// Loop through the array and display the results
 		while(($row = $result->fetch_assoc()) !== null) {
 
 			try {
-				$cause = new TeamCause($row["teamId"], $row["causeId"]);
-				$causeIdSearch [] = $cause;
+				$commentTeam = new CommentTeam($row["teamId"], $row["commentId"]);
+				$commentIdSearch [] = $commentTeam;
 			} catch(Exception $exception) {
 
-				throw(new mysqli_sql_exception("Unable to convert row to teamCause", 0, $exception));
+				throw(new mysqli_sql_exception("Unable to convert row to comment", 0, $exception));
 			}
 		}
 
 		if($result->num_rows === 0) {
 			return(null);
 		} else {
-			return($causeIdSearch);
+			return($commentIdSearch);
 		}
+
 	}
 }

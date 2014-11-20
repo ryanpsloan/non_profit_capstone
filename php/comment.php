@@ -20,7 +20,7 @@ class Comment{
 	 */
 	private $commentDate;
 
-	public function __constructor($newCommentId, $newCommentText, $newCommentDate){
+	public function __construct($newCommentId, $newCommentText, $newCommentDate){
 		try{
 			$this->setCommentId($newCommentId);
 
@@ -34,7 +34,17 @@ class Comment{
 		}
 	}
 
-	// todo add get method
+	public function __get($name)
+	{
+		$data = array("commentId"        => $this->commentId,
+						  "commentText"       => $this->commentText,
+						  "commentDate"    => $this->commentDate);
+		if(array_key_exists($name, $data)) {
+			return $data[$name];
+		} else {
+			throw(new InvalidArgumentException("Unable to get $name"));
+		}
+	}
 
 	/**
 	 * assigns the value for commentId
@@ -156,6 +166,7 @@ class Comment{
 		if($this->commentId === null) {
 			throw(new mysqli_sql_exception("Unable to delete an comment that does not exist"));
 		}
+		var_dump($this);
 
 		$query		="DELETE FROM comment WHERE commentId = ?";
 		$statement  =$mysqli->prepare($query);
@@ -164,6 +175,7 @@ class Comment{
 		}
 
 		$wasClean = $statement->bind_param("i", $this->commentId);
+		var_dump($this);
 		if($wasClean === false){
 			throw (new mysqli_sql_exception("Unable to bind parameters"));
 		}

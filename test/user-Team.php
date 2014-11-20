@@ -43,7 +43,7 @@ class UserTeamTest extends UnitTestCase{
 		$salt       = bin2hex(openssl_random_pseudo_bytes(32));
 		$authToken = bin2hex(openssl_random_pseudo_bytes(16));
 		$passwordHash       = hash_pbkdf2("sha512", "password", $salt, 2048, 128);
-		$this->user = new User(null,"igotthis", "myhomie@yahoo.com",$passwordHash,$salt,$authToken,2);
+		$this->user = new User(null, "igotthis", "myhomie@yahoo.com", $passwordHash, $salt, $authToken, 2);
 		$this->user->insert($this->mysqli);
 
 		$this->profile = new Profile(null, $this->user->getUserId(),"Mr.","John", "P", "Handcock", "I have the largest signature on the
@@ -178,7 +178,7 @@ class UserTeamTest extends UnitTestCase{
 		$this->userTeam->insert($this->mysqli);
 
 		// fourth, get the userTeam using the static method
-		$staticUserTeam = User::getUserByProfileTeamId($this->mysqli, $this->userTeam->getProfileId(), $this->userTeam->getTeamId());
+		$staticUserTeam = UserTeam::getUserTeamByProfileTeamId($this->mysqli, $this->userTeam->getProfileId(), $this->userTeam->getTeamId());
 
 		// finally, compare the fields
 		$this->assertNotNull($staticUserTeam->getProfileId());
