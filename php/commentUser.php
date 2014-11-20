@@ -118,12 +118,12 @@ class CommentUser {
 		}
 
 		// enforce the profileId is null (i.e., don't insert a user that already exists)
-		if($this->profileId !== null) {
+		if($this->profileId === null) {
 			throw(new mysqli_sql_exception("not a new user"));
 		}
 
 		// enforce the commentId is null (i.e., don't insert a user that already exists)
-		if($this->commentId !== null) {
+		if($this->commentId === null) {
 			throw(new mysqli_sql_exception("not a new user"));
 		}
 
@@ -210,16 +210,20 @@ class CommentUser {
 		// create query template
 		$query     = "UPDATE commentUser SET profileId = ?, commentId = ?	WHERE profileId = ? AND commentId = ?";
 		$statement = $mysqli->prepare($query);
+		echo "<p>before execution</p>";
+		var_dump($this);
 		if($statement === false) {
 			throw(new mysqli_sql_exception("Unable to prepare statement"));
 		}
 
+		//fixme because dameon said so
 		// bind the member variables to the place holders in the template
-		$wasClean = $statement->bind_param("ii", $this->profileId, $this->commentId);
+		$wasClean = $statement->bind_param("iiii", $this->profileId, $this->commentId, $this->profileId, $this->commentId);
 		if($wasClean === false) {
 			throw(new mysqli_sql_exception("Unable to bind parameters"));
 		}
-
+		echo "<p>after execution</p>";
+		var_dump($this);
 		// execute the statement
 		if($statement->execute() === false) {
 			throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
@@ -235,7 +239,7 @@ class CommentUser {
 	 * @throws mysqli_sql_exception when mySQL related errors occur
 	 **/
 
-	public static function getUserTeamByProfileTeamId(&$mysqli, $profileId, $commentId) {
+	public static function getCommentUserByProfileCommentId(&$mysqli, $profileId, $commentId) {
 
 		//handle degenerate cases
 		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {

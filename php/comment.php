@@ -166,6 +166,7 @@ class Comment{
 		if($this->commentId === null) {
 			throw(new mysqli_sql_exception("Unable to delete an comment that does not exist"));
 		}
+		var_dump($this);
 
 		$query		="DELETE FROM comment WHERE commentId = ?";
 		$statement  =$mysqli->prepare($query);

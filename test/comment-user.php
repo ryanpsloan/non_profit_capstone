@@ -12,7 +12,7 @@ require_once("../php/profile.php");
 require_once("../php/comment.php");
 
 //then require class under scrutiny
-require_once("../php/commentuser.php");
+require_once("../php/commentUser.php");
 
 //the UserTeamTest for all our testsclass UserTeamTest extends UnitTestCase {
 class CommentUserTest extends UnitTestCase{
@@ -38,16 +38,16 @@ class CommentUserTest extends UnitTestCase{
 		$salt       = bin2hex(openssl_random_pseudo_bytes(32));
 		$authToken = bin2hex(openssl_random_pseudo_bytes(16));
 		$passwordHash       = hash_pbkdf2("sha512", "password", $salt, 2048, 128);
-		$this->user = new User(null,"igotthis", "myhomie@yahoo.com",$passwordHash,$salt,$authToken,2);
+		$i = rand(1, 1000);
+		$this->user = new User(null,"igotthis", "myhomie".$i."@yahoo.com",$passwordHash,$salt,$authToken,2);
 		$this->user->insert($this->mysqli);
 
 		$this->profile = new Profile(null, $this->user->getUserId(),"Mr.","John", "P", "Handcock", "I have the largest signature on the
-												Declaration of Independence", "PM of Britain", "1600 Pennsylvania Ave", "SW", "Washington",
-			"DC", "20500");
+				Declaration of Independence", "PM of Britain", "1600 Pennsylvania Ave", "SW", "Washington", "DC", "20500");
 		$this->profile->insert($this->mysqli);
 
-		$this->comment = new Comment(null, "waiting on unit test", "2014-11-17 11:17:24");
 
+		$this->comment = new Comment(null, "waiting on unit test", new DateTime());
 		$this->comment->insert($this->mysqli);
 
 	}
@@ -83,7 +83,7 @@ class CommentUserTest extends UnitTestCase{
 		$this->assertNotNull($this->mysqli);
 
 		// second, create a commentUser to post to mySQL
-		$this->commentUser = new CommentUser($this->profile->getProfileId(), $this->comment->getCommentId());
+		$this->commentUser = new CommentUser($this->profile->getProfileId(), $this->comment->commentId);
 
 		// third, insert the commentUser, to mySQL
 		$this->commentUser->insert($this->mysqli);
@@ -94,7 +94,7 @@ class CommentUserTest extends UnitTestCase{
 		$this->assertNotNull($this->commentUser->getCommentId());
 		$this->assertTrue($this->commentUser->getCommentId() > 0);
 		$this->assertIdentical($this->commentUser->getProfileId(),							$this->profile->getProfileId());
-		$this->assertIdentical($this->commentUser->getCommentId(),							$this->comment->getCommentId());
+		$this->assertIdentical($this->commentUser->getCommentId(),							$this->comment->commentId);
 
 	}
 // test updating a profile and comment in mySQL
@@ -103,14 +103,15 @@ class CommentUserTest extends UnitTestCase{
 		$this->assertNotNull($this->mysqli);
 
 		// create a user comment to post to mySQL
-		$this->commentUser = new CommentUser($this->profile->getProfileId(), $this->comment->getCommentId());
+		$this->commentUser = new CommentUser($this->profile->getProfileId(), $this->comment->commentId);
 
 		// third, insert the commentUser to mySQL
 		$this->commentUser->insert($this->mysqli);
 
 		// fourth, update the commentUser and post the changes to mySQL
-		$newCommentId = 1;
-		$this->commentUser->setCommentId($newCommentId);
+		$differentComment = new Comment(null, "test update comment", new DateTime());
+		$differentComment->insert($this->mysqli);
+		$this->commentUser->setCommentId($differentComment->commentId);
 		$this->commentUser->update($this->mysqli);
 
 		// finally, compare the fields
@@ -119,8 +120,10 @@ class CommentUserTest extends UnitTestCase{
 		$this->assertNotNull($this->commentUser->getCommentId());
 		$this->assertTrue($this->commentUser->getCommentId() > 0);
 		$this->assertIdentical($this->commentUser->getProfileId(),							$this->profile->getProfileId());
-		$this->assertIdentical($this->commentUser->getCommentId(),							$newCommentId);
+		$this->assertIdentical($this->commentUser->getCommentId(),							$differentComment->commentId);
 
+		// tear down the different comment
+		$differentComment->delete($this->mysqli);
 	}
 	// test deleting a CommentUser
 	public function testDeleteCommentUser() {
@@ -128,7 +131,7 @@ class CommentUserTest extends UnitTestCase{
 		$this->assertNotNull($this->mysqli);
 
 		// second, create a CommentUser to post to mySQL
-		$this->commentUser = new CommentUser($this->profile->getProfileId(), $this->comment->getCommentId());
+		$this->commentUser = new CommentUser($this->profile->getProfileId(), $this->comment->commentId);
 
 		// third, insert the CommentUser to mySQL
 		$this->commentUser->insert($this->mysqli);
@@ -148,13 +151,13 @@ class CommentUserTest extends UnitTestCase{
 		$this->assertNull($hopefulUserCommentId);
 	}
 	// test grabbing a userTeam from mySQL
-	public function testGetUserByProfileId() {
+	public function testGetCommentUserByProfileId() {
 
 		// first, verify mySQL connected OK
 		$this->assertNotNull($this->mysqli);
 
 		// second, create a commentUser to post to mySQL
-		$this->commentUser = new CommentUser($this->profile->getProfileId(), $this->comment->getCommentId());
+		$this->commentUser = new CommentUser($this->profile->getProfileId(), $this->comment->commentId);
 
 		// third, insert the CommentUser to mySQL
 		$this->commentUser->insert($this->mysqli);
@@ -169,7 +172,7 @@ class CommentUserTest extends UnitTestCase{
 		$this->assertNotNull($staticCommentUser->getCommentId());
 		$this->assertTrue($staticCommentUser->getCommentId() > 0);
 		$this->assertIdentical($staticCommentUser->getProfileId(),							$this->profile->getProfileId());
-		$this->assertIdentical($staticCommentUser->getCommentId(),							$this->comment->getCommentId());
+		$this->assertIdentical($staticCommentUser->getCommentId(),							$this->comment->commentId);
 	}
 
 
