@@ -27,11 +27,11 @@ class TeamTest extends UnitTestCase {
 		$this->mysqli = MysqliConfiguration::getMysqli();
 	}
 
-		// tearDown() is a method that is run after each test
+	// tearDown() is a method that is run after each test
 
 	public function tearDown() {
 		// delete the team if we can
-			if($this->team !== null) {
+		if($this->team !== null) {
 			$this->team->delete($this->mysqli);
 			$this->team = null;
 		}
@@ -65,7 +65,7 @@ class TeamTest extends UnitTestCase {
 		// insert the team to mySQL
 		$this->team->insert($this->mysqli);
 
-		// fourth, update the user and post the changes to mySQL
+		// fourth, update the team and post the changes to mySQL
 		$newTeamCause = "feeding the coders";
 		$this->team->setTeamCause($newTeamCause);
 		$this->team->update($this->mysqli);

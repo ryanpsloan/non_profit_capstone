@@ -59,10 +59,25 @@ class Team {
 		$this->teamId = $newTeamId;
 	}
 
+	/**
+	 * sets the value of TeamName
+	 *
+	 * @param mixed $newTeamName team id (or null if new object)
+	 * @throws UnexpectedValueException if not an integer or null
+	 * @throws RangeException if teamId isn't positive
+	 **/
+
 	public function getTeamName() {
 		return($this->teamName);
 	}
-
+	/**
+	 * creates a new TeamName
+	 *
+	 * @param resource $mysqli pointer to mySQL connection, by reference
+	 * @param int $teamId teamId to search for
+	 * @return mixed teamId found or null if not found
+	 * @throws mysqli_sql_exception when mySQL related errors occur
+	 **/
 	public function setTeamName ($newTeamName){
 		if($newTeamName === null){
 			throw(new UnexpectedValueException("TeamName cannot be null"));
@@ -72,14 +87,22 @@ class Team {
 		if(filter_var($newTeamName, FILTER_SANITIZE_STRING) === false) {
 			throw(new UnexpectedValueException("TeamName $newTeamName is not a string"));
 		}
-		//verify userTitle is less than 64 characters
+		//verify TeamName is less than 64 characters
 		$newTeamNameLength = strlen($newTeamName);
 		if($newTeamNameLength > 65) {
 			throw(new RangeException("Team name $newTeamName is longer than 64 characters"));
 		}
-		//remove UserTitle from quarantine
+		//remove TeamName from quarantine
 		$this->teamName = $newTeamName;
 	}
+
+	/**
+	 * sets the value of TeamCause
+	 *
+	 * @param mixed $newTeamCause team id (or null if new object)
+	 * @throws UnexpectedValueException if not an integer or null
+	 * @throws RangeException if teamId isn't positive
+	 **/
 
 	public function getTeamCause() {
 		return($this->teamCause);
@@ -94,7 +117,7 @@ class Team {
 		if(filter_var($newTeamCause, FILTER_SANITIZE_STRING) === false) {
 			throw(new UnexpectedValueException("TeamCause $newTeamCause is not a string"));
 		}
-		//verify userTitle is less than 64 characters
+		//verify TeamName is less than 64 characters
 		$newTeamCauseLength = strlen($newTeamCause);
 		if($newTeamCauseLength > 65) {
 			throw(new RangeException("Team cause $newTeamCause is longer than 64 characters"));
@@ -103,8 +126,14 @@ class Team {
 		$this->teamCause = $newTeamCause;
 	}
 
-
-
+	/**
+	 * Inserts a new Team
+	 *
+	 * @param resource $mysqli pointer to mySQL connection, by reference
+	 * @param int $teamId teamId to search for
+	 * @return mixed teamId found or null if not found
+	 * @throws mysqli_sql_exception when mySQL related errors occur
+	 **/
 
 	public function insert(&$mysqli) {
 
@@ -131,6 +160,16 @@ class Team {
 
       $this->teamId = $mysqli->insert_id;
    }
+	/**
+	 * deletes a Team
+	 *
+	 * @param resource $mysqli pointer to mySQL connection, by reference
+	 * @param int $teamId teamId to search for
+	 * @return mixed teamId found or null if not found
+	 * @throws mysqli_sql_exception when mySQL related errors occur
+	 **/
+
+
 	public function delete(&$mysqli)	{
 
 		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
@@ -155,6 +194,14 @@ class Team {
 			throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
 		}
 	}
+	/**
+	 * updates the Team
+	 *
+	 * @param resource $mysqli pointer to mySQL connection, by reference
+	 * @param int $teamId teamId to search for
+	 * @return mixed teamId found or null if not found
+	 * @throws mysqli_sql_exception when mySQL related errors occur
+	 **/
 
 	public function update($mysqli){
 		//* query to find Team ID//
@@ -168,7 +215,6 @@ class Team {
 		if($this->teamId === null) {
 			throw(new mysqli_sql_exception("Unable to update a team that does not exist"));
 		}
-
 
 		$query = "UPDATE team SET teamName = ?, teamCause = ? WHERE teamId = ?";
 		$statement = $mysqli->prepare($query);
@@ -186,7 +232,7 @@ class Team {
 		}
 	}
 	/**
-	 * gets the Team by userId
+	 * gets the Team by TeamId
 	 *
 	 * @param resource $mysqli pointer to mySQL connection, by reference
 	 * @param int $teamId teamId to search for
@@ -232,7 +278,7 @@ class Team {
 		//if not error code 404
 		$row = $result->fetch_assoc();
 
-		//covert the associative array to a userId
+		//covert the associative array to a TeamId
 		if($row !== null) {
 			try {
 				$team = new team($row["teamId"], $row["teamName"], $row["teamCause"]);
@@ -298,7 +344,7 @@ class Team {
 		//if not error code 404
 		$row = $result->fetch_assoc();
 
-		//covert the associative array to a userId
+		//covert the associative array to a TeamId
 		if($row !== null) {
 			try {
 				$team = new team($row["teamId"], $row["teamName"], $row["teamCause"]);
@@ -314,8 +360,6 @@ class Team {
 			return (null);
 		}
 	}
-
-
 	/**
 	 * gets the Team by teamCause
 	 *
@@ -375,7 +419,7 @@ class Team {
 
 			} catch(Exception $exception) {
 				//rethrow
-				throw(new mysqli_sql_exception ("unable to convert row to user", 0, $exception));
+				throw(new mysqli_sql_exception ("unable to convert row to Team", 0, $exception));
 			}
 		}
 		//if we get a teamId I'm lucky and show it
