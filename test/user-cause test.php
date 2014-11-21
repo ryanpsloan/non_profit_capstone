@@ -73,7 +73,7 @@ class UserCauseTest extends UnitTestCase {
 	}
 
 	// test creating a new profile Id and cause Id and inserting it to mySQL
-	public function testInsertNewCommentUser() {
+	public function testInsertNewUserCause() {
 
 		// first, verify mySQL connected OK
 		$this->assertNotNull($this->mysqli);
@@ -85,63 +85,62 @@ class UserCauseTest extends UnitTestCase {
 		$this->causeUser->insert($this->mysqli);
 
 		// finally, compare the fields
-		$this->assertNotNull($this->causeUser->getProfileId());
-		$this->assertTrue($this->causeUser->getProfileId() > 0);
-		$this->assertNotNull($this->causeUser->getCommentId());
-		$this->assertTrue($this->causeUser->getCommentId() > 0);
-		$this->assertIdentical($this->causeUser->getProfileId(),							$this->profile->getProfileId());
-		$this->assertIdentical($this->causeUser->getCommentId(),							$this->cause->getCauseId());
+		$this->assertNotNull($this->causeUser->profileId);
+		$this->assertTrue($this->causeUser->profileId > 0);
+		$this->assertNotNull($this->causeUser->causeId);
+		$this->assertTrue($this->causeUser->causeId > 0);
+		$this->assertIdentical($this->causeUser->profileId,							$this->profile->getProfileId());
+		$this->assertIdentical($this->causeUser->causeId,							$this->cause->getCauseId());
 
 	}
 
 	// test deleting a CommentUser
-	public function testDeleteCauseUser() {
+	public function testDeleteUserCause() {
 		// first, verify mySQL connected OK
 		$this->assertNotNull($this->mysqli);
 
 		// second, create a CommentUser to post to mySQL
-		$this->causeUser = new CommentUser($this->profile->getProfileId(), $this->cause->causeId);
+		$this->causeUser = new UserCause($this->profile->getProfileId(), $this->cause->getCauseId());
 
 		// third, insert the CommentUser to mySQL
 		$this->causeUser->insert($this->mysqli);
 
 		// fourth, verify the CommentUser was inserted
-		$this->assertNotNull($this->causeUser->getProfileId());
-		$this->assertTrue($this->causeUser->getProfileId() > 0);
-		$this->assertNotNull($this->causeUser->getCommentId());
-		$this->assertTrue($this->causeUser->getCommentId() > 0);
-
+		$this->assertNotNull($this->causeUser->profileId);
+		$this->assertTrue($this->causeUser->profileId > 0);
+		$this->assertNotNull($this->causeUser->causeId);
+		$this->assertTrue($this->causeUser->causeId > 0);
 		// fifth, delete the causeUser
 		$this->causeUser->delete($this->mysqli);
 		$this->causeUser = null;
 
 		// finally, try to get the userTeam and assert we didn't get a thing
-		$hopefulUserCommentId = CommentUser::getCommentUserByProfileCommentId ($this->mysqli, $this->profile->getProfileId(), $this->cause->causeId);
-		$this->assertNull($hopefulUserCommentId);
+		$hopefulCauseUserId = UserCause::getCauseUserByProfileCauseId($this->mysqli, $this->profile->getProfileId(), $this->cause->getCauseId());
+		$this->assertNull($hopefulCauseUserId);
 	}
 	// test grabbing a userTeam from mySQL
-	public function testGetCommentUserByProfileId() {
+	public function testGetUserCauseByProfileId() {
 
 		// first, verify mySQL connected OK
 		$this->assertNotNull($this->mysqli);
 
 		// second, create a causeUser to post to mySQL
-		$this->causeUser = new CommentUser($this->profile->getProfileId(), $this->cause->causeId);
+		$this->causeUser = new UserCause($this->profile->getProfileId(), $this->cause->getCauseId());
 
 		// third, insert the CommentUser to mySQL
 		$this->causeUser->insert($this->mysqli);
 
 		// fourth, get the causeUser using the static method
-		$staticCommentUser = CommentUser::getCommentUserByProfileCommentId($this->mysqli, $this->causeUser->getProfileId(),
-			$this->causeUser->getCommentId());
+		$staticCauseUser = UserCause::getCauseUserByProfileCauseId($this->mysqli, $this->causeUser->profileId,
+			$this->causeUser->causeId);
 
 		// finally, compare the fields to upload
-		$this->assertNotNull($staticCommentUser->getProfileId());
-		$this->assertTrue($staticCommentUser->getProfileId() > 0);
-		$this->assertNotNull($staticCommentUser->getCommentId());
-		$this->assertTrue($staticCommentUser->getCommentId() > 0);
-		$this->assertIdentical($staticCommentUser->getProfileId(),							$this->profile->getProfileId());
-		$this->assertIdentical($staticCommentUser->getCommentId(),							$this->cause->causeId);
+		$this->assertNotNull($staticCauseUser->profileId);
+		$this->assertTrue($staticCauseUser->profileId > 0);
+		$this->assertNotNull($staticCauseUser->causeId);
+		$this->assertTrue($staticCauseUser->causeId > 0);
+		$this->assertIdentical($staticCauseUser->profileId,							$this->profile->getProfileId());
+		$this->assertIdentical($staticCauseUser->causeId,							$this->cause->getCauseId());
 	}
 
 

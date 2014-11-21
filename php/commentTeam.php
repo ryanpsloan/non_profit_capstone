@@ -6,8 +6,8 @@
  * @author Dameon Smith <dameonsmith76@gmail.com>
  */
 
-require_once("../php/team.php");
-require_once("../php/comment.php");
+require_once("../php/profile.php");
+require_once("../php/cause.php");
 
 class CommentTeam {
 		/**

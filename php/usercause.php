@@ -44,11 +44,7 @@ class UserCause{
 **/
 
 
-	public function __get($name) {$this->assertNotNull($this->commentTeam->teamId);
-		$this->assertTrue($this->commentTeam->teamId > 0);
-		$this->assertNotNull($this->commentTeam->commentId);
-		$this->assertTrue($this->commentTeam->commentId > 0);
-
+	public function __get($name) {
 		$data = array("profileId" => $this->profileId,
 						  "causeId" => $this->causeId);
 		if(array_key_exists($name, $data)) {
@@ -68,7 +64,7 @@ class UserCause{
 	public function setProfileId($newProfileId)
 	{
 		//set profile id to null if new object
-		if($this->profileId === null) {
+		if($this->newProfileId === null) {
 			throw (new UnexpectedValueException("profileId cannot be null"));
 		}
 		//insure profile id is an integer
@@ -93,7 +89,7 @@ class UserCause{
 	 **/
 	//set cause id to null if new object
 	public function setCauseId($newCauseId){
-		if($this->causeId === null) {
+		if($this->newCauseId === null) {
 			throw (new UnexpectedValueException("causeId does not exist"));
 		}
 
