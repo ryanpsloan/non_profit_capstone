@@ -329,11 +329,11 @@ class CommentTeam {
 	}
 
 	/**
-	 * gets the CommentUser by profileId and commentId
+	 * gets the Commentteam by teamId and commentId
 	 *
 	 * @param resource $mysqli pointer to mySQL connection, by reference
-	 * @param int $profileId and $commentId  profileId and teamId to search for
-	 * @return int profile and comment found or null if not found
+	 * @param int $teamId and $commentId  profileId and teamId to search for
+	 * @return int team and comment found or null if not found
 	 * @throws mysqli_sql_exception when mySQL related errors occur
 	 **/
 

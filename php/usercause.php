@@ -44,7 +44,11 @@ class UserCause{
 **/
 
 
-	public function __get($name) {
+	public function __get($name) {$this->assertNotNull($this->commentTeam->teamId);
+		$this->assertTrue($this->commentTeam->teamId > 0);
+		$this->assertNotNull($this->commentTeam->commentId);
+		$this->assertTrue($this->commentTeam->commentId > 0);
+
 		$data = array("profileId" => $this->profileId,
 						  "causeId" => $this->causeId);
 		if(array_key_exists($name, $data)) {
@@ -353,6 +357,75 @@ class UserCause{
 			return(null);
 		} else {
 			return($causeIdSearch);
+		}
+	}
+
+	/**
+	 * gets the Commentteam by teamId and commentId
+	 *
+	 * @param resource $mysqli pointer to mySQL connection, by reference
+	 * @param int $teamId and $commentId  profileId and teamId to search for
+	 * @return int team and comment found or null if not found
+	 * @throws mysqli_sql_exception when mySQL related errors occur
+	 **/
+
+	public static function getCauseUserByProfileCauseId(&$mysqli, $profileId, $causeId) {
+
+		//handle degenerate cases
+		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
+			throw(new mysqli_sql_exception("input is not a mysqli object"));
+		}
+		//sanitize the profileId and commentId before searching
+		$profileId = filter_var($profileId, FILTER_VALIDATE_INT);
+		if($profileId === null) {
+			throw(new mysqli_sql_exception("input is null"));
+		}
+
+		$causeId = filter_var($causeId, FILTER_VALIDATE_INT);
+		if($causeId === null) {
+			throw(new mysqli_sql_exception("input is null"));
+		}
+
+		//Create query template
+		$query = "SELECT profileId, causeId FROM userCause WHERE profileId = ? AND causeId = ?";
+		$statement = $mysqli->prepare($query);
+		if($statement === false) {
+			throw(new mysqli_sql_exception ("unable to prepare statement"));
+		}
+
+		//bind the profileId and teamId to the place holder in the template
+		$wasClean = $statement->bind_param("ii", $profileId, $causeId);
+		if($wasClean === false) {
+			throw(new mysqli_sql_exception("unable to bind parameters"));
+		}
+		//execute the statement
+		if($statement->execute() === false) {
+			throw(new mysqli_sql_exception("unable to execute mySQL statement"));
+		}
+		// get result from the SELECT query
+		$result = $statement->get_result();
+		if($result === false) {
+			throw(new mysqli_sql_exception("unable to get result set"));
+		}
+		//primary key can only one of two things null or integer
+		//if there's a result, we can show it
+		//if not error code 404
+		$row = $result->fetch_assoc();
+
+		//covert the associative array to a userId
+		if($row !== null) {
+			try {
+				$causeUser = new userCause($row["profileId"], $row["causeId"]);
+			} catch(Exception $exception) {
+				//rethrow
+				throw(new mysqli_sql_exception ("unable to convert row to user", 0, $exception));
+
+			}
+			//if we get a profileId and commentId I'm lucky and show it
+			return ($causeUser);
+		} else {
+			//404 User not found
+			return (null);
 		}
 	}
 }
