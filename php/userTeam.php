@@ -439,7 +439,7 @@ class UserTeam {
 
 		// create query template
 		$query = "SELECT profileId, teamId, roleInTeam, teamPermission, commentPermission, invitePermission, banStatus
-					 FROM userTeam WHERE profileId = ?";
+					 FROM userTeam WHERE profileId = ? ORDER BY profileId, teamId";
 
 		//prepare statement
 		$statement = $mysqli->prepare($query);
