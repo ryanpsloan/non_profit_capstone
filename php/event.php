@@ -220,26 +220,28 @@ class Event {
 		}
 
 		// Convert date to strings
-		if($this->eventDate === null) {
+	/**	if($this->eventDate === null) {
 			$dateCreated = null;
 		} else {
 			$eventDate = $this->eventDate->format("Y-d-m H:i:s");
-		}
+		} */
+
+		$dateString = $this->eventDate->format("Y-m-d H:i:s");
 
 		$query		="UPDATE event SET eventId = ?, eventTitle = ?, eventDate = ?, eventLocation = ?";
-		$statement  =$mysqli->prepare->$query;
+		$statement  =$mysqli->prepare($query);
 		if($statement === false){
 			throw(new mysqli_sql_exception("Unable to prepare statement"));
 		}
 
 		$wasClean = $statement->bind_param("isss", $this->eventId, $this->eventTitle,
-																$this->eventDate, $this->eventLocation);
+																$dateString, $this->eventLocation);
 
 		if($wasClean === false){
 			throw(new mysqli_sql_exception("Unable to bind parameters"));
 		}
 
-		if($statement->execute === false){
+		if($statement->execute() === false){
 			throw(new mysqli_sql_exception("Unable to execute mySQL statement."));
 		}
 	}

@@ -6,7 +6,7 @@ require_once("/etc/apache2/capstone-mysql/helpabq.php");
 // ../ means go up one directory
 require_once("../php/event.php");
 //the articleTest is a container for all our tests
-class eventTest extends UnitTestCase {
+class EventTest extends UnitTestCase {
 	//variable to hold the mySQL connection
 	private $mysqli = null;
 	//variable to hold the test database row
@@ -20,7 +20,8 @@ class eventTest extends UnitTestCase {
 	//here, we use it to connect to mySQL and to calculate salt, authentication token and hash if we need it
 	public function setUp() {
 		// connect to mySQL
-		mysqli_report (MYSQLI_REPORT_STRICT);
+		// mysqli_report (MYSQLI_REPORT_STRICT);
+		$this->mysqli = MysqliConfiguration::getMysqli();
 		$this->EVENTDATE = DateTime::createFromFormat("Y-m-d H:i:s", "1995-12-12 12:12:12");
 	}
 	// tearDown() is a method that is run after each test
@@ -30,10 +31,6 @@ class eventTest extends UnitTestCase {
 		if($this->event !== null) {
 			$this->event->delete($this->mysqli);
 			$this->event = null;
-		}
-		//disconnect from mySQL
-		if($this->mysqli !== null) {
-			$this->mysqli->close();
 		}
 	}
 	//test creating a new Event and inserting it into SQL
@@ -64,6 +61,11 @@ class eventTest extends UnitTestCase {
 		$this->assertNotNull($this->event->eventId);
 		$this->assertTrue($this->event->eventId > 0);
 		//fifth delete the article
+		$secondEvent = new Event(null, "This is a new event", "2012-12-12 12:12:12", "This is the location");
+		$secondEvent->insert($this->mysqli);
+		$this->event->setEventId($secondEvent->eventId);
+		$this->event->update($this->mysqli);
+
 		$this->event->delete($this->mysqli);
 		$this->event = null;
 		//finally try to get the event and assert we didn't get a thing

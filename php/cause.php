@@ -10,9 +10,9 @@ class Cause {
 	/**
 	 * constructor for cause
 	 *
-	 * @param mixed $newCause cause id (or null if new object)
+	 * @param mixed $newCauseId cause id (or null if new object)
 	 * @param string $newCauseName
-	 * @param string $newCause
+	 * @param string $newCauseDescription
 	 * @throws UnexpectedValueException when a parameter is of the wrong type
 	 * @throws RangeException when a parameter is invalid
 	 **/

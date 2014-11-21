@@ -132,9 +132,11 @@ class Comment{
 		}
 
 		$query = "INSERT INTO comment(commentText, commentDate) VALUES(?,?)";
+
 		$statement = $mysqli->prepare($query);
+
 		if($statement === false) {
-			throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
+			throw(new mysqli_sql_exception("Unable to prepare mySQL statement"));
 		}
 
 		$dateString = $this->commentDate->format("Y-m-d H:i:s");
@@ -166,7 +168,6 @@ class Comment{
 		if($this->commentId === null) {
 			throw(new mysqli_sql_exception("Unable to delete an comment that does not exist"));
 		}
-		var_dump($this);
 
 		$query		="DELETE FROM comment WHERE commentId = ?";
 		$statement  =$mysqli->prepare($query);
@@ -175,7 +176,7 @@ class Comment{
 		}
 
 		$wasClean = $statement->bind_param("i", $this->commentId);
-		var_dump($this);
+
 		if($wasClean === false){
 			throw (new mysqli_sql_exception("Unable to bind parameters"));
 		}
@@ -209,7 +210,7 @@ class Comment{
 		}
 
 		$query		="UPDATE comment SET commentId = ?, commentText = ?, commentDate = ?";
-		$statement  =$mysqli->prepare->$query;
+		$statement  =$mysqli->prepare($query);
 		if($statement === false){
 			throw(new mysqli_sql_exception("Unable to prepare statement"));
 		}
@@ -302,16 +303,18 @@ class Comment{
 			throw(new mysqli_sql_exception("input is not a mysqli object"));
 		}
 
-		$commentDate = trim($commentDate);
-		$commentDate = filter_var($commentDate, FILTER_SANITIZE_STRING);
+		$dateString = $commentDate->format("Y-m-d H:i:s");
 
-		$query = "SELECT commentId, commentTitle, commentDate, commentLocation FROM comment WHERE commentDate = ?";
+		$dateString = trim($dateString);
+		$dateString = filter_var($dateString, FILTER_SANITIZE_STRING);
+
+		$query = "SELECT commentId, commentText, commentDate FROM comment WHERE commentDate = ?";
 		$statement = $mysqli->prepare($query);
 		if($statement === false) {
 			throw(new mysqli_sql_exception("Unable to prepare statement"));
 		}
 
-		$wasClean = $statement->bind_param("s", $commentDate);
+		$wasClean = $statement->bind_param("s", $dateString);
 		if($wasClean === false) {
 			throw(new mysqli_sql_exception("Unable to bind parameters"));
 		}
