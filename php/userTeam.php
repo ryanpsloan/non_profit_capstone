@@ -418,6 +418,142 @@ class UserTeam {
 	}
 
 	/**
+	 * gets the UserTeam by profile Id
+	 *
+	 * @param $mysqli mysqli object
+	 * @param mixed $profileId
+	 * @return array|null
+	 * @throw mysqli_sql_exception if unable to properly execute statement
+	 */
+
+	public static function getUserTeamByProfileId($mysqli,$profileId){
+
+		//handle degenerate cases
+		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
+			throw(new mysqli_sql_exception("input is not a mysqli object"));
+		}
+
+		// sanitize the profileId before searching
+		$profileId = trim($profileId);
+		$profileId = filter_var($profileId, FILTER_VALIDATE_INT);
+
+		// create query template
+		$query = "SELECT profileId, teamId, roleInTeam, teamPermission, commentPermission, invitePermission, banStatus
+					 FROM userTeam WHERE profileId = ?";
+
+		//prepare statement
+		$statement = $mysqli->prepare($query);
+		if($statement === false) {
+			throw(new mysqli_sql_exception("Unable to prepare statement"));
+		}
+
+		//bind the profileId to the place holder in the template
+		$wasClean = $statement->bind_param("i", $profileId);
+		if($wasClean === false) {
+			throw(new mysqli_sql_exception("Unable to bind parameters"));
+		}
+
+		//execute the statement
+		if($statement->execute() === false) {
+			throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
+		}
+		//get result from the SELECT query
+		$result = $statement->get_result();
+		if($result === false) {
+			throw(new mysqli_sql_exception("Unable to get result set."));
+		}
+
+		//turn the results into an array
+		$profileIdSearch = array();
+
+		// loop through the array and display the results
+		while(($row = $result->fetch_assoc()) !== null) {
+
+			try {
+				$profile = new userTeam($row["profileId"], $row["teamId"], $row["roleInTeam"], $row["teamPermission"],
+												$row["commentPermission"], $row["invitePermission"], $row["banStatus"]);
+				$profileIdSearch [] = $profile;
+			} catch(Exception $exception) {
+
+				throw(new mysqli_sql_exception("Unable to convert row to userteam", 0, $exception));
+			}
+		}
+
+		// return
+		if($result->num_rows === 0) {
+			return(null);
+		} else {
+			return($profileIdSearch);
+		}
+	}
+
+	/**
+	 * gets the UserTeam by team Id
+	 *
+	 * @param $mysqli mysqli object
+	 * @param mixed $teamId
+	 * @return array|null
+	 * @throw mysqli_sql_exception if unable to execute method
+	 */
+
+	public static function getUserTeamByTeamId($mysqli,$teamId){
+		//handle degenerate cases
+		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
+			throw(new mysqli_sql_exception("input is not a mysqli object"));
+		}
+
+		// sanitize the team id before searching
+		$teamId = trim($teamId);
+		$teamId = filter_var($teamId, FILTER_VALIDATE_INT);
+
+		// create query template
+		$query = "SELECT profileId, teamId, roleInTeam, teamPermission, commentPermission, invitePermission, banStatus
+					 FROM userTeam WHERE teamId = ?";
+
+		$statement = $mysqli->prepare($query);
+		if($statement === false) {
+			throw(new mysqli_sql_exception("Unable to prepare statement"));
+		}
+		//bind the teamId to the place holder in the template
+		$wasClean = $statement->bind_param("i", $teamId);
+		if($wasClean === false) {
+			throw(new mysqli_sql_exception("Unable to bind parameters"));
+		}
+		//execute the statement
+		if($statement->execute() === false) {
+			throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
+		}
+		//get result from the SELECT query
+		$result = $statement->get_result();
+		if($result === false) {
+			throw(new mysqli_sql_exception("Unable to get result set."));
+		}
+
+		//turn the results into an array
+		$teamIdSearch = array();
+
+		// Loop through the array and display the results
+		while(($row = $result->fetch_assoc()) !== null) {
+
+			try {
+				$team = new userTeam($row["profileId"], $row["teamId"], $row["roleInTeam"], $row["teamPermission"],
+					$row["commentPermission"], $row["invitePermission"], $row["banStatus"]);
+				$teamIdSearch [] = $team;
+			} catch(Exception $exception) {
+
+				throw(new mysqli_sql_exception("Unable to convert row to userTeam", 0, $exception));
+			}
+		}
+		// return
+		if($result->num_rows === 0) {
+			return(null);
+		} else {
+			return($teamIdSearch);
+		}
+	}
+
+
+	/**
 	 * gets the UserTeam by profileId and teamId
 	 *
 	 * @param resource $mysqli pointer to mySQL connection, by reference
@@ -425,6 +561,8 @@ class UserTeam {
 	 * @return int profile and team found or null if not found
 	 * @throws mysqli_sql_exception when mySQL related errors occur
 	 **/
+
+
 
 	public static function getUserTeamByProfileTeamId(&$mysqli, $profileId, $teamId) {
 		//handle degenerate cases

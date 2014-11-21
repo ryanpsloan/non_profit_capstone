@@ -31,7 +31,7 @@ class UserCause{
 
 			$this->setCauseId($newCauseId);
 		} catch(UnexpectedValueException $unexpectedValue) {
-			var_dump($unexpectedValue);
+
 			throw(new UnexpectedValueException("Could not construct object ProfileCause", 0, $unexpectedValue));
 		} catch(RangeException $range) {
 			throw(new RangeException("Could not construct object ProfileCause", 0, $range));
