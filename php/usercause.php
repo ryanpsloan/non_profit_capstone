@@ -31,6 +31,7 @@ class UserCause{
 
 			$this->setCauseId($newCauseId);
 		} catch(UnexpectedValueException $unexpectedValue) {
+			var_dump($unexpectedValue);
 			throw(new UnexpectedValueException("Could not construct object ProfileCause", 0, $unexpectedValue));
 		} catch(RangeException $range) {
 			throw(new RangeException("Could not construct object ProfileCause", 0, $range));
@@ -50,6 +51,7 @@ class UserCause{
 		if(array_key_exists($name, $data)) {
 			return $data[$name];
 		} else {
+			var_dump($this->profileId);
 			throw(new InvalidArgumentException("Unable to get $name"));
 		}
 	}
@@ -63,10 +65,7 @@ class UserCause{
 	 **/
 	public function setProfileId($newProfileId)
 	{
-		//set profile id to null if new object
-		if($this->newProfileId === null) {
-			throw (new UnexpectedValueException("profileId cannot be null"));
-		}
+
 		//insure profile id is an integer
 		if(filter_var($newProfileId, FILTER_VALIDATE_INT) === false) {
 			throw(new UnexpectedValueException("profileId $newProfileId is not numeric"));
@@ -89,9 +88,6 @@ class UserCause{
 	 **/
 	//set cause id to null if new object
 	public function setCauseId($newCauseId){
-		if($this->newCauseId === null) {
-			throw (new UnexpectedValueException("causeId does not exist"));
-		}
 
 		//insure cause id is an integer
 		if(filter_var($newCauseId, FILTER_VALIDATE_INT) === false) {
@@ -120,17 +116,17 @@ class UserCause{
 		}
 
 		//enforce the profile id is null
-		if($this->profileId !== null){
+		if($this->profileId === null){
 			throw(new mysqli_sql_exception("Not a new ProfileCause Relationship"));
 		}
 
 		//enforce the cause id is null
-		if($this->causeId !== null){
+		if($this->causeId === null){
 			throw(new mysqli_sql_exception("Not a new ProfileCause relationship"));
 		}
 
 		//create a query template
-		$query = "INSERT INTO profileCause(profileId, causeId) VALUES (?, ?)";
+		$query = "INSERT INTO userCause(profileId, causeId) VALUES (?, ?)";
 		$statement = $mysqli->prepare($query);
 		if($statement === false) {
 			throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
@@ -160,22 +156,22 @@ class UserCause{
 			throw (new mysqli_sql_exception("Input is not a mysqli object"));
 		}
 		//enforce the cause id and profile id are not null
-		if($this->causeId === null) {
+		if($this->profileId === null) {
 			throw(new mysqli_sql_exception("Unable to delete an Cause that does not exist"));
 		}
 
-		if($this->profileId === null){
+		if($this->causeId === null){
 			throw(new mysqli_sql_exception("Unable to delete a Profile that does not exist"));
 		}
 		//create a query template
-		$query		="DELETE FROM profileCause WHERE causeId = ? AND profileId = ?";
+		$query		="DELETE FROM userCause WHERE profileId = ? AND causeId = ?";
 		$statement  =$mysqli->prepare($query);
 		if($statement === false){
 			throw (new mysqli_sql_exception("Unable to prepare statement"));
 		}
 
 		// bind the member variables to the placeholder in the template
-		$wasClean = $statement->bind_param("ii", $this->causeId, $this->profileId);
+		$wasClean = $statement->bind_param("ii", $this->profileId, $this->causeId);
 		if($wasClean === false){
 			throw (new mysqli_sql_exception("Unable to bind parameters"));
 		}
@@ -202,22 +198,22 @@ class UserCause{
 		}
 
 		//enforce the cause id and profile id are set to null
-		if($this->causeId === null){
+		if($this->profileId === null){
 			throw (new mysqli_sql_exception("Cannot update cause that does not exist"));
 		}
-		if($this->profileId === null){
+		if($this->causeId === null){
 			throw (new mysqli_sql_exception("Cannot update profile that does not exist"));
 		}
 
 		//create a query template
-		$query		="UPDATE profileCause SET profileId = ?, causeId = ?";
+		$query		="UPDATE userCause SET profileId = ?, causeId = ?";
 		$statement  =$mysqli->prepare->$query;
 		if($statement === false){
 			throw(new mysqli_sql_exception("Unable to prepare statement"));
 		}
 
 		//bind the member variables to the places holder in the template
-		$wasClean = $statement->bind_param("ii", $this->causeId, $this->profileId);
+		$wasClean = $statement->bind_param("ii", $this->profileId, $this->causeId);
 
 		if($wasClean === false){
 			throw(new mysqli_sql_exception("Unable to bind parameters"));
@@ -238,7 +234,7 @@ class UserCause{
 	 * @throw mysqli_sql_exception if unable to properly execute statement
 	 */
 
-	public static function getProfileCauseByProfileId($mysqli,$profileId){
+	public static function getUserCauseByProfileId($mysqli,$profileId){
 		//handle degenerate cases
 		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
 			throw(new mysqli_sql_exception("input is not a mysqli object"));
@@ -249,7 +245,7 @@ class UserCause{
 		$profileId = filter_var($profileId, FILTER_VALIDATE_INT);
 
 		// create query template
-		$query = "SELECT profileId, causeId FROM profileCause WHERE profileId = ?";
+		$query = "SELECT profileId, causeId FROM userCause WHERE profileId = ?";
 
 		$statement = $mysqli->prepare($query);
 		if($statement === false) {
@@ -277,7 +273,7 @@ class UserCause{
 		while(($row = $result->fetch_assoc()) !== null) {
 
 			try {
-				$profile = new ProfileCause($row["profileId"], $row["causeId"]);
+				$profile = new userCause($row["profileId"], $row["causeId"]);
 				$profileIdSearch [] = $profile;
 			} catch(Exception $exception) {
 
@@ -302,7 +298,7 @@ class UserCause{
 	 * @throw mysqli_sql_exception if unable to execute method
 	 */
 
-	public static function getProfileCauseByCauseId($mysqli,$causeId){
+	public static function getUserCauseByCauseId($mysqli,$causeId){
 		//handle degenerate cases
 		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
 			throw(new mysqli_sql_exception("input is not a mysqli object"));
@@ -341,7 +337,7 @@ class UserCause{
 		while(($row = $result->fetch_assoc()) !== null) {
 
 			try {
-				$cause = new ProfileCause($row["profileId"], $row["causeId"]);
+				$cause = new userCause($row["profileId"], $row["causeId"]);
 				$causeIdSearch [] = $cause;
 			} catch(Exception $exception) {
 
@@ -365,7 +361,7 @@ class UserCause{
 	 * @throws mysqli_sql_exception when mySQL related errors occur
 	 **/
 
-	public static function getCauseUserByProfileCauseId(&$mysqli, $profileId, $causeId) {
+	public static function getUserCauseByUserCauseId(&$mysqli, $profileId, $causeId) {
 
 		//handle degenerate cases
 		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {

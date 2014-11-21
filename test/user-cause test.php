@@ -90,7 +90,7 @@ class UserCauseTest extends UnitTestCase {
 		$this->assertNotNull($this->causeUser->causeId);
 		$this->assertTrue($this->causeUser->causeId > 0);
 		$this->assertIdentical($this->causeUser->profileId,							$this->profile->getProfileId());
-		$this->assertIdentical($this->causeUser->causeId,							$this->cause->getCauseId());
+		$this->assertIdentical($this->causeUser->causeId,								$this->cause->getCauseId());
 
 	}
 
@@ -110,12 +110,13 @@ class UserCauseTest extends UnitTestCase {
 		$this->assertTrue($this->causeUser->profileId > 0);
 		$this->assertNotNull($this->causeUser->causeId);
 		$this->assertTrue($this->causeUser->causeId > 0);
+
 		// fifth, delete the causeUser
 		$this->causeUser->delete($this->mysqli);
 		$this->causeUser = null;
 
 		// finally, try to get the userTeam and assert we didn't get a thing
-		$hopefulCauseUserId = UserCause::getCauseUserByProfileCauseId($this->mysqli, $this->profile->getProfileId(), $this->cause->getCauseId());
+		$hopefulCauseUserId = UserCause::getUserCauseByUserCauseId($this->mysqli, $this->profile->getProfileId(), $this->cause->getCauseId());
 		$this->assertNull($hopefulCauseUserId);
 	}
 	// test grabbing a userTeam from mySQL
@@ -131,7 +132,7 @@ class UserCauseTest extends UnitTestCase {
 		$this->causeUser->insert($this->mysqli);
 
 		// fourth, get the causeUser using the static method
-		$staticCauseUser = UserCause::getCauseUserByProfileCauseId($this->mysqli, $this->causeUser->profileId,
+		$staticCauseUser = UserCause::getUserCauseByUserCauseId($this->mysqli, $this->causeUser->profileId,
 			$this->causeUser->causeId);
 
 		// finally, compare the fields to upload

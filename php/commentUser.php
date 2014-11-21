@@ -36,7 +36,6 @@ class CommentUser {
 			throw(new UnexpectedValueException ("Unable to construct Profile", 0, $unexpectedValue));
 
 		} catch(RangeException $range) {
-			$range->getMessage();
 			throw(new RangeException("Unable to construct Profile", 0, $range));
 		}
 	}
