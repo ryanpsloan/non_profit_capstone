@@ -48,7 +48,7 @@ CREATE TABLE profile(
 	PRIMARY KEY(profileId),
 	FOREIGN KEY (userId) REFERENCES user(userId),
 	INDEX(zipCode),
-	INDEX(userId)
+	UNIQUE (userId)
 );
 
 CREATE TABLE cause(

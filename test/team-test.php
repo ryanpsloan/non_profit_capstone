@@ -135,5 +135,27 @@ class TeamTest extends UnitTestCase {
 		$this->assertIdentical($staticTeam->getTeamName(),						$this->TEAMNAME);
 		$this->assertIdentical($staticTeam->getTeamCause(), 					$this->TEAMCAUSE);
 	}
+
+	// test grabbing a team from mySQL
+	public function testGetTeamByTeamName () {
+		// verify mySQL connected OK
+		$this->assertNotNull($this->mysqli);
+
+		// create a team to post to mySQL
+		$this->team = new Team(null, $this->TEAMNAME, $this->TEAMCAUSE);
+
+		// third, insert the team to mySQL
+		$this->team->insert($this->mysqli);
+
+		// fourth, get the team using the static method
+		$staticTeam = Team::getTeamByTeamName($this->mysqli, $this->TEAMNAME);
+
+		// finally, compare the fields
+		$this->assertNotNull($staticTeam->getTeamId ());
+		$this->assertTrue($staticTeam->getTeamId () > 0);
+		$this->assertIdentical($staticTeam->getTeamId(),	 					$this->team->getTeamId());
+		$this->assertIdentical($staticTeam->getTeamName(),						$this->TEAMNAME);
+		$this->assertIdentical($staticTeam->getTeamCause(), 					$this->TEAMCAUSE);
+	}
 }
 ?>
