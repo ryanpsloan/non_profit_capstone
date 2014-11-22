@@ -13,6 +13,7 @@ class TeamTest extends UnitTestCase {
 	private $mysqli = null;
 	// variable to hold the test database row
 	private $team   = null;
+	private $team1 = null;
 
 	// a few "global" variables for creating test data
 	private $TEAMID		= null;
@@ -156,6 +157,32 @@ class TeamTest extends UnitTestCase {
 		$this->assertIdentical($staticTeam->getTeamId(),	 					$this->team->getTeamId());
 		$this->assertIdentical($staticTeam->getTeamName(),						$this->TEAMNAME);
 		$this->assertIdentical($staticTeam->getTeamCause(), 					$this->TEAMCAUSE);
+	}
+
+	public function testTeamByTeamCause() {
+
+		// first, verify mySQL connected OK
+		$this->assertNotNull($this->mysqli);
+
+		// second, create a user to post to mySQL
+		$this->team = new Team(null, $this->TEAMNAME, $this->TEAMCAUSE);
+		$this->team1 = new Team(null, "WifeBeaters", $this->TEAMCAUSE);
+
+		// third, insert the userTeam to mySQL
+		$this->team->insert($this->mysqli);
+		$this->team1->insert($this->mysqli);
+
+		// fourth, get the userTeam using the static method
+		$staticTeam = Team::getTeamByTeamCause($this->mysqli, $this->TEAMCAUSE);
+		//finally, compare the fields
+		for($i = 0; $i < count($staticTeam); $i++){
+			$this->assertNotNull($staticTeam[$i]->getTeamId());
+			$this->assertTrue($staticTeam[$i]->getTeamId() > 0);
+			$this->assertIdentical($staticTeam[$i]->getTeamCause(), 		$this->TEAMCAUSE);
+
+		}
+
+		$this->team1->delete($this->mysqli);
 	}
 }
 ?>
