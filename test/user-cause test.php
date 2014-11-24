@@ -19,6 +19,7 @@ class UserCauseTest extends UnitTestCase {
 
 	//variable to hold the mySQL connection
 	private $mysqli = null;
+
 	//variable to hold the test database
 	private $causeUser = null;
 
@@ -31,13 +32,13 @@ class UserCauseTest extends UnitTestCase {
 	//setUp () is the first step in unit testing and is a method to run before each test
 	//here it connects to mySQL
 	public function setUp() {
+
 		//connect to mySQL and add data
 		$this->mysqli = MysqliConfiguration::getMysqli();
 
 		$salt       = bin2hex(openssl_random_pseudo_bytes(32));
 		$authToken = bin2hex(openssl_random_pseudo_bytes(16));
 		$passwordHash       = hash_pbkdf2("sha512", "password", $salt, 2048, 128);
-		//$i = rand(1, 1000);
 		$this->user = new User(null,"Juan", "Juanito@gmail.com",$passwordHash,$salt,$authToken,2);
 		$this->user->insert($this->mysqli);
 
@@ -50,6 +51,7 @@ class UserCauseTest extends UnitTestCase {
 
 	//Tear down (), a method to delete the test record and disconnect from mySQL
 	public function tearDown(){
+
 		// delete the user if we can
 		if($this->causeUser !== null) {
 			$this->causeUser->delete($this->mysqli);
@@ -78,10 +80,10 @@ class UserCauseTest extends UnitTestCase {
 		// first, verify mySQL connected OK
 		$this->assertNotNull($this->mysqli);
 
-		// second, create a causeUser to post to mySQL
+		// second, create a userCauseUser to post to mySQL
 		$this->causeUser = new UserCause($this->profile->getProfileId(), $this->cause->getCauseId());
 
-		// third, insert the causeUser, to mySQL
+		// third, insert the userCause, to mySQL
 		$this->causeUser->insert($this->mysqli);
 
 		// finally, compare the fields
@@ -94,44 +96,45 @@ class UserCauseTest extends UnitTestCase {
 
 	}
 
-	// test deleting a CommentUser
+	// test deleting a  userCause
 	public function testDeleteUserCause() {
+
 		// first, verify mySQL connected OK
 		$this->assertNotNull($this->mysqli);
 
-		// second, create a CommentUser to post to mySQL
+		// second, create a userCause to post to mySQL
 		$this->causeUser = new UserCause($this->profile->getProfileId(), $this->cause->getCauseId());
 
-		// third, insert the CommentUser to mySQL
+		// third, insert the userCause to mySQL
 		$this->causeUser->insert($this->mysqli);
 
-		// fourth, verify the CommentUser was inserted
+		// fourth, verify the userCause was inserted
 		$this->assertNotNull($this->causeUser->profileId);
 		$this->assertTrue($this->causeUser->profileId > 0);
 		$this->assertNotNull($this->causeUser->causeId);
 		$this->assertTrue($this->causeUser->causeId > 0);
 
-		// fifth, delete the causeUser
+		// fifth, delete the userCause
 		$this->causeUser->delete($this->mysqli);
 		$this->causeUser = null;
 
-		// finally, try to get the userTeam and assert we didn't get a thing
+		// finally, try to get the userCause and assert we didn't get a thing
 		$hopefulCauseUserId = UserCause::getUserCauseByUserCauseId($this->mysqli, $this->profile->getProfileId(), $this->cause->getCauseId());
 		$this->assertNull($hopefulCauseUserId);
 	}
-	// test grabbing a userTeam from mySQL
+	// test grabbing a userCause from mySQL
 	public function testGetUserCauseByProfileId() {
 
 		// first, verify mySQL connected OK
 		$this->assertNotNull($this->mysqli);
 
-		// second, create a causeUser to post to mySQL
+		// second, create a userCause to post to mySQL
 		$this->causeUser = new UserCause($this->profile->getProfileId(), $this->cause->getCauseId());
 
-		// third, insert the CommentUser to mySQL
+		// third, insert the userCause to mySQL
 		$this->causeUser->insert($this->mysqli);
 
-		// fourth, get the causeUser using the static method
+		// fourth, get the userCause using the static method
 		$staticCauseUser = UserCause::getUserCauseByUserCauseId($this->mysqli, $this->causeUser->profileId,
 			$this->causeUser->causeId);
 
@@ -143,6 +146,4 @@ class UserCauseTest extends UnitTestCase {
 		$this->assertIdentical($staticCauseUser->profileId,							$this->profile->getProfileId());
 		$this->assertIdentical($staticCauseUser->causeId,							$this->cause->getCauseId());
 	}
-
-
 }

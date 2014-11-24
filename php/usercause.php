@@ -1,6 +1,6 @@
 <?php
 /**
- * To create a class that will create a relationship between the Profile and Cause tables
+ * To create a class that will create a relationship between the User and Cause tables
  * Connects the profile and the cause tables
  * @author Casimiro Vigil <cfvigil26@gmail.com>
  **/
@@ -30,6 +30,7 @@ class UserCause{
 			$this->setProfileId($newProfileId);
 
 			$this->setCauseId($newCauseId);
+
 		} catch(UnexpectedValueException $unexpectedValue) {
 
 			throw(new UnexpectedValueException("Could not construct object ProfileCause", 0, $unexpectedValue));
@@ -40,7 +41,7 @@ class UserCause{
 	}
 
 	/**
-	 * Creates an array with ProfileId and causeId to check for name.
+	 * Creates an array with profileId and causeId to check for name.
 	 *
 	**/
 
@@ -127,6 +128,7 @@ class UserCause{
 		//create a query template
 		$query = "INSERT INTO userCause(profileId, causeId) VALUES (?, ?)";
 		$statement = $mysqli->prepare($query);
+
 		if($statement === false) {
 			throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
 		}
@@ -414,7 +416,7 @@ class UserCause{
 			//if we get a profileId and commentId I'm lucky and show it
 			return ($causeUser);
 		} else {
-			//404 User not found
+
 			return (null);
 		}
 	}
