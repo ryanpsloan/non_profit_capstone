@@ -9,8 +9,10 @@ require_once("../php/cause.php");
 
 // the causeTest is a container for all our tests
 class CauseTest extends UnitTestCase {
+
 	// variable to hold the mySQL connection
 	private $mysqli = null;
+
 	// variable to hold the test database row
 	private $cause   = null;
 
@@ -36,6 +38,7 @@ class CauseTest extends UnitTestCase {
 			$this->cause = null;
 		}
 	}
+
 	// test creating a new cause and inserting it to mySQL
 	public function testInsertNewCause() {
 		// first, verify mySQL connected OK
@@ -70,15 +73,11 @@ class CauseTest extends UnitTestCase {
 		$this->cause->setCauseDescription($newCauseDescription);
 		$this->cause->update($this->mysqli);
 
-
 		// update the cause and post the changes to mySQL
 		$this->assertNotNull($this->cause->getCauseId());
 		$this->assertTrue($this->cause->getCauseId() > 0);
 		$this->assertIdentical($this->cause->getCauseName(),	               			$this->CAUSENAME);
-		$this->assertIdentical($this->cause->getCauseDescription(),			               $newCauseDescription);
-
-
-
+		$this->assertIdentical($this->cause->getCauseDescription(),			            $newCauseDescription);
 
 		//fifth delete the article
 		$this->cause->delete($this->mysqli);
@@ -91,6 +90,7 @@ class CauseTest extends UnitTestCase {
 
 	// test deleting a cause
 	public function testDeleteCause() {
+
 		// verify mySQL connected OK
 		$this->assertNotNull($this->mysqli);
 
@@ -114,7 +114,8 @@ class CauseTest extends UnitTestCase {
 	}
 
 	// test grabbing a cause from mySQL
-	public function testGetCauseByCauseId () {
+	public function testGetCauseByDescription () {
+
 		// verify mySQL connected OK
 		$this->assertNotNull($this->mysqli);
 
@@ -128,12 +129,37 @@ class CauseTest extends UnitTestCase {
 		$staticCause = Cause::getCauseByCauseId($this->mysqli, $this->cause->getCauseId());
 
 		// finally, compare the fields
-		// finally, compare the fields
 		$this->assertNotNull($staticCause->getCauseId ());
 		$this->assertTrue($staticCause->getCauseId () > 0);
-		$this->assertIdentical($staticCause->getCauseId(),	 					$this->cause->getCauseId());
+		$this->assertIdentical($staticCause->getCauseId(),	 						$this->cause->getCauseId());
 		$this->assertIdentical($staticCause->getCauseName(),						$this->CAUSENAME);
-		$this->assertIdentical($staticCause->getCauseDescription(), 					$this->CAUSEDESCRIPTION);
+		$this->assertIdentical($staticCause->getCauseDescription(), 			$this->CAUSEDESCRIPTION);
+	}
+
+	// test getting Cause by CauseName
+	public function testCauseByCauseName() {
+
+		// first, verify mySQL connected OK
+		$this->assertNotNull($this->mysqli);
+
+		// second, create a cause to post to mySQL
+		$this->cause = new Cause(null, $this->CAUSENAME, $this->CAUSEDESCRIPTION);
+		$this->cause1 = new Cause(null, $this->CAUSENAME, $this->CAUSEDESCRIPTION);
+
+		// third, insert the cause to mySQL
+		$this->cause->insert($this->mysqli);
+		$this->cause1->insert($this->mysqli);
+
+		// fourth, get the cause using the static method
+		$staticCause = Cause::getCauseByCauseName($this->mysqli, $this->CAUSENAME);
+		//finally, compare the fields
+		for($i = 0; $i < count($staticCause); $i++){
+			$this->assertNotNull($staticCause[$i]->getCauseId());
+			$this->assertTrue($staticCause[$i]->getCauseId() > 0);
+			$this->assertIdentical($staticCause[$i]->getCauseName(), 		$this->CAUSENAME);
+		}
+
+		$this->cause->delete($this->mysqli);
 	}
 }
 ?>

@@ -42,8 +42,7 @@ class UserCause{
 	/**
 	 * Creates an array with ProfileId and causeId to check for name.
 	 *
-**/
-
+	**/
 
 	public function __get($name) {
 		$data = array("profileId" => $this->profileId,
@@ -180,7 +179,6 @@ class UserCause{
 		if($statement->execute() === false) {
 			throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
 		}
-
 	}
 
 	/**
@@ -421,9 +419,3 @@ class UserCause{
 		}
 	}
 }
-/**
- * Created by PhpStorm.
- * User: Cass
- * Date: 11/7/2014
- * Time: 11:03 AM
- */ 

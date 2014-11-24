@@ -38,7 +38,7 @@ class UserCauseTest extends UnitTestCase {
 		$authToken = bin2hex(openssl_random_pseudo_bytes(16));
 		$passwordHash       = hash_pbkdf2("sha512", "password", $salt, 2048, 128);
 		$i = rand(1, 1000);
-		$this->user = new User(null,"Juan", "Juanito".$i."@gmail.com",$passwordHash,$salt,$authToken,2);
+		$this->user = new User(null,"Juan", "Juanito@gmail.com",$passwordHash,$salt,$authToken,2);
 		$this->user->insert($this->mysqli);
 
 		$this->profile = new Profile(null, $this->user->getUserId(),"Sr.","Juan", "A", "Garcia", "I have the largest pen", "PM of Britain", "Address", "SW", "City", "NM", "87144");

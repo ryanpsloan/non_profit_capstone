@@ -346,73 +346,6 @@ class Cause {
 		}
 		//Unique can only one of two things null or string
 		//if there's a result, we can show it
-		//if not error code 404
-		$row = $result->fetch_assoc();
-
-		//covert the associative array to a CauseId
-		if($row !== null) {
-			try {
-				$cause = new cause($row["causeId"], $row["causeName"], $row["CauseDescription"]);
-			} catch(Exception $exception) {
-				//rethrow
-				throw(new mysqli_sql_exception ("unable to convert row to cause", 0, $exception));
-
-			}
-			//if we get a causeId show it
-			return ($cause);
-		} else {
-			//404 User not found
-			return (null);
-		}
-	}
-	/**
-	 * gets the Cause by Cause
-	 *
-	 * @param resource $mysqli pointer to mySQL connection, by reference
-	 * @param string $Cause Cause to search for
-	 * @return string Cause found or null if not found
-	 * @throws mysqli_sql_exception when mySQL related errors occur
-	 **/
-
-
-	public static function getCauseByCause(&$mysqli, $cause) {
-
-		//handle degenerate cases
-		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
-			throw(new mysqli_sql_exception("input is not a mysqli object"));
-		}
-		//sanitize the cause before searching
-		$cause = trim($cause);
-		$cause = filter_var($cause, FILTER_SANITIZE_STRING);
-		if($cause === null) {
-			throw(new mysqli_sql_exception("input is null"));
-		}
-
-		//Create query template
-		$query = "SELECT causeId, causeName, cause FROM cause WHERE cause = ?";
-		$statement = $mysqli->prepare($query);
-		if($statement === false) {
-			throw(new mysqli_sql_exception ("unable to prepare statement"));
-		}
-
-		//bind the causeId to the place holder in the template
-		$wasClean = $statement->bind_param("s", $cause);
-		if($wasClean === false) {
-			throw(new mysqli_sql_exception("unable to bind parameters"));
-		}
-		//execute the statement
-		if($statement->execute() === false) {
-			throw(new mysqli_sql_exception("unable to execute mySQL statement"));
-		}
-		// get result from the SELECT query
-		$result = $statement->get_result();
-		if($result === false) {
-			throw(new mysqli_sql_exception("unable to get result set"));
-		}
-
-		//many causes can have different Causes
-		//if there's a result, we can show it
-		//if not error code 404
 
 		//causeArrayCounter = 0
 		$causeArray = array();
@@ -437,4 +370,5 @@ class Cause {
 			return ($causeArray);
 		}
 	}
+
 }
