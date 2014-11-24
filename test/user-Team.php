@@ -48,6 +48,7 @@ class UserTeamTest extends UnitTestCase
 		$salt = bin2hex(openssl_random_pseudo_bytes(32));
 		$authToken = bin2hex(openssl_random_pseudo_bytes(16));
 		$passwordHash = hash_pbkdf2("sha512", "password", $salt, 2048, 128);
+
 		$this->user = new User(null, "igotthis", "myhomie@yahoo.com", $passwordHash, $salt, $authToken, 2);
 		$this->user->insert($this->mysqli);
 
@@ -214,7 +215,7 @@ class UserTeamTest extends UnitTestCase
 		// second, create a userTeam to post to mySQL
 		$this->userTeam = new UserTeam($this->profile->getProfileId(), $this->team->getTeamId(), $this->ROLEINTEAM, $this->TEAMPERMISSION,
 			$this->COMMMENTPERMISSION, $this->INVITEPERMISSION, $this->BANSTATUS);
-		$this->userTeam1 = new UserTeam($this->profile->getProfileId(), $this->team1->getTeamId(), $this->ROLEINTEAM, $this->TEAMPERMISSION,
+		$this->userTeam1 = new UserTeam($this->profile1->getProfileId(), $this->team1->getTeamId(), $this->ROLEINTEAM, $this->TEAMPERMISSION,
 			$this->COMMMENTPERMISSION, $this->INVITEPERMISSION, $this->BANSTATUS);
 
 		// third, insert the userTeam to mySQL
@@ -246,7 +247,7 @@ class UserTeamTest extends UnitTestCase
 		// second, create a userTeam to post to mySQL
 		$this->userTeam = new UserTeam($this->profile->getProfileId(), $this->team->getTeamId(), $this->ROLEINTEAM, $this->TEAMPERMISSION,
 			$this->COMMMENTPERMISSION, $this->INVITEPERMISSION, $this->BANSTATUS);
-		$this->userTeam1 = new UserTeam($this->profile->getProfileId(), $this->team1->getTeamId(), $this->ROLEINTEAM, $this->TEAMPERMISSION,
+		$this->userTeam1 = new UserTeam($this->profile1->getProfileId(), $this->team1->getTeamId(), $this->ROLEINTEAM, $this->TEAMPERMISSION,
 			$this->COMMMENTPERMISSION, $this->INVITEPERMISSION, $this->BANSTATUS);
 
 		// third, insert the userTeam to mySQL
@@ -306,7 +307,7 @@ class UserTeamTest extends UnitTestCase
 		// second, create a userTeam to post to mySQL
 		$this->userTeam = new UserTeam($this->profile->getProfileId(), $this->team->getTeamId(), $this->ROLEINTEAM, $this->TEAMPERMISSION,
 			$this->COMMMENTPERMISSION, $this->INVITEPERMISSION, $this->BANSTATUS);
-		$this->userTeam1 = new UserTeam($this->profile->getProfileId(), $this->team1->getTeamId(), $this->ROLEINTEAM, $this->TEAMPERMISSION,
+		$this->userTeam1 = new UserTeam($this->profile1->getProfileId(), $this->team1->getTeamId(), $this->ROLEINTEAM, $this->TEAMPERMISSION,
 			$this->COMMMENTPERMISSION, $this->INVITEPERMISSION, $this->BANSTATUS);
 
 		// third, insert the userTeam to mySQL
@@ -338,7 +339,7 @@ class UserTeamTest extends UnitTestCase
 		// second, create a userTeam to post to mySQL
 		$this->userTeam = new UserTeam($this->profile->getProfileId(), $this->team->getTeamId(), $this->ROLEINTEAM, $this->TEAMPERMISSION,
 			$this->COMMMENTPERMISSION, $this->INVITEPERMISSION, $this->BANSTATUS);
-		$this->userTeam1 = new UserTeam($this->profile->getProfileId(), $this->team1->getTeamId(), $this->ROLEINTEAM, $this->TEAMPERMISSION,
+		$this->userTeam1 = new UserTeam($this->profile1->getProfileId(), $this->team1->getTeamId(), $this->ROLEINTEAM, $this->TEAMPERMISSION,
 			$this->COMMMENTPERMISSION, $this->INVITEPERMISSION, $this->BANSTATUS);
 
 		// third, insert the userTeam to mySQL
@@ -370,7 +371,7 @@ class UserTeamTest extends UnitTestCase
 		// second, create a userTeam to post to mySQL
 		$this->userTeam = new UserTeam($this->profile->getProfileId(), $this->team->getTeamId(), $this->ROLEINTEAM, $this->TEAMPERMISSION,
 			$this->COMMMENTPERMISSION, $this->INVITEPERMISSION, $this->BANSTATUS);
-		$this->userTeam1 = new UserTeam($this->profile->getProfileId(), $this->team1->getTeamId(), $this->ROLEINTEAM, $this->TEAMPERMISSION,
+		$this->userTeam1 = new UserTeam($this->profile1->getProfileId(), $this->team1->getTeamId(), $this->ROLEINTEAM, $this->TEAMPERMISSION,
 			$this->COMMMENTPERMISSION, $this->INVITEPERMISSION, $this->BANSTATUS);
 
 		// third, insert the userTeam to mySQL
@@ -402,7 +403,7 @@ class UserTeamTest extends UnitTestCase
 		// second, create a userTeam to post to mySQL
 		$this->userTeam = new UserTeam($this->profile->getProfileId(), $this->team->getTeamId(), $this->ROLEINTEAM, $this->TEAMPERMISSION,
 			$this->COMMMENTPERMISSION, $this->INVITEPERMISSION, $this->BANSTATUS);
-		$this->userTeam1 = new UserTeam($this->profile->getProfileId(), $this->team1->getTeamId(), $this->ROLEINTEAM, $this->TEAMPERMISSION,
+		$this->userTeam1 = new UserTeam($this->profile1->getProfileId(), $this->team1->getTeamId(), $this->ROLEINTEAM, $this->TEAMPERMISSION,
 			$this->COMMMENTPERMISSION, $this->INVITEPERMISSION, $this->BANSTATUS);
 
 		// third, insert the userTeam to mySQL

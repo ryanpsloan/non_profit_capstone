@@ -9,7 +9,7 @@
 require_once("../php/event.php");
 require_once("../php/comment.php");
 
-class commentEvent {
+class CommentEvent {
 	/**
 	 * Primary key that links the event to this table
 	 */
@@ -25,6 +25,7 @@ class commentEvent {
 
 			$this->setCommentId($newCommentId);
 		} catch (UnexpectedValueException $unexpectedValue){
+			var_dump($unexpectedValue->error);
 			throw(new UnexpectedValueException("Unable to construct commentEvent object", 0, $unexpectedValue));
 		} catch (RangeException $rangeException){
 			throw(new RangeException("Unable to construct commentEvent object", 0, $rangeException));
@@ -50,9 +51,6 @@ class commentEvent {
 	 **/
 	public function setEventId($newEventId)
 	{
-		if($this->eventId === null) {
-			throw (new UnexpectedValueException("eventId cannot be null"));
-		}
 
 		if(filter_var($newEventId, FILTER_VALIDATE_INT) === false) {
 			throw(new UnexpectedValueException("eventId $newEventId is not numeric"));
@@ -74,9 +72,6 @@ class commentEvent {
 	 * @throws RangeException if comment id is not positive
 	 **/
 	public function setCommentId($newCommentId){
-		if($newCommentId === null){
-			throw(new UnexpectedValueException("commentId cannot be null."));
-		}
 
 		if(filter_var($newCommentId, FILTER_VALIDATE_INT) === false){
 			throw(new UnexpectedValueException("commentId $newCommentId is not numeric"));
@@ -328,4 +323,75 @@ class commentEvent {
 		}
 
 	}
+
+	/**
+	 * gets the CommentEvent by eventId and commentId
+	 *
+	 * @param resource $mysqli pointer to mySQL connection, by reference
+	 * @param int $eventId and $commentId  eventId and commentId to search for
+	 * @return int event and comment found or null if not found
+	 * @throws mysqli_sql_exception when mySQL related errors occur
+	 **/
+
+
+	public static function getCommentEventByEventCommentId(&$mysqli, $eventId, $commentId) {
+
+		//handle degenerate cases
+		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
+			throw(new mysqli_sql_exception("input is not a mysqli object"));
+		}
+		//sanitize the eventId and commentId before searching
+		$eventId = filter_var($eventId, FILTER_VALIDATE_INT);
+		if($eventId === null) {
+			throw(new mysqli_sql_exception("input is null"));
+		}
+
+		$commentId = filter_var($commentId, FILTER_VALIDATE_INT);
+		if($commentId === null) {
+			throw(new mysqli_sql_exception("input is null"));
+		}
+
+		//Create query template
+		$query = "SELECT eventId, commentId FROM commentEvent WHERE eventId = ? AND commentId = ?";
+		$statement = $mysqli->prepare($query);
+		if($statement === false) {
+			throw(new mysqli_sql_exception ("unable to prepare statement"));
+		}
+
+		//bind the profileId and teamId to the place holder in the template
+		$wasClean = $statement->bind_param("ii", $eventId, $commentId);
+		if($wasClean === false) {
+			throw(new mysqli_sql_exception("unable to bind parameters"));
+		}
+		//execute the statement
+		if($statement->execute() === false) {
+			throw(new mysqli_sql_exception("unable to execute mySQL statement"));
+		}
+		// get result from the SELECT query
+		$result = $statement->get_result();
+		if($result === false) {
+			throw(new mysqli_sql_exception("unable to get result set"));
+		}
+		//primary key can only one of two things null or integer
+		//if there's a result, we can show it
+		//if not error code 404
+		$row = $result->fetch_assoc();
+
+		//covert the associative array to a commentEvent
+		if($row !== null) {
+			try {
+				$commentEvent = new commentEvent($row["eventId"], $row["commentId"]);
+			} catch(Exception $exception) {
+				//rethrow
+				throw(new mysqli_sql_exception ("unable to convert row to user", 0, $exception));
+
+			}
+			//if we get a profileId and commentId I'm lucky and show it
+			return ($commentEvent);
+		} else {
+			//404 User not found
+			return (null);
+		}
+	}
+
 }

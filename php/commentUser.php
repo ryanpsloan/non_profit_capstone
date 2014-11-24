@@ -299,8 +299,8 @@ class CommentUser {
 		while(($row = $result->fetch_assoc()) !== null) {
 
 			try {
-				$comment = new commentUser$row["profileId"], $row["commentId"]);
-				$causeIdArray [] = $cause;
+				$comment = new commentUser ($row["profileId"], $row["commentId"]);
+				$commentIdArray [] = $comment;
 			} catch(Exception $exception) {
 
 				throw(new mysqli_sql_exception("Unable to convert row to profileCause", 0, $exception));
@@ -310,7 +310,7 @@ class CommentUser {
 		if($result->num_rows === 0) {
 			return(null);
 		} else {
-			return($causeIdSearch);
+			return($commentIdArray);
 		}
 	}
 

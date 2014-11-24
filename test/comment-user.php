@@ -21,7 +21,7 @@ class CommentUserTest extends UnitTestCase{
 	private $mysqli = null;
 	//variable to hold the test database row
 	private $commentUser = null;
-//	private $commentUser1 = null;
+	private $commentUser1 = null;
 
 	//the rest of the "global" variables used to create test data
 
@@ -44,25 +44,25 @@ class CommentUserTest extends UnitTestCase{
 		$authToken = bin2hex(openssl_random_pseudo_bytes(16));
 		$passwordHash       = hash_pbkdf2("sha512", "password", $salt, 2048, 128);
 		$i = rand(1, 1000);
-		$this->user = new User(null,"igotthismaybe", "myhomie".$i."@yahoo.com",$passwordHash,$salt,$authToken,2);
+		$this->user = new User(null,"igotthismaybe".$i, "myhomie".$i."@yahoo.com",$passwordHash,$salt,$authToken,2);
 		$this->user->insert($this->mysqli);
-//		$this->user1 = new User(null,"mrnoodles", "mrnoodles".$i."@sesamestreet.com",$passwordHash,$salt,$authToken,1);
-//		$this->user1->insert($this->mysqli);
-//		var_dump($this->user);
+		$this->user1 = new User(null,"mrnoodles".$i, "mrnoodles".$i."@sesamestreet.com",$passwordHash,$salt,$authToken,1);
+		$this->user1->insert($this->mysqli);
+
 
 		$this->profile = new Profile(null, $this->user->getUserId(),"Mr.","Edward", "P", "Stressed", "I have the largest signature on the
 				Declaration of Independence", "PM of Britain", "1600 Pennsylvania Ave", "SW", "Washington", "DC", "10500");
 		$this->profile->insert($this->mysqli);
 
-//		$this->profile1 = new Profile(null, $this->user->getUserId(),"Mr.","Jim", "N", "Noodles", "Can you tell how to get to Sesame Street",
-//												"Elmo", "2461 Sesame Street Way", "SW", "MakeBelieve", "CA", "20501");
-//		$this->profile1->insert($this->mysqli);
+		$this->profile1 = new Profile(null, $this->user1->getUserId(),"Mr.","Jim", "N", "Noodles", "Can you tell how to get to Sesame Street",
+												"Elmo", "2461 Sesame Street Way", "SW", "MakeBelieve", "CA", "20501");
+		$this->profile1->insert($this->mysqli);
 
 
 		$this->comment = new Comment(null, "waiting on unit test", new DateTime());
 		$this->comment->insert($this->mysqli);
-//		$this->comment1 = new Comment(null, "I hope unit test passed already", new DateTime());
-//		$this->comment1->insert($this->mysqli);
+		$this->comment1 = new Comment(null, "I hope unit test passed already", new DateTime());
+		$this->comment1->insert($this->mysqli);
 	}
 
 	//Teardown (), a method to delete the test record and disconnect from mySQL
@@ -78,30 +78,30 @@ class CommentUserTest extends UnitTestCase{
 			$this->comment = null;
 		}
 
-//		if($this->comment1 !== null) {
-//			$this->comment1->delete($this->mysqli);
-//			$this->comment1 = null;
-//		}
+		if($this->comment1 !== null) {
+			$this->comment1->delete($this->mysqli);
+			$this->comment1 = null;
+		}
 
 		if($this->profile !== null) {
 			$this->profile->delete($this->mysqli);
 			$this->profile = null;
 		}
 
-//		if($this->profile1 !== null) {
-//			$this->profile1->delete($this->mysqli);
-//			$this->profile1 = null;
-//		}
+		if($this->profile1 !== null) {
+			$this->profile1->delete($this->mysqli);
+			$this->profile1 = null;
+		}
 
 		if($this->user !== null) {
 			$this->user->delete($this->mysqli);
 			$this->user = null;
 		}
 
-//		if($this->user1 !== null) {
-//			$this->user1->delete($this->mysqli);
-//			$this->user1 = null;
-//		}
+		if($this->user1 !== null) {
+			$this->user1->delete($this->mysqli);
+			$this->user1 = null;
+		}
 	}
 
 	// test creating a new profile Id and comment Id and inserting it to mySQL
@@ -177,6 +177,60 @@ class CommentUserTest extends UnitTestCase{
 		$this->assertIdentical($staticCommentUser->getCommentId(),							$this->comment->commentId);
 	}
 
+	public function testGetCommentUserByProfileId() {
 
+		// first, verify mySQL connected OK
+		$this->assertNotNull($this->mysqli);
+
+		// second, create a commentUser to post to mySQL
+		$this->commentUser = new CommentUser($this->profile->getProfileId(), $this->comment->commentId);
+		$this->commentUser1 = new CommentUser($this->profile->getProfileId(), $this->comment1->commentId);
+
+		// third, insert the commentUser to mySQL
+		$this->commentUser->insert($this->mysqli);
+		$this->commentUser1->insert($this->mysqli);
+
+		// fourth, get the commentUser using the static method
+		$staticCommentUser = CommentUser::getCommentUserByProfileId ($this->mysqli, $this->commentUser->getProfileId());
+
+		// finally, compare the fields
+		for($i = 0; $i < count($staticCommentUser); $i++){
+			$this->assertNotNull($staticCommentUser[$i]->getProfileId());
+			$this->assertTrue($staticCommentUser[$i]->getProfileId() > 0);
+			$this->assertNotNull($staticCommentUser[$i]->getCommentId());
+			$this->assertTrue($staticCommentUser[$i]->getCommentId() > 0);
+			$this->assertIdentical($staticCommentUser[$i]->getProfileId(),			 $this->commentUser->getProfileId());
+		}
+		//teardown for commentUser1
+		$this->commentUser1->delete($this->mysqli);
+	}
+
+	public function testGetCommentUserByCommentId() {
+
+		// first, verify mySQL connected OK
+		$this->assertNotNull($this->mysqli);
+
+		// second, create a commentUser to post to mySQL
+		$this->commentUser = new CommentUser($this->profile->getProfileId(), $this->comment->commentId);
+		$this->commentUser1 = new CommentUser($this->profile1->getProfileId(), $this->comment1->commentId);
+
+		// third, insert the commentUser to mySQL
+		$this->commentUser->insert($this->mysqli);
+		$this->commentUser1->insert($this->mysqli);
+
+		// fourth, get the commentTeam using the static method
+		$staticCommentUser = CommentUser::getCommentUserByCommentId($this->mysqli, $this->commentUser->getCommentId());
+
+		// finally, compare the fields
+		for($i = 0; $i < count($staticCommentUser); $i++){
+			$this->assertNotNull($staticCommentUser[$i]->getProfileId());
+			$this->assertTrue($staticCommentUser[$i]->getProfileId() > 0);
+			$this->assertNotNull($staticCommentUser[$i]->getCommentId());
+			$this->assertTrue($staticCommentUser[$i]->getCommentId() > 0);
+			$this->assertIdentical($staticCommentUser[$i]->getCommentId(),			 $this->commentUser->getCommentId());
+		}
+		//teardown for commentUser1
+		$this->commentUser1->delete($this->mysqli);
+	}
 
 }
