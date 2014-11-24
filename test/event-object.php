@@ -32,6 +32,7 @@ class EventTest extends UnitTestCase {
 			$this->event->delete($this->mysqli);
 			$this->event = null;
 		}
+
 	}
 	//test creating a new Event and inserting it into SQL
 
@@ -60,14 +61,7 @@ class EventTest extends UnitTestCase {
 		//fourth verify event was inserted
 		$this->assertNotNull($this->event->eventId);
 		$this->assertTrue($this->event->eventId > 0);
-		//fifth delete the article
-		$secondEvent = new Event(null, "This is a new event", "2012-12-12 12:12:12", "This is the location");
-		$secondEvent->insert($this->mysqli);
-		$this->event->setEventId($secondEvent->eventId);
-		$this->event->update($this->mysqli);
 
-		$this->event->delete($this->mysqli);
-		$this->event = null;
 		//finally try to get the event and assert we didn't get a thing
 		$hopefulEvent = Event::getEventByEventId($this->mysqli, $this->EVENTID);
 		$this->assertNull($hopefulEvent);
@@ -115,5 +109,44 @@ class EventTest extends UnitTestCase {
 		$this->assertIdentical($staticEvent->eventDate,						$this->EVENTDATE);
 		$this->assertIdentical($staticEvent->eventLocation,				$this->EVENTLOCATION);
 	}
+
+
+// test grabbing an event from mySQL
+public function testGetEventByEventTitle(){
+	// first verify mySQL connection
+	$this->assertNotNull($this->mysqli);
+	//second create an event to post to mySQL
+	$this->event = new Event( $this->EVENTID, $this->EVENTTITLE, $this->EVENTDATE, $this->EVENTLOCATION);
+	// third insert event to mySQL
+	$this->event->insert($this->mysqli);
+	//fourth, get the event using the static method
+	$staticEvents = Event::getEventByEventTitle($this->mysqli, $this->event->eventTitle);
+	// finally compare the fields
+
+	foreach($staticEvents as $staticEvent) {
+		$this->assertNotNull($staticEvent->eventId);
+		$this->assertTrue($staticEvent->eventId > 0);
+		$this->assertIdentical($staticEvent->eventTitle, $this->EVENTTITLE);
+	}
 }
-?>
+
+	// test grabbing an event from mySQL
+	public function testGetEventByEventLocation(){
+		// first verify mySQL connection
+		$this->assertNotNull($this->mysqli);
+		//second create an event to post to mySQL
+		$this->event = new Event( $this->EVENTID, $this->EVENTTITLE, $this->EVENTDATE, $this->EVENTLOCATION);
+		// third insert event to mySQL
+		$this->event->insert($this->mysqli);
+		//fourth, get the event using the static method
+		$staticEvents = Event::getEventByEventLocation($this->mysqli, $this->event->eventLocation);
+		// finally compare the fields
+
+		foreach($staticEvents as $staticEvent) {
+			$this->assertNotNull($staticEvent->eventId);
+			$this->assertTrue($staticEvent->eventId > 0);
+			$this->assertIdentical($staticEvent->eventLocation, $this->EVENTLOCATION);
+		}
+	}
+
+}

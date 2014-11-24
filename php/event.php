@@ -220,22 +220,17 @@ class Event {
 		}
 
 		// Convert date to strings
-	/**	if($this->eventDate === null) {
-			$dateCreated = null;
-		} else {
-			$eventDate = $this->eventDate->format("Y-d-m H:i:s");
-		} */
 
 		$dateString = $this->eventDate->format("Y-m-d H:i:s");
 
-		$query		="UPDATE event SET eventId = ?, eventTitle = ?, eventDate = ?, eventLocation = ?";
+		$query		="UPDATE event SET eventTitle = ?, eventDate = ?, eventLocation = ? WHERE eventId = ?";
 		$statement  =$mysqli->prepare($query);
 		if($statement === false){
 			throw(new mysqli_sql_exception("Unable to prepare statement"));
 		}
 
-		$wasClean = $statement->bind_param("isss", $this->eventId, $this->eventTitle,
-																$dateString, $this->eventLocation);
+		$wasClean = $statement->bind_param("sssi", $this->eventTitle,
+																$dateString, $this->eventLocation, $this->eventId);
 
 		if($wasClean === false){
 			throw(new mysqli_sql_exception("Unable to bind parameters"));
@@ -468,9 +463,8 @@ class Event {
 		while(($row = $result->fetch_assoc()) !== null) {
 
 			try {
-				$event = new Event($row["eventId"], $row["profileId"], $row["date"], $row["eventDate"], $row["eventTitle"],
-					$row["eventBody"]);
-				$eventLocationSearch [] = $event;
+				$event = new Event($row["eventId"], $row["eventTitle"], $row["eventDate"], $row["eventLocation"]);
+ 				$eventLocationSearch [] = $event;
 			} catch(Exception $exception) {
 
 				throw(new mysqli_sql_exception("Unable to convert row to event", 0, $exception));
