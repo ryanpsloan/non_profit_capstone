@@ -10,7 +10,7 @@ require_once("../php/event.php");
 require_once("../php/profile.php");
 
 
-class userEvent {
+class UserEvent {
 	/**
 	 * This will connect the user to the events
 	 */
