@@ -185,6 +185,137 @@ class CommentUser {
 	}
 
 	/**
+	 * gets the mysqli object using the ProfileId, creating it if necessary
+	 *
+	 * @param $mysqli mysqli object
+	 * @param mixed $profileId
+	 * @return array|null
+	 * @throw mysqli_sql_exception if unable to properly execute statement
+	 */
+
+	public static function getCommentUserByProfileId($mysqli,$profileId){
+
+		//handle degenerate cases
+		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
+			throw(new mysqli_sql_exception("input is not a mysqli object"));
+		}
+
+		// sanitize the profileId before searching
+		$profileId = trim($profileId);
+		$profileId = filter_var($profileId, FILTER_VALIDATE_INT);
+
+		// create query template
+		$query = "SELECT profileId, commentId FROM commentUser WHERE profileId = ?";
+
+		$statement = $mysqli->prepare($query);
+		if($statement === false) {
+			throw(new mysqli_sql_exception("Unable to prepare statement"));
+		}
+		//bind the profileId to the place holder in the template
+		$wasClean = $statement->bind_param("i", $profileId);
+		if($wasClean === false) {
+			throw(new mysqli_sql_exception("Unable to bind parameters"));
+		}
+
+		//execute the statement
+		if($statement->execute() === false) {
+			throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
+		}
+
+		//get result from the SELECT query
+		$result = $statement->get_result();
+		if($result === false) {
+			throw(new mysqli_sql_exception("Unable to get result set."));
+		}
+
+		//turn the results into an array
+		$profileIdArray = array();
+
+		// loop through the array and display the results
+		while(($row = $result->fetch_assoc()) !== null) {
+
+			try {
+				$profile = new commentUser($row["profileId"], $row["commentId"]);
+				$profileIdArray [] = $profile;
+			} catch(Exception $exception) {
+
+				throw(new mysqli_sql_exception("Unable to convert row to profileCause", 0, $exception));
+			}
+		}
+
+		// return
+		if($result->num_rows === 0) {
+			return(null);
+		} else {
+			return($profileIdArray);
+		}
+	}
+
+	/**
+	 * gets the mysqli object using the commentId, creating it if necessary
+	 *
+	 * @param $mysqli mysqli object
+	 * @param mixed $commentId
+	 * @return array|null
+	 * @throw mysqli_sql_exception if unable to execute method
+	 */
+
+	public static function getCommentUserByCommentId($mysqli,$commentId){
+		//handle degenerate cases
+		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
+			throw(new mysqli_sql_exception("input is not a mysqli object"));
+		}
+
+		// sanitize the profile id before searching
+		$commentId = trim($commentId);
+		$commentId = filter_var($commentId, FILTER_VALIDATE_INT);
+
+		// create query template
+		$query = "SELECT profileId, commentId FROM commentUser WHERE commentId = ?";
+
+		$statement = $mysqli->prepare($query);
+		if($statement === false) {
+			throw(new mysqli_sql_exception("Unable to prepare statement"));
+		}
+		//bind the comment id to the place holder in the template
+		$wasClean = $statement->bind_param("i", $commentId);
+		if($wasClean === false) {
+			throw(new mysqli_sql_exception("Unable to bind parameters"));
+		}
+		//execute the statement
+		if($statement->execute() === false) {
+			throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
+		}
+		//get result from the SELECT query
+		$result = $statement->get_result();
+		if($result === false) {
+			throw(new mysqli_sql_exception("Unable to get result set."));
+		}
+
+		//turn the results into an array
+		$commentIdArray = array();
+
+		// Loop through the array and display the results
+		while(($row = $result->fetch_assoc()) !== null) {
+
+			try {
+				$comment = new commentUser$row["profileId"], $row["commentId"]);
+				$causeIdArray [] = $cause;
+			} catch(Exception $exception) {
+
+				throw(new mysqli_sql_exception("Unable to convert row to profileCause", 0, $exception));
+			}
+		}
+		// return
+		if($result->num_rows === 0) {
+			return(null);
+		} else {
+			return($causeIdSearch);
+		}
+	}
+
+
+	/**
 	 * gets the CommentUser by profileId and commentId
 	 *
 	 * @param resource $mysqli pointer to mySQL connection, by reference
