@@ -20,12 +20,14 @@ class CommentTeamTest extends UnitTestCase{
 	private $mysqli = null;
 	//variable to hold the test database row
 	private $commentTeam = null;
+	private $commentTeam1 = null;
 
 	//the rest of the "global" variables used to create test data
 
 	private $team = null;
+	private $team1 =null;
 	private $comment = null;
-
+	private $comment1 = null;
 
 	//setUp () is the first step in unit testing and is a method to run before each test
 	//here it connects to mySQL
@@ -37,10 +39,13 @@ class CommentTeamTest extends UnitTestCase{
 
 		$this->team = new Team(null, "Team DMC", "Help Dameon because he is behind");
 		$this->team->insert($this->mysqli);
-
+		$this->team1 = new Team(null, "Vato Locos", "You cry we die shut up");
+		$this->team1->insert($this->mysqli);
 
 		$this->comment = new Comment(null, "waiting on unit test", new DateTime());
 		$this->comment->insert($this->mysqli);
+		$this->comment1 = new Comment(null, "La Onda Forever!!", new DateTime());
+		$this->comment1->insert($this->mysqli);
 	}
 
 	//Teardown (), a method to delete the test record and disconnect from mySQL
@@ -56,11 +61,22 @@ class CommentTeamTest extends UnitTestCase{
 			$this->comment = null;
 		}
 
+		if($this->comment1 !== null) {
+			$this->comment1->delete($this->mysqli);
+			$this->comment1 = null;
+		}
+
 		if($this->team !== null) {
 			$this->team->delete($this->mysqli);
 			$this->team = null;
 		}
+
+		if($this->team1 !== null) {
+			$this->team1->delete($this->mysqli);
+			$this->team1 = null;
+		}
 	}
+
 
 	// test creating a new team Id and comment Id and inserting it to mySQL
 	public function testInsertNewCommentTeam() {
@@ -112,7 +128,7 @@ class CommentTeamTest extends UnitTestCase{
 		$this->assertNull($hopefulUserCommentId);
 	}
 	// test grabbing a userTeam from mySQL
-	public function testGetCommentTeamByTeamId() {
+	public function testGetCommentTeamByCommentTeamId() {
 
 		// first, verify mySQL connected OK
 		$this->assertNotNull($this->mysqli);
@@ -134,6 +150,62 @@ class CommentTeamTest extends UnitTestCase{
 		$this->assertTrue($staticCommentTeam->commentId > 0);
 		$this->assertIdentical($staticCommentTeam->teamId,										$this->team->getTeamId());
 		$this->assertIdentical($staticCommentTeam->commentId,									$this->comment->commentId);
+	}
+
+	public function testGetCommentTeamByTeamId() {
+
+		// first, verify mySQL connected OK
+		$this->assertNotNull($this->mysqli);
+
+		// second, create a commentTeam to post to mySQL
+		$this->commentTeam = new CommentTeam($this->team->getTeamId(), $this->comment->commentId);
+		$this->commentTeam1 = new CommentTeam($this->team1->getTeamId(), $this->comment1->commentId);
+
+		// third, insert the commentUser to mySQL
+		$this->commentTeam->insert($this->mysqli);
+		$this->commentTeam1->insert($this->mysqli);
+
+		// fourth, get the commentTeam using the static method
+		$staticCommentTeam = CommentTeam::getCommentTeamByTeamId($this->mysqli, $this->commentTeam->teamId);
+
+		// finally, compare the fields
+		for($i = 0; $i < count($staticCommentTeam); $i++){
+			$this->assertNotNull($staticCommentTeam[$i]->teamId);
+			$this->assertTrue($staticCommentTeam[$i]->teamId > 0);
+			$this->assertNotNull($staticCommentTeam[$i]->commentId);
+			$this->assertTrue($staticCommentTeam[$i]->commentId > 0);
+			$this->assertIdentical($staticCommentTeam[$i]->teamId,			 $this->team->getTeamId());
+		}
+		//teardown for commentTeam1
+		$this->commentTeam1->delete($this->mysqli);
+	}
+
+	public function testGetCommentTeamByCommentId() {
+
+		// first, verify mySQL connected OK
+		$this->assertNotNull($this->mysqli);
+
+		// second, create a commentTeam to post to mySQL
+		$this->commentTeam = new CommentTeam($this->team->getTeamId(), $this->comment->commentId);
+		$this->commentTeam1 = new CommentTeam($this->team1->getTeamId(), $this->comment1->commentId);
+
+		// third, insert the commentTeam to mySQL
+		$this->commentTeam->insert($this->mysqli);
+		$this->commentTeam1->insert($this->mysqli);
+
+		// fourth, get the commentTeam using the static method
+		$staticCommentTeam = CommentTeam::getCommentTeamByCommentId($this->mysqli, $this->commentTeam->commentId);
+
+		// finally, compare the fields
+		for($i = 0; $i < count($staticCommentTeam); $i++){
+			$this->assertNotNull($staticCommentTeam[$i]->teamId);
+			$this->assertTrue($staticCommentTeam[$i]->teamId > 0);
+			$this->assertNotNull($staticCommentTeam[$i]->commentId);
+			$this->assertTrue($staticCommentTeam[$i]->commentId > 0);
+			$this->assertIdentical($staticCommentTeam[$i]->commentId,			 $this->comment->commentId);
+		}
+		//teardown for commentUser1
+		$this->commentTeam1->delete($this->mysqli);
 	}
 
 
