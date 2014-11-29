@@ -53,7 +53,6 @@ class UserEventTest extends UnitTestCase
 				Declaration of Independence", "PM of Britain", "1600 Pennsylvania Ave", "SW", "Washington", "DC", "20500");
 		$this->profile->insert($this->mysqli);
 
-
 		$this->event = new Event(null, "BigEvent", new DateTime(), "The STEM center");
 		$this->event->insert($this->mysqli);
 	}
@@ -91,8 +90,8 @@ class UserEventTest extends UnitTestCase
 
 		// second, create a commentUser to post to mySQL
 		$this->userEvent = new UserEvent($this->profile->getProfileId(), $this->event->eventId,
-			$this->USEREVENTROLE, $this->COMMENTPERMISSION,
-			$this->BANSTATUS);
+													$this->USEREVENTROLE, $this->COMMENTPERMISSION,
+													$this->BANSTATUS);
 
 		// third, insert the commentUser, to mySQL
 		$this->userEvent->insert($this->mysqli);
@@ -102,11 +101,11 @@ class UserEventTest extends UnitTestCase
 		$this->assertTrue($this->userEvent->profileId > 0);
 		$this->assertNotNull($this->userEvent->eventId);
 		$this->assertTrue($this->userEvent->eventId > 0);
-		$this->assertIdentical($this->userEvent->profileId, $this->profile->getProfileId());
-		$this->assertIdentical($this->userEvent->eventId, $this->comment->commentId);
-		$this->assertIdentical($this->userEvent->userEventRole, $this->USEREVENTROLE);
-		$this->assertIdentical($this->userEvent->commentPermission, $this->COMMENTPERMISSION);
-		$this->assertIdentical($this->userEvent->banStatus, $this->BANSTATUS);
+		$this->assertIdentical($this->userEvent->profileId, 				$this->profile->getProfileId());
+		$this->assertIdentical($this->userEvent->eventId, 					$this->event->eventId);
+		$this->assertIdentical($this->userEvent->userEventRole, 			$this->USEREVENTROLE);
+		$this->assertIdentical($this->userEvent->commentPermission, 	$this->COMMENTPERMISSION);
+		$this->assertIdentical($this->userEvent->banStatus, 				$this->BANSTATUS);
 	}
 
 	//Tests the delete method
@@ -120,25 +119,51 @@ class UserEventTest extends UnitTestCase
 			$this->COMMENTPERMISSION, $this->BANSTATUS);
 
 		// third, insert the CommentUser to mySQL
-		$this->commentUser->insert($this->mysqli);
+		$this->userEvent->insert($this->mysqli);
 
 		// fourth, verify the CommentUser was inserted
-		$this->assertNotNull($this->userEvent->getProfileId());
-		$this->assertTrue($this->userEvent->getProfileId() > 0);
-		$this->assertNotNull($this->userEvent->eventId);
-		$this->assertTrue($this->userEvent->eventId > 0);
+		$this->assertNotNull($this->profile->getProfileId());
+		$this->assertTrue($this->profile->getProfileId() > 0);
+		$this->assertNotNull($this->event->eventId);
+		$this->assertTrue($this->event->eventId > 0);
 
 		// fifth, delete the commentUser
 		$this->userEvent->delete($this->mysqli);
 		$this->userEvent = null;
 
 		// finally, try to get the userTeam and assert we didn't get a thing
-		$hopefulUserCommentId = UserEvent::getUserEventByEventId($this->mysqli, $this->profile->profileId,
+		$hopefulUserCommentId = UserEvent::getUserEventByEventId($this->mysqli, $this->profile->getProfileId(),
 			$this->event->eventId);
 		$this->assertNull($hopefulUserCommentId);
 	}
 
-	public function testGetUserEventByUserId() {
+	public function testGetUserEventByEventId() {
+
+		// first, verify mySQL connected OK
+		$this->assertNotNull($this->mysqli);
+
+		// second, create a commentTeam to post to mySQL
+		$this->userEvent = new UserEvent($this->profile->getProfileId(), $this->event->eventId, $this->USEREVENTROLE,
+			$this->COMMENTPERMISSION, $this->BANSTATUS);
+
+		// third, insert the commentUser to mySQL
+		$this->userEvent->insert($this->mysqli);
+
+		// fourth, get the commentTeam using the static method
+		$staticUserEvent = UserEvent::getUserEventByProfileId($this->mysqli, $this->event->eventId);
+
+		// finally, compare the fields
+		for($i = 0; $i < count($staticUserEvent); $i++){
+			$this->assertNotNull($staticUserEvent[$i]->profileId);
+			$this->assertTrue($staticUserEvent[$i]->profileId > 0);
+			$this->assertNotNull($staticUserEvent[$i]->eventId);
+			$this->assertTrue($staticUserEvent[$i]->eventId > 0);
+			$this->assertIdentical($staticUserEvent[$i]->eventId,			 $this->event->evnetId);
+		}
+
+	}
+
+	public function testGetUserEventByProfileId() {
 
 		// first, verify mySQL connected OK
 		$this->assertNotNull($this->mysqli);
@@ -146,20 +171,17 @@ class UserEventTest extends UnitTestCase
 		// second, create a commentTeam to post to mySQL
 		$this->userEvent = new UserEvent($this->profile->getProfileId(), $this->event->eventId, $this->USEREVENTROLE,
 													$this->COMMENTPERMISSION, $this->BANSTATUS);
-		$this->userEvent1 = new UserEvent($this->profile1->getProfileId(), $this->event1->eventId, $this->USEREVENTROLE,
-													$this->COMMENTPERMISSION, $this->BANSTATUS);
 
 		// third, insert the commentUser to mySQL
 		$this->userEvent->insert($this->mysqli);
-		$this->userEvent1->insert($this->mysqli);
 
 		// fourth, get the commentTeam using the static method
-		$staticUserEvent = CommentTeam::getUserEventByProfileId($this->mysqli, $this->userEvent->profileId);
+		$staticUserEvent = UserEvent::getUserEventByProfileId($this->mysqli, $this->profile->getProfileId());
 
 		// finally, compare the fields
 		for($i = 0; $i < count($staticUserEvent); $i++){
-			$this->assertNotNull($staticUserEvent[$i]->teamId);
-			$this->assertTrue($staticUserEvent[$i]->teamId > 0);
+			$this->assertNotNull($staticUserEvent[$i]->profileId);
+			$this->assertTrue($staticUserEvent[$i]->profileId > 0);
 			$this->assertNotNull($staticUserEvent[$i]->eventId);
 			$this->assertTrue($staticUserEvent[$i]->eventId > 0);
 			$this->assertIdentical($staticUserEvent[$i]->profileId,			 $this->profile->getProfileId());

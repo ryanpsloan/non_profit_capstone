@@ -81,7 +81,7 @@ class UserEvent {
 	 * @throws RangeException if Cause id is not positive
 	 **/
 	public function setProfileId($newProfileId) {
-		if($this->profileId === null) {
+		if($newProfileId === null) {
 			throw (new UnexpectedValueException("profileId does not exist"));
 		}
 
@@ -105,7 +105,7 @@ class UserEvent {
 	 * @throws RangeException if Cause id is not positive
 	 **/
 	public function setEventId($newEventId){
-		if($this->eventId === null) {
+		if($newEventId === null) {
 			throw (new UnexpectedValueException("eventId does not exist"));
 		}
 
@@ -134,7 +134,7 @@ class UserEvent {
 			throw(new UnexpectedValueException("userEvent Roll Must not be Null"));
 		}
 
-		if(filter_var($newUserEventRole, FILTER_SANITIZE_INT) === false) {
+		if(filter_var($newUserEventRole, FILTER_VALIDATE_INT) === false) {
 			throw(new UnexpectedValueException("userEventRole $newUserEventRole is not numeric"));
 		}
 
@@ -157,7 +157,7 @@ class UserEvent {
 			throw (new UnexpectedValueException("commentPermission must not be null"));
 		}
 
-		if(filter_var($newCommentPermission, FILTER_SANITIZE_INT) === false) {
+		if(filter_var($newCommentPermission, FILTER_VALIDATE_INT) === false) {
 			throw(new UnexpectedValueException("Comment permission $$newCommentPermission is not numeric"));
 		}
 
@@ -180,7 +180,7 @@ class UserEvent {
 			throw (new UnexpectedValueException("banStatus must not be null"));
 		}
 
-		if(filter_var($newBanStatus, FILTER_SANITIZE_INT) === false) {
+		if(filter_var($newBanStatus, FILTER_VALIDATE_INT) === false) {
 			throw(new UnexpectedValueException("Comment permission $newBanStatus is not numeric"));
 		}
 

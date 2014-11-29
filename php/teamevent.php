@@ -60,11 +60,11 @@ class TeamEvent {
 	// The function to call the parameters of this class
 	public function __get($name)
 	{
-		$data = array("teamId"        => $this->teamId,
-						  "eventId"       => $this->eventId,
-						  "teamStatus"    => $this->teamStatus,
-						  "commentPermission"     => $this->commentPermission,
-						  "banStatus" => $this->banStatus);
+		$data = array("teamId"        		=> $this->teamId,
+						  "eventId"       		=> $this->eventId,
+						  "teamStatus"    		=> $this->teamStatus,
+						  "commentPermission" 	=> $this->commentPermission,
+						  "banStatus" 				=> $this->banStatus);
 		if(array_key_exists($name, $data)) {
 			return $data[$name];
 		} else {
