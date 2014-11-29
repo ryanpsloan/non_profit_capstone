@@ -58,7 +58,7 @@ class TeamCause{
 	 **/
 	public function setTeamId($newTeamId)
 	{
-		if($this->teamId === null) {
+		if($newTeamId === null) {
 			throw (new UnexpectedValueException("teamId cannot be null"));
 		}
 
@@ -82,7 +82,7 @@ class TeamCause{
 	 * @throws RangeException if Cause id is not positive
 	 **/
 	public function setCauseId($newCauseId){
-		if($this->causeId === null) {
+		if($newCauseId === null) {
 			throw (new UnexpectedValueException("causeId does not exist"));
 		}
 
@@ -109,13 +109,13 @@ class TeamCause{
 			throw(new mysqli_sql_exception("This is not a valid mysqli object"));
 		}
 
-		if($this->teamId !== null){
+		/*if($this->teamId !== null){
 			throw(new mysqli_sql_exception("Not a new TeamCause Relationship"));
 		}
 
 		if($this->causeId !== null){
 			throw(new mysqli_sql_exception("Not a new TeamCause relationship"));
-		}
+		}*/
 
 
 		$query = "INSERT INTO teamCause(teamId, causeId) VALUES (?, ?)";
@@ -169,42 +169,6 @@ class TeamCause{
 			throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
 		}
 		
-	}
-
-	/**
-	 * Updates the values within mySQL
-	 *
-	 * @param resource $mysqli pointer to mySQL connection, by reference
-	 * @throws mysqli_sql_exception when mySQL related errors occur
-	 **/
-
-	public function update($mysqli){
-		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli"){
-			throw (new mysqli_sql_exception("Input is not a mysqli object"));
-		}
-
-		if($this->causeId === null){
-			throw (new mysqli_sql_exception("Cannot update cause that does not exist"));
-		}
-		if($this->teamId === null){
-			throw (new mysqli_sql_exception("Cannot update team that does not exist"));
-		}
-
-		$query		="UPDATE teamCause SET teamId = ?, causeId = ?";
-		$statement  =$mysqli->prepare->$query;
-		if($statement === false){
-			throw(new mysqli_sql_exception("Unable to prepare statement"));
-		}
-
-		$wasClean = $statement->bind_param("ii", $this->causeId, $this->teamId);
-
-		if($wasClean === false){
-			throw(new mysqli_sql_exception("Unable to bind parameters"));
-		}
-
-		if($statement->execute === false){
-			throw(new mysqli_sql_exception("Unable to execute mySQL statement."));
-		}
 	}
 
 	/**

@@ -41,7 +41,7 @@ class TeamEventTest extends UnitTestCase {
 	}
 
 	public function tearDown(){
-		// delete the user if we can
+		// delete the teamEvent if we can
 		if($this->teamEvent !== null) {
 			$this->teamEvent->delete($this->mysqli);
 			$this->teamEvent = null;
