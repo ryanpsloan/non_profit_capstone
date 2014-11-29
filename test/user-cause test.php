@@ -21,7 +21,7 @@ class UserCauseTest extends UnitTestCase {
 	private $mysqli = null;
 
 	//variable to hold the test database
-	private $causeUser = null;
+	private $userCause = null;
 
 	//the "global" variables to create test data
 
@@ -53,9 +53,9 @@ class UserCauseTest extends UnitTestCase {
 	public function tearDown(){
 
 		// delete the user if we can
-		if($this->causeUser !== null) {
-			$this->causeUser->delete($this->mysqli);
-			$this->causeUser = null;
+		if($this->userCause !== null) {
+			$this->userCause->delete($this->mysqli);
+			$this->userCause = null;
 		}
 
 		if($this->cause !== null) {
@@ -80,19 +80,19 @@ class UserCauseTest extends UnitTestCase {
 		// first, verify mySQL connected OK
 		$this->assertNotNull($this->mysqli);
 
-		// second, create a userCauseUser to post to mySQL
-		$this->causeUser = new UserCause($this->profile->getProfileId(), $this->cause->getCauseId());
+		// second, create a userUserCause to post to mySQL
+		$this->userCause = new UserCause($this->profile->getProfileId(), $this->cause->getCauseId());
 
 		// third, insert the userCause, to mySQL
-		$this->causeUser->insert($this->mysqli);
+		$this->userCause->insert($this->mysqli);
 
 		// finally, compare the fields
-		$this->assertNotNull($this->causeUser->profileId);
-		$this->assertTrue($this->causeUser->profileId > 0);
-		$this->assertNotNull($this->causeUser->causeId);
-		$this->assertTrue($this->causeUser->causeId > 0);
-		$this->assertIdentical($this->causeUser->profileId,							$this->profile->getProfileId());
-		$this->assertIdentical($this->causeUser->causeId,								$this->cause->getCauseId());
+		$this->assertNotNull($this->userCause->profileId);
+		$this->assertTrue($this->userCause->profileId > 0);
+		$this->assertNotNull($this->userCause->causeId);
+		$this->assertTrue($this->userCause->causeId > 0);
+		$this->assertIdentical($this->userCause->profileId,							$this->profile->getProfileId());
+		$this->assertIdentical($this->userCause->causeId,								$this->cause->getCauseId());
 
 	}
 
@@ -103,24 +103,24 @@ class UserCauseTest extends UnitTestCase {
 		$this->assertNotNull($this->mysqli);
 
 		// second, create a userCause to post to mySQL
-		$this->causeUser = new UserCause($this->profile->getProfileId(), $this->cause->getCauseId());
+		$this->userCause = new UserCause($this->profile->getProfileId(), $this->cause->getCauseId());
 
 		// third, insert the userCause to mySQL
-		$this->causeUser->insert($this->mysqli);
+		$this->userCause->insert($this->mysqli);
 
 		// fourth, verify the userCause was inserted
-		$this->assertNotNull($this->causeUser->profileId);
-		$this->assertTrue($this->causeUser->profileId > 0);
-		$this->assertNotNull($this->causeUser->causeId);
-		$this->assertTrue($this->causeUser->causeId > 0);
+		$this->assertNotNull($this->userCause->profileId);
+		$this->assertTrue($this->userCause->profileId > 0);
+		$this->assertNotNull($this->userCause->causeId);
+		$this->assertTrue($this->userCause->causeId > 0);
 
 		// fifth, delete the userCause
-		$this->causeUser->delete($this->mysqli);
-		$this->causeUser = null;
+		$this->userCause->delete($this->mysqli);
+		$this->userCause = null;
 
 		// finally, try to get the userCause and assert we didn't get a thing
-		$hopefulCauseUserId = UserCause::getUserCauseByUserCauseId($this->mysqli, $this->profile->getProfileId(), $this->cause->getCauseId());
-		$this->assertNull($hopefulCauseUserId);
+		$hopefulUserCauseId = UserCause::getUserCauseByUserCauseId($this->mysqli, $this->profile->getProfileId(), $this->cause->getCauseId());
+		$this->assertNull($hopefulUserCauseId);
 	}
 	// test grabbing a userCause from mySQL
 	public function testGetUserCauseByProfileId() {
@@ -129,21 +129,21 @@ class UserCauseTest extends UnitTestCase {
 		$this->assertNotNull($this->mysqli);
 
 		// second, create a userCause to post to mySQL
-		$this->causeUser = new UserCause($this->profile->getProfileId(), $this->cause->getCauseId());
+		$this->userCause = new UserCause($this->profile->getProfileId(), $this->cause->getCauseId());
 
 		// third, insert the userCause to mySQL
-		$this->causeUser->insert($this->mysqli);
+		$this->userCause->insert($this->mysqli);
 
 		// fourth, get the userCause using the static method
-		$staticCauseUser = UserCause::getUserCauseByUserCauseId($this->mysqli, $this->causeUser->profileId,
-			$this->causeUser->causeId);
+		$staticUserCause = UserCause::getUserCauseByUserCauseId($this->mysqli, $this->userCause->profileId,
+			$this->userCause->causeId);
 
 		// finally, compare the fields to upload
-		$this->assertNotNull($staticCauseUser->profileId);
-		$this->assertTrue($staticCauseUser->profileId > 0);
-		$this->assertNotNull($staticCauseUser->causeId);
-		$this->assertTrue($staticCauseUser->causeId > 0);
-		$this->assertIdentical($staticCauseUser->profileId,							$this->profile->getProfileId());
-		$this->assertIdentical($staticCauseUser->causeId,							$this->cause->getCauseId());
+		$this->assertNotNull($staticUserCause->profileId);
+		$this->assertTrue($staticUserCause->profileId > 0);
+		$this->assertNotNull($staticUserCause->causeId);
+		$this->assertTrue($staticUserCause->causeId > 0);
+		$this->assertIdentical($staticUserCause->profileId,							$this->profile->getProfileId());
+		$this->assertIdentical($staticUserCause->causeId,							$this->cause->getCauseId());
 	}
 }

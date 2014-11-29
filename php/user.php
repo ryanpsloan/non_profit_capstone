@@ -320,7 +320,6 @@ class User {
 		if($statement->execute() === false) {
 			var_dump($statement->error);
 			throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
-
 		}
 
 		// update the null userId with what mySQL just gave us

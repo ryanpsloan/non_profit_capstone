@@ -130,7 +130,6 @@ class Team {
 	 * Inserts a new Team
 	 *
 	 * @param resource $mysqli pointer to mySQL connection, by reference
-	 * @param int $teamId teamId to search for
 	 * @return mixed teamId found or null if not found
 	 * @throws mysqli_sql_exception when mySQL related errors occur
 	 **/
@@ -153,12 +152,13 @@ class Team {
       if($wasClean === false) {
 			throw(new mysqli_sql_exception("Unable to bind parameters"));
 		}
-
       if($statement->execute() === false) {
+
 			throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
 		}
 
       $this->teamId = $mysqli->insert_id;
+
    }
 	/**
 	 * deletes a Team
@@ -198,7 +198,6 @@ class Team {
 	 * updates the Team
 	 *
 	 * @param resource $mysqli pointer to mySQL connection, by reference
-	 * @param int $teamId teamId to search for
 	 * @return mixed teamId found or null if not found
 	 * @throws mysqli_sql_exception when mySQL related errors occur
 	 **/

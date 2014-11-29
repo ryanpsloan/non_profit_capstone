@@ -135,11 +135,11 @@ class UserEvent {
 		}
 
 		if(filter_var($newUserEventRole, FILTER_SANITIZE_INT) === false) {
-			throw(new UnexpectedValueException("teamStatus $newUserEventRole is not numeric"));
+			throw(new UnexpectedValueException("userEventRole $newUserEventRole is not numeric"));
 		}
 
 		if($newUserEventRole <= 0) {
-			throw(new RangeException("Team status is not positive"));
+			throw(new RangeException("User event role is not positive"));
 		}
 
 		$this->userEventRole = $newUserEventRole;
@@ -212,7 +212,9 @@ class UserEvent {
 
 		$query = "INSERT INTO userEvent(profileId, eventId, userEventRole, commentPermission, banStatus)
 		VALUES (?, ?, ?, ?, ?)";
+
 		$statement = $mysqli->prepare($query);
+
 		if($statement === false) {
 			throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
 		}
@@ -367,5 +369,62 @@ class UserEvent {
 		}
 
 	}
-	//TODO: add static method for finding by profile Id
+
+	public static function getUserEventByProfileId($mysqli, $profileId){
+		//handle degenerate cases
+		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
+			throw(new mysqli_sql_exception("input is not a mysqli object"));
+		}
+
+		// sanitize the eventId before searching
+		$profileId = trim($profileId);
+		$profileId = filter_var($profileId, FILTER_VALIDATE_INT);
+
+
+
+		// create query template
+		$query = "SELECT profileId, eventId, userEventRole, commentPermission, banStatus FROM userEvent WHERE profileId = ?";
+
+		$statement = $mysqli->prepare($query);
+		if($statement === false) {
+			throw(new mysqli_sql_exception("Unable to prepare statement"));
+		}
+		//bind the eventId to the place holder in the template
+		$wasClean = $statement->bind_param("i", $profileId);
+		if($wasClean === false) {
+			throw(new mysqli_sql_exception("Unable to bind parameters"));
+		}
+		//execute the statement
+		if($statement->execute() === false) {
+			throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
+		}
+		//get result from the SELECT query
+		$result = $statement->get_result();
+		if($result === false) {
+			throw(new mysqli_sql_exception("Unable to get result set."));
+		}
+
+		//turn the results into an array
+		$profileIdSearch = array();
+
+		// Loop through the array and display the results
+		while(($row = $result->fetch_assoc()) !== null) {
+
+			try {
+				$userEvent = new UserEvent( $row["profileId"], $row["eventId"], $row["userEventRole"], $row["commentPermission"],
+					$row["banStatus"]);
+				$profileIdSearch [] = $userEvent;
+			} catch(Exception $exception) {
+
+				throw(new mysqli_sql_exception("Unable to convert row to event", 0, $exception));
+			}
+		}
+
+		if($result->num_rows === 0) {
+			return(null);
+		} else {
+			return($profileIdSearch);
+		}
+
+	}
 }

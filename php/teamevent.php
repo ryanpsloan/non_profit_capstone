@@ -47,7 +47,7 @@ class TeamEvent {
 			$this->setTeamId($newTeamId);
 			$this->setEventId($newEventId);
 			$this->setTeamStatus($newTeamStatus);
-			$this->setcommentPermission($newCommentPermission);
+			$this->setCommentPermission($newCommentPermission);
 			$this->setBanStatus($newBanStatus);
 		} catch(UnexpectedValueException $unexpectedValue) {
 			throw(new UnexpectedValueException("Could not construct object TeamEvent", 0, $unexpectedValue));
@@ -79,9 +79,8 @@ class TeamEvent {
 	 **/
 	public function setTeamId($newTeamId)
 	{
-		if($this->teamId === null) {
-			$this->teamId = null;
-			return;
+		if($newTeamId === null) {
+			throw(new UnexpectedValueException("Team Id is null"));
 		}
 
 		if(filter_var($newTeamId, FILTER_VALIDATE_INT) === false) {
@@ -92,7 +91,6 @@ class TeamEvent {
 		if($newTeamId <= 0) {
 			throw(new RangeException("teamId $newTeamId is not positive."));
 		}
-
 		$this->teamId = $newTeamId;
 	}
 
@@ -105,12 +103,11 @@ class TeamEvent {
 	 **/
 	public function setEventId($newEventId)
 	{
-		if($this->eventId === null) {
-			$this->eventId = null;
-			return;
+		if($newEventId === null) {
+			throw(new UnexpectedValueException("Event Id does not exist"));
 		}
 
-		if(filter_var($newEventId, FILTER_SANITIZE_INT) === false) {
+		if(filter_var($newEventId, FILTER_VALIDATE_INT) === false) {
 			throw(new UnexpectedValueException("eventId $newEventId is not numeric."));
 		}
 
@@ -132,11 +129,10 @@ class TeamEvent {
 	public function setTeamStatus($newTeamStatus)
 	{
 		if($newTeamStatus === null) {
-			$newTeamStatus = null;
-			return;
+			throw(new UnexpectedValueException("Team Status cannot be null"));
 		}
 
-		if(filter_var($newTeamStatus, FILTER_SANITIZE_INT) === false) {
+		if(filter_var($newTeamStatus, FILTER_VALIDATE_INT) === false) {
 			throw(new UnexpectedValueException("teamStatus $newTeamStatus is not numeric"));
 		}
 
@@ -161,7 +157,7 @@ class TeamEvent {
 			throw(new UnexpectedValueException("Comment permission $newCommentPermission cannot by null"));
 		}
 
-		if(filter_var($newCommentPermission, FILTER_SANITIZE_INT) === false) {
+		if(filter_var($newCommentPermission, FILTER_VALIDATE_INT) === false) {
 			throw(new UnexpectedValueException("Comment permission $newCommentPermission is not numeric"));
 		}
 
@@ -185,7 +181,7 @@ class TeamEvent {
 			throw(new UnexpectedValueException("Ban Status Cannot be Null"));
 		}
 
-		if(filter_var($newBanStatus, FILTER_SANITIZE_INT) === false) {
+		if(filter_var($newBanStatus, FILTER_VALIDATE_INT) === false) {
 			throw(new UnexpectedValueException("Ban status $newBanStatus is not numeric"));
 		}
 
@@ -207,22 +203,22 @@ class TeamEvent {
 			throw(new mysqli_sql_exception("This is not a valid mysqli object"));
 		}
 
-		if($this->eventId === null){
-			throw(new mysqli_sql_exception("This event does not exist"));
-		}
-
 		if($this->teamId === null){
 			throw(new mysqli_sql_exception("This team does not exist"));
 		}
 
-		$query = "INSERT INTO teamEvent(eventId, teamId, teamStatus, commentPermission, banStatus)
+		if($this->eventId === null){
+			throw(new mysqli_sql_exception("This event does not exist"));
+		}
+
+		$query = "INSERT INTO teamEvent(teamId, eventId, teamStatus, commentPermission, banStatus)
 		VALUES (?, ?, ?, ?, ?)";
 		$statement = $mysqli->prepare($query);
 		if($statement === false) {
 			throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
 		}
 
-		$wasClean = $statement->bind_param("iiiii", $this->eventId, $this->teamId, $this->teamStatus,
+		$wasClean = $statement->bind_param("iiiii", $this->teamId, $this->eventId, $this->teamStatus,
 			$this->commentPermission, $this->banStatus);
 
 		if($wasClean === false){
@@ -253,13 +249,13 @@ class TeamEvent {
 			throw(new mysqli_sql_exception("Unable to delete a team that does not exist"));
 		}
 
-		$query		="DELETE FROM teamEvent WHERE eventId = ? AND teamId = ?";
+		$query		="DELETE FROM teamEvent WHERE teamId = ? AND  eventId = ?";
 		$statement  =$mysqli->prepare($query);
 		if($statement === false){
 			throw (new mysqli_sql_exception("Unable to prepare statement"));
 		}
 
-		$wasClean = $statement->bind_param("ii", $this->eventId, $this->teamId);
+		$wasClean = $statement->bind_param("ii", $this->teamId, $this->eventId);
 		if($wasClean === false){
 			throw (new mysqli_sql_exception("Unable to bind parameters"));
 		}
@@ -290,20 +286,20 @@ class TeamEvent {
 			throw (new mysqli_sql_exception("cannot update team object that does not exist"));
 		}
 
-		$query		="UPDATE teamEvent SET eventId = ?, teamId = ?, teamStatus = ?, commentPermission = ?, banStatus = ?";
-		$statement  =$mysqli->prepare->$query;
+		$query		="UPDATE teamEvent SET teamId = ?, eventId = ?, teamStatus = ?, commentPermission = ?, banStatus = ?";
+		$statement  =$mysqli->prepare($query);
 		if($statement === false){
 			throw(new mysqli_sql_exception("Unable to prepare statement"));
 		}
 
-		$wasClean = $statement->bind_param("iiiii", $this->eventId, $this->teamId, $this->teamStatus,
+		$wasClean = $statement->bind_param("iiiii", $this->teamId, $this->eventId, $this->teamStatus,
 			$this->commentPermission, $this->banStatus);
 
 		if($wasClean === false){
 			throw(new mysqli_sql_exception("Unable to bind parameters"));
 		}
 
-		if($statement->execute === false){
+		if($statement->execute() === false){
 			throw(new mysqli_sql_exception("Unable to execute mySQL statement."));
 		}
 	}
@@ -374,4 +370,64 @@ class TeamEvent {
 
 	}
 	//TODO: add static method for find by Team ID
+
+	public static function getTeamEventByTeamId($mysqli, $teamId){
+		//handle degenerate cases
+		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
+			throw(new mysqli_sql_exception("input is not a mysqli object"));
+		}
+
+		// sanitize the eventId before searching
+		$teamId = trim($teamId);
+		$teamId = filter_var($teamId, FILTER_VALIDATE_INT);
+		if($teamId === null){
+			throw(new UnexpectedValueException("teamId cannot be null"));
+		}
+
+
+		// create query template
+		$query = "SELECT eventId, teamId, teamStatus, commentPermission, banStatus FROM teamEvent WHERE teamId = ?";
+
+		$statement = $mysqli->prepare($query);
+		if($statement === false) {
+			throw(new mysqli_sql_exception("Unable to prepare statement"));
+		}
+		//bind the eventId to the place holder in the template
+		$wasClean = $statement->bind_param("i", $teamId);
+		if($wasClean === false) {
+			throw(new mysqli_sql_exception("Unable to bind parameters"));
+		}
+		//execute the statement
+		if($statement->execute() === false) {
+			throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
+		}
+		//get result from the SELECT query
+		$result = $statement->get_result();
+		if($result === false) {
+			throw(new mysqli_sql_exception("Unable to get result set."));
+		}
+
+		//turn the results into an array
+		$teamIdSearch = array();
+
+		// Loop through the array and display the results
+		while(($row = $result->fetch_assoc()) !== null) {
+
+			try {
+				$teamEvent = new TeamEvent($row["eventId"], $row["teamId"], $row["teamStatus"], $row["commentPermission"],
+					$row["banStatus"]);
+				$teamIdSearch [] = $teamEvent;
+			} catch(Exception $exception) {
+
+				throw(new mysqli_sql_exception("Unable to convert row to event", 0, $exception));
+			}
+		}
+
+		if($result->num_rows === 0) {
+			return(null);
+		} else {
+			return($teamIdSearch);
+		}
+
+	}
 }
