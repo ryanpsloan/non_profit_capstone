@@ -3,7 +3,7 @@
 require_once("/usr/lib/php5/simpletest/autorun.php");
 // require mySQLI
 require_once("/etc/apache2/capstone-mysql/helpabq.php");
-class RgEventsSuite extends TestSuite {
+class HelpAbqSuite extends TestSuite {
 	// the constructor for a TestSuite just sets up all the file names
 	public function __construct() {
 		// run the parent constructor
