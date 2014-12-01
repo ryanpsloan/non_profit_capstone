@@ -52,7 +52,9 @@ class ProfileIdTest extends UnitTestCase
 		$salt       = bin2hex(openssl_random_pseudo_bytes(32));
 		$authToken = bin2hex(openssl_random_pseudo_bytes(16));
 		$passwordHash       = hash_pbkdf2("sha512", "password", $salt, 2048, 128);
-		$this->user = new User(null, "imconfused", "myhomie@lost.com", $passwordHash, $salt, $authToken, 2);
+
+		$i = rand(0, 100000);
+		$this->user = new User(null, "imconfused" . $i, "myhomie" . $i . "@lost.com", $passwordHash, $salt, $authToken, 2);
 		$this->user->insert($this->mysqli);
 
 		/*$this->user1 = new User(null, "hentry", "myotherhomie@lost.com", $passwordHash, $salt, $authToken, 1);

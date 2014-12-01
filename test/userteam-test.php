@@ -50,10 +50,10 @@ class UserTeamTest extends UnitTestCase
 		$passwordHash = hash_pbkdf2("sha512", "password", $salt, 2048, 128);
 
 		$i= rand(0, 100000);
-		$this->user = new User(null, "igotthis" . $i, "myhomie@yahoo.com", $passwordHash, $salt, $authToken, 2);
+		$this->user = new User(null, "igotthis" . $i, "myhomie" . $i . "@yahoo.com", $passwordHash, $salt, $authToken, 2);
 		$this->user->insert($this->mysqli);
 
-		$this->user1 = new User(null, "ithoughtIhadthis" . $i, "myotherhome@yahoo.com", $passwordHash, $salt, $authToken, 1);
+		$this->user1 = new User(null, "ithoughtIhadthis" . $i, "myotherhome" . $i . "@yahoo.com", $passwordHash, $salt, $authToken, 1);
 		$this->user1->insert($this->mysqli);
 
 		$this->profile = new Profile(null, $this->user->getUserId(), "Mr.", "John", "P", "Handcock", "I have the largest signature on the
@@ -65,10 +65,10 @@ class UserTeamTest extends UnitTestCase
 												"Mrs.PM of Britain", "1600 Pennsylvania Ave", "SW", "Washington", "DC", "20500");
 		$this->profile1->insert($this->mysqli);
 
-		$this->team = new Team(null, "Luevano", "Domestic Violence");
+		$this->team = new Team(null, "Luevano" . $i, "Domestic Violence");
 		$this->team->insert($this->mysqli);
 
-		$this->team1 = new Team(null, "McDonald", "Homeless Coders");
+		$this->team1 = new Team(null, "McDonald" . $i, "Homeless Coders");
 		$this->team1->insert($this->mysqli);
 
 	}

@@ -5,7 +5,8 @@ require_once("/usr/lib/php5/simpletest/autorun.php");
 require_once("/etc/apache2/capstone-mysql/helpabq.php");
 class HelpAbqSuite extends TestSuite {
 	// the constructor for a TestSuite just sets up all the file names
-	public function __construct() {
+	public function __construct()
+	{
 		// run the parent constructor
 		parent::__construct();
 		// stuff the test files into an array
@@ -14,6 +15,8 @@ class HelpAbqSuite extends TestSuite {
 			"commentuser-test.php", "event-test.php", "profile-test.php", "team-test.php", "teamcause-test.php",
 			"teamevent-test.php", "user-test.php", "usercause-test.php", "userevent-test.php", "userteam-test.php");
 		// run them forward
+
+
 		foreach($testFiles as $testFile) {
 			$this->addFile($testFile);
 		}
@@ -23,9 +26,11 @@ class HelpAbqSuite extends TestSuite {
 			$this->addFile($testFile);
 		}
 		// run them randomly
+		for($i = 0; $i < 20; $i++){
 		shuffle($testFiles);
 		foreach($testFiles as $testFile) {
 			$this->addFile($testFile);
 		}
 	}
+}
 }
