@@ -106,9 +106,6 @@ class TeamEventTest extends UnitTestCase {
 		$this->assertNotNull($this->event->eventId);
 		$this->assertTrue($this->event->eventId > 0);
 
-
-
-
 		//fifth delete the article
 		$this->teamEvent->delete($this->mysqli);
 		$this->teamEvent = null;

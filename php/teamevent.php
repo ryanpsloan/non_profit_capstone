@@ -325,7 +325,7 @@ class TeamEvent {
 
 
 		// create query template
-		$query = "SELECT eventId, teamId, teamStatus, commentPermission, banStatus FROM teamEvent WHERE eventId = ?";
+		$query = "SELECT teamId, eventId, teamStatus, commentPermission, banStatus FROM teamEvent WHERE eventId = ?";
 
 		$statement = $mysqli->prepare($query);
 		if($statement === false) {
@@ -353,7 +353,7 @@ class TeamEvent {
 		while(($row = $result->fetch_assoc()) !== null) {
 
 			try {
-				$teamEvent = new TeamEvent($row["eventId"], $row["teamId"], $row["teamStatus"], $row["commentPermission"],
+				$teamEvent = new TeamEvent($row["teamId"], $row["eventId"], $row["teamStatus"], $row["commentPermission"],
 				$row["banStatus"]);
 				$eventIdSearch [] = $teamEvent;
 			} catch(Exception $exception) {
@@ -369,7 +369,6 @@ class TeamEvent {
 		}
 
 	}
-	//TODO: add static method for find by Team ID
 
 	public static function getTeamEventByTeamId($mysqli, $teamId){
 		//handle degenerate cases
@@ -386,7 +385,7 @@ class TeamEvent {
 
 
 		// create query template
-		$query = "SELECT eventId, teamId, teamStatus, commentPermission, banStatus FROM teamEvent WHERE teamId = ?";
+		$query = "SELECT teamId, eventId, teamStatus, commentPermission, banStatus FROM teamEvent WHERE teamId = ?";
 
 		$statement = $mysqli->prepare($query);
 		if($statement === false) {
@@ -414,7 +413,7 @@ class TeamEvent {
 		while(($row = $result->fetch_assoc()) !== null) {
 
 			try {
-				$teamEvent = new TeamEvent($row["eventId"], $row["teamId"], $row["teamStatus"], $row["commentPermission"],
+				$teamEvent = new TeamEvent($row["teamId"], $row["eventId"], $row["teamStatus"], $row["commentPermission"],
 					$row["banStatus"]);
 				$teamIdSearch [] = $teamEvent;
 			} catch(Exception $exception) {

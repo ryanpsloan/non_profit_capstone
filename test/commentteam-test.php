@@ -36,10 +36,10 @@ class CommentTeamTest extends UnitTestCase{
 		//connect to mySQL
 		$this->mysqli = MysqliConfiguration::getMysqli();
 
-
-		$this->team = new Team(null, "Team DMC", "Help Dameon because he is behind");
+		$i= rand(0, 100000);
+		$this->team = new Team(null, "Team DMC" . $i, "Help Dameon because he is behind");
 		$this->team->insert($this->mysqli);
-		$this->team1 = new Team(null, "Vato Locos", "You cry we die shut up");
+		$this->team1 = new Team(null, "Vato Locos" . $i, "You cry we die shut up");
 		$this->team1->insert($this->mysqli);
 
 		$this->comment = new Comment(null, "waiting on unit test", new DateTime());

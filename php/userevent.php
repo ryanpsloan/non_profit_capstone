@@ -91,7 +91,7 @@ class UserEvent {
 
 		$newProfileId = intval($newProfileId);
 		if($newProfileId <= 0) {
-			throw(new RangeException("teamId $newProfileId is not positive."));
+			throw(new RangeException("profileId $newProfileId is not positive."));
 		}
 
 		$this->profileId = $newProfileId;
@@ -110,7 +110,7 @@ class UserEvent {
 		}
 
 		if(filter_var($newEventId, FILTER_VALIDATE_INT) === false) {
-			throw(new UnexpectedValueException("teamId $newEventId is not numeric"));
+			throw(new UnexpectedValueException("eventId $newEventId is not numeric"));
 		}
 
 		$newEventId = intval($newEventId);
@@ -287,19 +287,19 @@ class UserEvent {
 		}
 
 		$query		="UPDATE userEvent SET profileId = ?, eventId = ?, userEventRole = ?, commentPermission = ?, banStatus = ?";
-		$statement  =$mysqli->prepare->$query;
+		$statement  =$mysqli->prepare($query);
 		if($statement === false){
 			throw(new mysqli_sql_exception("Unable to prepare statement"));
 		}
 
-		$wasClean = $statement->bind_param("iiiii", $this->eventId, $this->teamId, $this->teamStatus,
+		$wasClean = $statement->bind_param("iiiii", $this->profileId, $this->eventId, $this->userEventRole,
 			$this->commentPermission, $this->banStatus);
 
 		if($wasClean === false){
 			throw(new mysqli_sql_exception("Unable to bind parameters"));
 		}
 
-		if($statement->execute === false){
+		if($statement->execute() === false){
 			throw(new mysqli_sql_exception("Unable to execute mySQL statement."));
 		}
 	}
@@ -325,7 +325,7 @@ class UserEvent {
 
 
 		// create query template
-		$query = "SELECT profileId,eventId, userEventRole, commentPermission, banStatus FROM userEvent WHERE eventId = ?";
+		$query = "SELECT profileId, eventId, userEventRole, commentPermission, banStatus FROM userEvent WHERE eventId = ?";
 
 		$statement = $mysqli->prepare($query);
 		if($statement === false) {

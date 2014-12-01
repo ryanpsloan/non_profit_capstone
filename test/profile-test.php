@@ -23,7 +23,7 @@ class ProfileIdTest extends UnitTestCase
 	
 	//variable to hold the test database row
 	private $profile = null;
-	private $profile1 = null;
+	/*private $profile1 = null;*/
 	
 	//the rest of the "global" variables used to create test data
 	private $USERTITLE = "Mr.";
@@ -39,7 +39,7 @@ class ProfileIdTest extends UnitTestCase
 	private $ZIPCODE = "87171";
 
 	private $user = null;
-	private $user1 = null;
+/*	private $user1 = null;*/
 
 
 
@@ -52,12 +52,11 @@ class ProfileIdTest extends UnitTestCase
 		$salt       = bin2hex(openssl_random_pseudo_bytes(32));
 		$authToken = bin2hex(openssl_random_pseudo_bytes(16));
 		$passwordHash       = hash_pbkdf2("sha512", "password", $salt, 2048, 128);
-
 		$this->user = new User(null, "imconfused", "myhomie@lost.com", $passwordHash, $salt, $authToken, 2);
 		$this->user->insert($this->mysqli);
 
-		$this->user1 = new User(null, "hentry", "myotherhomie@lost.com", $passwordHash, $salt, $authToken, 1);
-		$this->user1->insert($this->mysqli);
+		/*$this->user1 = new User(null, "hentry", "myotherhomie@lost.com", $passwordHash, $salt, $authToken, 1);
+		$this->user1->insert($this->mysqli);*/
 	}
 
 	//Teardown (), a method to delete the test record and disconnect from mySQL
@@ -73,10 +72,10 @@ class ProfileIdTest extends UnitTestCase
 			$this->user = null;
 		}
 
-		if($this->user1 !==null) {
+		/*if($this->user1 !==null) {
 			$this->user1->delete($this->mysqli);
 			$this->user1 = null;
-		}
+		}*/
 	}
 	// test creating a new Profile Id and inserting it to mySQL
 	public function testInsertNewProfileId() {
@@ -242,7 +241,7 @@ class ProfileIdTest extends UnitTestCase
 
 	// test grabbing a profile by ZIPCODE from mySQL
 
-	public function testGetUserTeamByZipCode() {
+	public function testGetProfileByZipCode() {
 
 		// first, verify mySQL connected OK
 		$this->assertNotNull($this->mysqli);
@@ -250,12 +249,12 @@ class ProfileIdTest extends UnitTestCase
 		// second, create a userTeam to post to mySQL
 		$this->profile = new Profile(null, $this->user->getUserId(), $this->USERTITLE, $this->FIRSTNAME, $this->MIDINIT, $this->LASTNAME,
 											  $this->BIO, $this->ATTENTION, $this->STREET1, $this->STREET2, $this->CITY, $this->STATE, $this->ZIPCODE);
-		$this->profile1 = new Profile(null, $this->user->getUserId(), $this->USERTITLE, $this->FIRSTNAME, $this->MIDINIT, $this->LASTNAME,
-											  $this->BIO, $this->ATTENTION, $this->STREET1, $this->STREET2, $this->CITY, $this->STATE, $this->ZIPCODE);
+		/*$this->profile1 = new Profile(null, $this->user1->getUserId(), $this->USERTITLE, $this->FIRSTNAME, $this->MIDINIT, $this->LASTNAME,
+											  $this->BIO, $this->ATTENTION, $this->STREET1, $this->STREET2, $this->CITY, $this->STATE, $this->ZIPCODE);*/
 
 		// third, insert the userTeam to mySQL
 		$this->profile->insert($this->mysqli);
-		$this->profile1->insert($this->mysqli);
+		/*$this->profile1->insert($this->mysqli);*/
 
 		// fourth, get the userTeam using the static method
 		$staticProfile = Profile::getProfileByZipCode($this->mysqli, $this->ZIPCODE);
@@ -267,7 +266,7 @@ class ProfileIdTest extends UnitTestCase
 			$this->assertIdentical($staticProfile[$i]->getZipCode(), $this->ZIPCODE);
 		}
 		//teardown for userTeam1
-		$this->profile1->delete($this->mysqli);
+		$this->profile->delete($this->mysqli);
 	}
 
 }

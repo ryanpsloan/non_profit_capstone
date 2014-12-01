@@ -49,10 +49,11 @@ class UserTeamTest extends UnitTestCase
 		$authToken = bin2hex(openssl_random_pseudo_bytes(16));
 		$passwordHash = hash_pbkdf2("sha512", "password", $salt, 2048, 128);
 
-		$this->user = new User(null, "igotthis", "myhomie@yahoo.com", $passwordHash, $salt, $authToken, 2);
+		$i= rand(0, 100000);
+		$this->user = new User(null, "igotthis" . $i, "myhomie@yahoo.com", $passwordHash, $salt, $authToken, 2);
 		$this->user->insert($this->mysqli);
 
-		$this->user1 = new User(null, "ithoughtIhadthis", "myotherhome@yahoo.com", $passwordHash, $salt, $authToken, 1);
+		$this->user1 = new User(null, "ithoughtIhadthis" . $i, "myotherhome@yahoo.com", $passwordHash, $salt, $authToken, 1);
 		$this->user1->insert($this->mysqli);
 
 		$this->profile = new Profile(null, $this->user->getUserId(), "Mr.", "John", "P", "Handcock", "I have the largest signature on the

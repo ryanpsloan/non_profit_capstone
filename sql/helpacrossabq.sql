@@ -178,4 +178,5 @@ CREATE TABLE commentTeam(
 	FOREIGN KEY (teamId) REFERENCES team(teamId),
 	FOREIGN KEY (commentId) REFERENCES comment(commentId)
 );
+
 -- Comment for test.
