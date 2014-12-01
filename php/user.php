@@ -265,13 +265,13 @@ class User {
 	 **/
 	public function setPermissions($newPermissions) {
 
-		// zeroth, set allow the authentication token to be null if an active object
+		// zeroth, set allow the permission to be null if an active object
 		if($newPermissions === null) {
 			$this->permissions = null;
 			return;
 		}
 
-		//first, ensure the user id is an integer
+		//first, ensure the permissions is an integer
 		if(filter_var($newPermissions, FILTER_VALIDATE_INT) === false) {
 			throw(new UnexpectedValueException("Permissions $newPermissions is not numeric"));
 		}

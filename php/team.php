@@ -365,7 +365,7 @@ class Team {
 	 * @param resource $mysqli pointer to mySQL connection, by reference
 	 * @param string $teamCause teamCause to search for
 	 * @return string teamCause found or null if not found
-	 * @throws mysqli_sql_exception when mySQL related errors occur
+ 	 * @throws mysqli_sql_exception when mySQL related errors occur
 	 **/
 	public static function getTeamByTeamCause(&$mysqli, $teamCause) {
 
