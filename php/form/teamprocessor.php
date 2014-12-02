@@ -21,11 +21,10 @@ try {
 	}
 
 	// create a new object and insert it to mySQL
-	$authToken = bin2hex(openssl_random_pseudo_bytes(16));
-	$cause = new Cause(null, $_POST["teamId"], $_POST["teamName"], $_POST["teamDescription"]);
+	$cause = new Cause($_POST["teamId"], $_POST["teamName"], $_POST["teamDescription"]);
 	$mysqli = MysqliConfiguration::getMysqli();
 	$cause->insert($mysqli);
-	}catch(Exception $exception) {
-		echo "Unable to create a new team: " . $exception->getMessage();
+}catch(Exception $exception) {
+	echo "Unable to create a new team: " . $exception->getMessage();
 }
 ?>

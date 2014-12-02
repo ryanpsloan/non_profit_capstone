@@ -1,5 +1,6 @@
 <?php
 /**
+ *Processor for the cause form of the helpabq site
  * User: Cass
  *
  */
@@ -20,11 +21,10 @@ try {
 	}
 
 	// create a new object and insert it to mySQL
-	$authToken = bin2hex(openssl_random_pseudo_bytes(16));
-	$cause = new Cause(null, $_POST["causeId"], $_POST["causeName"], $_POST["causeDescription"]);
+	$cause = new Cause($_POST["causeId"], $_POST["causeName"], $_POST["causeDescription"]);
 	$mysqli = MysqliConfiguration::getMysqli();
 	$cause->insert($mysqli);
 }catch(Exception $exception) {
-	echo "<div class=\"alert alert-danger\" role=\"alert\"><strong>Oh snap!</strong> Unable to create a new cause: " . $exception->getMessage() . "</div>";
+	echo "Unable to create a new cause: " . $exception->getMessage() ;
 }
 ?>
