@@ -7,12 +7,13 @@
  */
 session_start();
 require_once("/etc/apache2/capstone-mysql/helpabq.php");
-require_once("csrf.php");
 $mysqli = MysqliConfiguration::getMysqli();
-include("../php/comment.php");
+require_once("csrf.php");
+include("../comment.php");
 
-	if(@isset($_POST['comment'])=== false || @isset($_POST['date'])){
-		echo "<p>Form variables incomplete or missing. Please refill form</p>";
+try {
+	if(@isset($_POST['comment']) === false) {
+		throw(new UnexpectedValueException("The comment was blank, please try again."));
 	}
 
 	// verify the CSRF tokens
@@ -20,12 +21,11 @@ include("../php/comment.php");
 		throw(new RuntimeException("CSRF tokens incorrect or missing. Make sure cookies are enabled."));
 	}
 
-	$comment = 	filter_input(INPUT_POST, "comment", FILTER_SANITIZE_STRING);
-	$date = 		filter_input(INPUT_POST, "date", FILTER_SANITIZE_STRING);
-
-	$newComment = new Comment(null, $comment, $date);
+	$newComment = new Comment(null, $_POST["comment"], new DateTime());
 	$newComment->insert($mysqli);
-	echo"<p>Comment posted!</p>";
+	echo "<p>Comment posted!</p>";
 	var_dump($newComment);
 
-
+} catch (RuntimeException $exception){
+		echo "We have encountered an error." . $exception->getMessage();
+}

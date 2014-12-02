@@ -1,5 +1,8 @@
 
-<?php ?>
+<?php
+require_once("../php/form/csrf.php");
+session_start();
+?>
 <!DOCTYPE html>
 	<html>
 		<head lang="en">
@@ -9,8 +12,9 @@
 		<body>
 			<form id="commentForm" action="../php/form/commentprocessor.php" method="POST">
 				<label for="commentText">Type your comment:</label>
-				<input type="text" class="commentBox" name="comment" maxlength="1024">
-				<input type="datetime" name="date" value=<?php $date=date_create_from_format("Y-m-d H:i:s", "");?>>
+				<br>
+				<textarea class="commentBox" name="comment" maxlength="1024" rows="6" cols="24"></textarea>
+				<br>
 				<input type="submit" value="Submit">
 			</form>
 		</body>
