@@ -13,7 +13,7 @@ try{
 		//verify the form was submitted properly
 		if (@isset($_POST["userName"]) === false || @isset($_POST["email"]) === false || @isset($_POST["passwordHash"]) === false ||
 	  		@isset($_POST["firstName"]) === false || @isset($_POST["lastName"]) === false || @isset($_POST["zipCode"]) === false) {
-			echo "<p>Form variables incomplete or missing. Please refill form</p>";
+			throw(new RuntimeException("Form variables incomplete or missing"));
 		}
 		// verify the CSRF tokens
 		if(verifyCsrf($_POST["csrfName"], $_POST["csrfToken"]) === false) {
@@ -21,9 +21,7 @@ try{
 		}
 
 		//create a new object and insert it to mySQL
-		$authToken 		= bin2hex(openssl_random_pseudo_bytes(16));
-		$salt       	= bin2hex(openssl_random_pseudo_bytes(32));
-		$passwordHash	= hash_pbkdf2("sha512", "password", $salt, 2048, 128);
+
 
 		$mysqli    = MysqliConfiguration::getMysqli();
 		$signupUser = new User(null,$_POST["userName"], $_POST["email"], $passwordHash, $salt, $authToken, 0);
@@ -36,6 +34,7 @@ try{
 
 
 	} catch(Exception $exception){
+		echo "<p>Form variables incomplete or missing. Please refill form</p>";
 
 }
 
