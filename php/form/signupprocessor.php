@@ -34,8 +34,8 @@ try{
 
 
 	} catch(Exception $exception){
-		echo "<p>Form variables incomplete or missing. Please refill form</p>";
+	echo "<div class=\"alert alert-danger\" role=\"alert\"><strong>Oh snap!</strong> Unable to sign up: " . $exception->getMessage() . "</div>";
 
-}
+		}
 
 ?>
