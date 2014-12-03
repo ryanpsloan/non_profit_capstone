@@ -18,22 +18,27 @@ session_start();
 	<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/jquery.validate.min.js"></script>
 	<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/additional-methods.min.js"></script>
 	<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="signIn.js"></script>
 </head>
 	<title>SignIn Form</title>
 
 <body>
-	<form id="signin" action="../php/form/signinprocessor.php" method="POST">
+	<form id="signIn" action="../php/form/signinprocessor.php" method="POST">
 		<?php echo generateInputTags();?>
-		<label for="userName">UserName/email</label>
+		<label for="userName">username/email</label>
 		<br>
-		<input type="userName" id="userName" name="userName" autocomplete="off"><br>
-		<label for="password">Password:</label>
-		<input type="passwordHash" id="passwordHash" name="passwordHash" autocomplete="off"><br>
+		<input type="userName" id="userName" name="userName" autocomplete="off">
+		<br>
+		<label for="passwordHash">Password:</label>
+		<br>
+		<input type="passwordHash" id="passwordHash" name="passwordHash" autocomplete="off">
+		<br>
 		<input type="submit" value="Sign In">
 
 	</form>
 		<div id="signUpLink"><p>OR</p>
 		<a href="signUp.php">Sign Up</a></div>
+	<div id="outputArea"></div>
 
 </body>
 </html>
