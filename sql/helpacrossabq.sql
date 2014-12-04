@@ -28,7 +28,8 @@ CREATE TABLE user(
 	PRIMARY KEY(userId),
 	INDEX(permissions),
 	UNIQUE(userName),
-	UNIQUE(email)
+	UNIQUE(email),
+	UNIQUE(authToken)
 );
 
 CREATE TABLE profile(
