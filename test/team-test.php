@@ -179,7 +179,6 @@ class TeamTest extends UnitTestCase {
 			$this->assertNotNull($staticTeam[$i]->getTeamId());
 			$this->assertTrue($staticTeam[$i]->getTeamId() > 0);
 			$this->assertIdentical($staticTeam[$i]->getTeamCause(), 		$this->TEAMCAUSE);
-
 		}
 
 		$this->team1->delete($this->mysqli);

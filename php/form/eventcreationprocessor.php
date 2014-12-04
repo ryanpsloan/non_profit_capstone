@@ -2,11 +2,16 @@
 session_start();
 require_once("/etc/apache2/capstone-mysql/helpabq.php");
 require_once("csrf.php");
-include("../php/event.php");
-$mysqli = MysqliConfiguration::getMysqli();
+include("../event.php");
+
 
 try {
-	if(@isset($_POST['eventTitle']) === false || @isset($_POST['eventDate']) || @isset($_POST['eventLocation'])) {
+	$mysqli = MysqliConfiguration::getMysqli();
+	if(($mysqli = MysqliConfiguration::getMysqli()) === false) {
+		throw (new mysqli_sql_exception("Server connection failed, please try again later."));
+	}
+
+	if(@isset($_POST['eventTitle']) === null || @isset($_POST['eventDate']) === null || @isset($_POST['eventLocation']) === null) {
 		echo "<p>Form variables incomplete or missing. Please refill form</p>";
 	}
 
@@ -15,9 +20,10 @@ try {
 	}
 
 	$newEvent = new Event(null, $_POST["eventTitle"], $_POST["eventDate"], $_POST["eventLocation"]);
+	var_dump($mysqli);
 	$newEvent->insert($mysqli);
 
 	echo "<p class=\"alert alert-success\" role=\"alert\">Event posted!</p>";
-} catch (Exception $exceiption){
-	echo "We have encountered an error" . $exceiption->getMessage();
+} catch (Exception $exception){
+	echo "We have encountered an error." . " " . $exception->getMessage();
 }

@@ -1,7 +1,6 @@
-
 <?php
-session_start();
-require_once("../php/form/csrf.php");
+	session_start();
+	require_once("../php/form/csrf.php");
 ?>
 <!DOCTYPE html>
 	<html>
@@ -14,16 +13,26 @@ require_once("../php/form/csrf.php");
 			<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/jquery.validate.min.js"></script>
 			<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/additional-methods.min.js"></script>
 			<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-			<title>Comment</title>
 		</head>
 		<body>
-			<form id="commentForm" action="../php/form/commentprocessor.php" method="POST">
-				<?php echo generateInputTags();?>
-				<label for="commentBox">Type your comment:</label>
-				<br>
-				<textarea class="commentBox" name="comment" maxlength="1024" rows="6" cols="24"></textarea>
-				<br>
-				<input type="submit" value="Submit">
+			<form id="eventCreation" action="../php/form/eventcreationprocessor.php" method="post">
+				<?php echo generateInputTags()?>
+				<label for="eventTitle">What is the name of your Event?</label>
+				<br/>
+				<input type="text" name="eventTitle">
+				<br/>
+				<br/>
+				<label for="eventDate">When is your event taking place?</label>
+				<br/>
+				<p>Please enter it in YYYY-MM-DD HH:ii:ss format.</p>
+				<input type="text" name="eventDate">
+				<br/>
+				<br/>
+				<label for="eventLocation">Where will your event take place?</label>
+				<br/>
+				<input type="text" name="eventLocation">
+				<br/>
+				<input type="submit" value="Create event!">
 			</form>
 		</body>
 	</html>

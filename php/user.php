@@ -299,7 +299,11 @@ class User {
 
 		// enforce the userId is null (i.e., don't insert a user that already exists)
 		if($this->userId !== null) {
-			throw(new mysqli_sql_exception("not a new user"));
+			throw(new mysqli_sql_exception("Not a new user"));
+		}
+
+		if($this->userName !== null){
+			throw(new mysqli_sql_exception("Not a new user"));
 		}
 
 		// create query template
