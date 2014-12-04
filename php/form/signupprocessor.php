@@ -11,6 +11,8 @@ require_once("../user.php");
 require_once("Mail.php");
 
 try{
+	$mysqli    = MysqliConfiguration::getMysqli();
+
 		//verify the form was submitted properly
 		if (@isset($_POST["userName"]) === false || @isset($_POST["email"]) === false || @isset($_POST["password"]) === false ||
 			 @isset($_POST["confPassword"]) === false || @isset($_POST["firstName"]) === false || @isset($_POST["lastName"]) === false ||
@@ -25,7 +27,9 @@ try{
 			throw(new RuntimeException("Passwords do not match"));
 		}
 		else {
-			if(User::getUserByEmail($mysqli, $_POST["email"])!== null);
+			$email = $_POST["email"];
+			$test = User::getUserByEmail($mysqli, $email);
+			if($test !== null) {
 				throw(new RuntimeException("Email already exist please try again"));
 		}
 
@@ -40,17 +44,15 @@ try{
 		$authToken	 	= bin2hex(openssl_random_pseudo_bytes(16));
 		$passwordHash	= hash_pbkdf2("sha512", $_POST["password"], $salt, 2048, 128);
 
-
-		$mysqli    = MysqliConfiguration::getMysqli();
-		$signupUser = new User(null,$_POST["userName"], $_POST["email"], $passwordHash, $salt, $authToken, 1);
-		$signupUser->insert($mysqli);
-		$signupProfile = new Profile(null, $signupUser->getUserId(), $_POST["userTitle"], $_POST["firstName"],$_POST["midInit"], $_POST["lastName"],
-											  $_POST["bio"], $_POST["attention"],$_POST["street1"], $_POST["street2"], $_POST["city"],
+		$signUpUser = new User(null,$_POST["userName"], $_POST["email"], $passwordHash, $salt, $authToken, 1);
+		$signUpUser->insert($mysqli);
+		$signUpProfile = new Profile(null, $signUpUser->getUserId(), $_POST["userTitle"], $_POST["firstName"],$_POST["midInit"], $_POST["lastName"],
+											  $_POST["biography"], $_POST["attention"],$_POST["street1"], $_POST["street2"], $_POST["city"],
 											  $_POST["state"], $_POST["zipCode"]);
-		$signupProfile->insert($mysqli);
+		$signUpProfile->insert($mysqli);
 
 	// email the user with an activation message
-	$to   = $newUser->getEmail();
+	$to   = $signUpUser->getEmail();
 	$from = "noreply@helpabq.com";
 
 	// build headers
@@ -58,7 +60,7 @@ try{
 	$headers["To"]           = $to;
 	$headers["From"]         = $from;
 	$headers["Reply-To"]      = $from;
-	$headers["Subject"]      = $signupProfile->getFirstName() . " " . $signupProfile->getLastName() . ",
+	$headers["Subject"]      = $signUpProfile->getFirstName() . " " . $signUpProfile->getLastName() . ",
 		Activate your HelpAbq Login";
 	$headers["MIME-Version"] = "1.0";
 	$headers["Content-Type"] = "text/html; charset=UTF-8";
@@ -92,6 +94,7 @@ EOF;
 		echo "<div class=\"alert alert-success\" role=\"alert\"><strong>Sign up successful!</strong> Please check your Email to complete the signup process.</div>";
 	}
 
+}
 } catch(Exception $exception){
 	echo "<div class=\"alert alert-danger\" role=\"alert\"><strong>Oh snap!</strong> Unable to sign up: " . $exception->getMessage() . "</div>";
 
