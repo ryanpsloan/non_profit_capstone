@@ -15,7 +15,6 @@ var VALID_passwordhash   = "lovemesomedoughnuts";
 // define a function to perform the actual unit tests
 function testValidFields() {
 	// fill in the form values
-// fill in the form values
 	F("#userName").visible(function() {
 		this.type(VALID_userName);
 	});
@@ -40,3 +39,4 @@ function testValidFields() {
 		ok(F(this).html().indexOf("Welcome to HelpAbq.com") >= 0, "successful message");
 
 	});
+}
