@@ -302,10 +302,6 @@ class User {
 			throw(new mysqli_sql_exception("Not a new user"));
 		}
 
-		if($this->userName !== null){
-			throw(new mysqli_sql_exception("Not a new user"));
-		}
-
 		// create query template
 		$query     = "INSERT INTO user(userName, email, passwordHash, salt, authToken, permissions) VALUES(?, ?, ?, ?, ?, ?)";
 		$statement = $mysqli->prepare($query);
@@ -715,7 +711,7 @@ class User {
 
 		//covert the associative array to a userId and repeat for all permissions
 		try {
-			$user = new user($row["userId"], $row["userName"], $row["email"], $row["passwordHash"], $row["salt"],
+			$user = new User($row["userId"], $row["userName"], $row["email"], $row["passwordHash"], $row["salt"],
 				$row["authToken"], $row["permissions"]);
 			//build empty array for sql to fill
 			$userArray [] = $user;
