@@ -507,8 +507,15 @@ class UserTeam {
 		$teamId = filter_var($teamId, FILTER_VALIDATE_INT);
 
 		// create query template
-		$query = "SELECT profileId, teamId, roleInTeam, teamPermission, commentPermission, invitePermission, banStatus
-					 FROM userTeam WHERE teamId = ?";
+		$query = <<< EOF
+		SELECT userTeam.teamId, profile.profileId, profile.userId, profile.firstName, profile.midInit,
+		profile.lastName, profile.bio, profile.attention, profile.street1, profile.street2, profile.city, profile.state
+		profile.zipCode, userTeam.roleInTeam, userTeam.teamPermission, userTeam.commentPermission, userTeam.invitePermission,
+		userTeam.banStatus
+		FROM userTeam
+		INNER JOIN profile ON userTeam.profileId = profile.profileId
+		WHERE teamId = ?
+EOF;
 
 		$statement = $mysqli->prepare($query);
 		if($statement === false) {
@@ -530,17 +537,18 @@ class UserTeam {
 		}
 
 		//turn the results into an array
-		$teamIdSearch = array();
+		$teamMembershipMap = array();
 
 		// Loop through the array and display the results
 		while(($row = $result->fetch_assoc()) !== null) {
-
 			try {
 				$team = new userTeam($row["profileId"], $row["teamId"], $row["roleInTeam"], $row["teamPermission"],
 					$row["commentPermission"], $row["invitePermission"], $row["banStatus"]);
-				$teamIdSearch [] = $team;
+				$profile = new Profile($row["profileId"], $row["userId"], $row["firstName"], $row["midInit"], $row["lastName"],
+											  $row["bio"], $row["attention"], $row["street1"], $row["street2"], $row["city"],
+											  $row["state"], $row["zipCode"]);
+				$teamMembershipMap[] = array($team, $profile);
 			} catch(Exception $exception) {
-
 				throw(new mysqli_sql_exception("Unable to convert row to userTeam", 0, $exception));
 			}
 		}
@@ -548,7 +556,7 @@ class UserTeam {
 		if($result->num_rows === 0) {
 			return(null);
 		} else {
-			return($teamIdSearch);
+			return($teamMembershipMap);
 		}
 	}
 
