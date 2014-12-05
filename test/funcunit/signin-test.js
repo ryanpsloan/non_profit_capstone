@@ -1,14 +1,13 @@
 // open a new window with the form under scrutiny
 module("tabs", {
 	setup: function() {
-		F.open("../../form_front_facing_signUp.php");
+		F.open("../../form_front_facing/signin.php");
 	}
 });
 
 // global variables for form values
-var VALID_userName  = "hsimpson";
-var VALID_email  = "doughnuts@KK.com";
-var VALID_passwordhash   = "lovemesomedoughnuts";
+var VALID_userName  = "doughnuts@KK.com";
+var VALID_passwordHash   = "lovemesomedoughnuts";
 
 
 
@@ -18,11 +17,8 @@ function testValidFields() {
 	F("#userName").visible(function() {
 		this.type(VALID_userName);
 	});
-	F("#email").visible(function() {
-		this.type(VALID_email);
-	});
 	F("#passwordHash").visible(function() {
-		this.type(VALID_passwordhash);
+		this.type(VALID_passwordHash);
 	});
 
 
@@ -40,3 +36,5 @@ function testValidFields() {
 
 	});
 }
+// the test function *MUST* be called in order for the test to execute
+test("test valid fields", testValidFields);
