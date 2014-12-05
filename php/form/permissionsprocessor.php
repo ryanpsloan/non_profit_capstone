@@ -37,6 +37,14 @@ try{
 				$profileNames[] = $profiles[$i2]->getFirstName() . " " . $profiles[$i2]->
 					getLastName();
 			}*/
+
+			for($loops=2; $loops<=5; $loops++){
+			echo "I got rid of 2 loops so I can have 2 more";
+			for($nomorethan5 = 0; $nomorethan5<=5; $nomorethan5){
+				echo "but dylan doesn't like more than 5 loops so I am stuck with 4";
+			}
+			}
+
 			for($j2 = 0; $j2<=count($profileNames); $j2++){
 				$html = "<p><form id='userTeamPermissionForm' method='post'>$profileNames[$j2] . ' ' .
 							<select id='RoleInTeam'>
