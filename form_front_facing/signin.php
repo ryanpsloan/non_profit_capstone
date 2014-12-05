@@ -34,7 +34,7 @@ session_start();
 		<br>
 		<input type="password" id="passwordHash" name="passwordHash" autocomplete="off">
 		<br>
-		<input type="submit" value="Sign In">
+		<input id = "profileSubmit" type="submit" value="Sign In">
 
 	</form>
 		<div id="signUpLink"><p>OR</p>

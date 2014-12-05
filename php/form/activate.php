@@ -5,10 +5,7 @@
  * User: Martin
  */
 session_start();
-require_once("/etc/apache2/capstone-mysql/helpabq.php");// verify the CSRF tokens
-if(verifyCsrf($_POST["csrfName"], $_POST["csrfToken"]) === false) {
-	throw(new RuntimeException("CSRF tokens incorrect or missing. Make sure cookies are enabled."));
-}
+require_once("/etc/apache2/capstone-mysql/helpabq.php");
 require_once("../profile.php");
 require_once("../user.php");
 

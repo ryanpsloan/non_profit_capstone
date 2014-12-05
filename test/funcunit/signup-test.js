@@ -1,3 +1,23 @@
+// open a new window with the form under scrutiny
+module("tabs", {
+	setup: function() {
+		F.open("../../form_front_facing_signUp.php");
+	}
+});
+
+// global variables for form values
+var VALID_userName  = "hsimpson";
+var VALID_email  = "doughnuts@KK.com";
+var VALID_password   = "lovemesomedoughnuts";
+var VALID_confPassword    = "lovemesomedoughnuts";
+var VALID_firstName = "Homer";
+var VALID_lastName = "Simpson"
+var VALID_zipCode = "55555"
+
+
+// define a function to perform the actual unit tests
+function testValidFields() {
+	// fill in the form values
 // fill in the form values
 F("#userName").visible(function() {
 	this.type(VALID_userName);
