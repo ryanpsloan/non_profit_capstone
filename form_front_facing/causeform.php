@@ -25,9 +25,9 @@ session_start();
 <body>
 	<form id="cause" action="../php/form/causeprocessor.php" method="POST">
 		<?php echo generateInputTags();?>
-		<label for="causeName">Enter Cause you want to support</label><br>
+		<label for="causeName">Enter Cause you want to support:</label><br>
 		<input type="causeName" id="causeName" name="causeName" autocomplete="off"><br>
-		<label for="cause">Enter Cause Description:</label>
+		<label for="cause">Enter Cause Description:</label><br>
 		<input type="causeDescription" id="causeDescription" name="causeDescription" autocomplete="off"><br>
 		<input type="submit" value="Submit">
 	</form>
