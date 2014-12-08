@@ -1,3 +1,4 @@
+
 // open a new window with the form under scrutiny
 module("tabs", {
 	setup: function() {
@@ -5,8 +6,8 @@ module("tabs", {
 	}
 });
 
-var VALID_userName  = "msimpson";
-var VALID_email  = "nodoughnuts@KK.com";
+var VALID_userName  = "msimpson2";
+var VALID_email  = "nodoughnuts2@KK.com";
 var VALID_password   = "dontlovemesomedoughnuts";
 var VALID_confPassword    = "dontlovemesomedoughnuts";
 var VALID_firstName = "Marge";
@@ -109,6 +110,6 @@ function testInvalidFields() {
 }
 // the test function *MUST* be called in order for the test to execute
 	test("test valid fields", testValidFields);
-	test("test invalid fields", testInvalidFields);
+			test("test invalid fields", testInvalidFields);
 
 

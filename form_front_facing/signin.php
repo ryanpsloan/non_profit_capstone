@@ -38,7 +38,7 @@ session_start();
 
 	</form>
 		<div id="signUpLink"><p>OR</p>
-		<a href="signUp.	php">Sign Up</a></div>
+		<a href="signUp.php">Sign Up</a></div>
 
 
 </body>
