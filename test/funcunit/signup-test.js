@@ -6,8 +6,8 @@ module("tabs", {
 	}
 });
 
-var VALID_userName  = "msimpson2";
-var VALID_email  = "nodoughnuts2@KK.com";
+var VALID_userName  = "msimpson3";
+var VALID_email  = "nodoughnuts3@KK.com";
 var VALID_password   = "dontlovemesomedoughnuts";
 var VALID_confPassword    = "dontlovemesomedoughnuts";
 var VALID_firstName = "Marge";
