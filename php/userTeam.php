@@ -536,7 +536,7 @@ EOF;
 			throw(new mysqli_sql_exception("Unable to get result set."));
 		}
 
-		//turn the results into an array
+		//turn the results into an array.
 		$teamMembershipMap = array();
 
 		// Loop through the array and display the results
