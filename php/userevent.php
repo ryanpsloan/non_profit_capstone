@@ -325,7 +325,14 @@ class UserEvent {
 
 
 		// create query template
-		$query = "SELECT profileId, eventId, userEventRole, commentPermission, banStatus FROM userEvent WHERE eventId = ?";
+		$query = <<<EOF
+		SELECT userEvent.profileId, userEvent.eventId, profile.userId, profile.firstName, profile.midInit,
+		profile.lastName, profile.bio, profile.attention, profile.street1, profile.street2, profile.city, profile.state
+		profile.zipCode, userEvent.userEventRole, userEvent.commentPermission, userEvent.banStatus
+		FROM userEvent
+		INNER JOIN profile ON userEvent.profileId = profile.profileId
+		WHERE eventId = ?
+EOF;
 
 		$statement = $mysqli->prepare($query);
 		if($statement === false) {
@@ -355,7 +362,11 @@ class UserEvent {
 			try {
 				$userEvent = new UserEvent( $row["profileId"], $row["eventId"], $row["userEventRole"], $row["commentPermission"],
 					$row["banStatus"]);
-				$eventIdSearch [] = $userEvent;
+				$profile = new Profile($row["profileId"], $row["userId"], $row["firstName"], $row["midInit"], $row["lastName"],
+					$row["bio"], $row["attention"], $row["street1"], $row["street2"], $row["city"],
+					$row["state"], $row["zipCode"]);
+
+				$eventIdSearch [] = array($userEvent, $profile);
 			} catch(Exception $exception) {
 
 				throw(new mysqli_sql_exception("Unable to convert row to event", 0, $exception));

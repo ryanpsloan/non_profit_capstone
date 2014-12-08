@@ -325,8 +325,13 @@ class TeamEvent {
 
 
 		// create query template
-		$query = "SELECT teamId, eventId, teamStatus, commentPermission, banStatus FROM teamEvent WHERE eventId = ?";
-
+		$query = <<< EOF
+		SELECT teamEvent.teamId,team.teamName, teamEvent.eventId, teamEvent.teamStatus, teamEvent.commentPermission,
+		teamEvent.banStatus
+		FROM teamEvent
+		INNER JOIN team ON teamEvent.teamId = team.teamId
+		WHERE eventId = ?
+EOF;
 		$statement = $mysqli->prepare($query);
 		if($statement === false) {
 			throw(new mysqli_sql_exception("Unable to prepare statement"));
