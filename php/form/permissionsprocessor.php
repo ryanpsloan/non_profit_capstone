@@ -27,30 +27,52 @@ try{
 
 			for($i= 0; $i<count($userArray); $i++){
 				$profileIds[] = $userArray[$i]->getProfileId();
-			}
-			for($j=0; $j<=count($profileIds); $j++) {
+				$profileNames [] = $userArray[$i]->getFirstName() . " " . $userArray[$i]->getLastName();
+ 			}
+		/*	for($j=0; $j<=count($profileIds); $j++) {
 				$profiles = Profile::getProfileByProfileId($mysqli, $profileIds[$j]);
-			}
-			for($i2 = 0; $i2<=count($profiles); $i2++){
+			}*/
+
+			/*for($i2 = 0; $i2<=count($profiles); $i2++){
 				$profileNames[] = $profiles[$i2]->getFirstName() . " " . $profiles[$i2]->
 					getLastName();
+			}*/
+
+			for($loops=2; $loops<=5; $loops++){
+			echo "I got rid of 2 loops so I can have 2 more";
+			for($nomorethan5 = 0; $nomorethan5<=5; $nomorethan5){
+				echo "but dylan doesn't like more than 5 loops so I am stuck with 4";
 			}
+			}
+
 			for($j2 = 0; $j2<=count($profileNames); $j2++){
 				$html = "<p><form id='userTeamPermissionForm' method='post'>$profileNames[$j2] . ' ' .
-							<select id='TeamPermission'>
-							 <option value='1'>Founder</option>
-							 <option value='2'>Event Organizer</option>
-							 <option value='3'>Normal Member</option>
-							 </select>
+							<select id='RoleInTeam'>
+							<option value='1'>Founder</option>
+							<option value='2'>Event Organizer</option>
+							<option value='3'>Normal Member</option>
+							</select>
 							 ";
 
-				$html2 =	"<select id='commentPermission'>
+				$html2 = "<select id='TeamPermission'>
+							 <option value='1'>Can Edit</option>
+							 <option value='2'>Cannot Edit</option>
+							 </select>
+							";
+
+				$html3 =	"<select id='commentPermission'>
 							<option value='1'>Can Comment</option>
 							<option value='2'>Cannot Comment</option>
 							</select>
 							";
 
- 				$html3 = "<select>
+				$html4 = "<select id='invitePermission'>
+							<option id='1'>Can Invite</option>
+							<option id='2'>Cannot Invite</option>
+							</select>
+							";
+
+ 				$html5 = "<select>
 								<option value='1'>Not Banned</option>
 								<option value='2'>Banned</option>
 							</select>

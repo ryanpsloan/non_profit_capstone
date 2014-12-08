@@ -18,7 +18,7 @@ session_start();
 	<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/jquery.validate.min.js"></script>
 	<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/additional-methods.min.js"></script>
 	<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="SignUp.js"></script>
+	<script type="text/javascript" src="signUp.js"></script>
 
 	<title>SignUp Form</title>
 </head>
@@ -87,7 +87,7 @@ session_start();
 	<input type="text" id="zipCode" name="zipCode" autocomplete="off">
 	<br>
 	<h4>The fields denoted with * cannot be left blank</h4>
-	<input type="submit" value="Sign Up">
+	<input id = "profileSubmit" type="submit" value="Sign Up">
 
 </form>
 
