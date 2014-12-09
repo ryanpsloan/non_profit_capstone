@@ -43,11 +43,6 @@ function testValidFields() {
 }
 
 // define a function to perform the actual unit tests
-
-test("test valid fields", testValidFields);
-
-
-// define a function to perform the actual unit tests
 function testInvalidFields() {
 	// fill in the form values
 	F("#teamName").visible(function() {
@@ -72,4 +67,4 @@ function testInvalidFields() {
 }
 // call for the test to execute
 test("test valid fields", testValidFields);
-test("test invalid fields"), testInvalidFields);
+test("test invalid fields", testInvalidFields);
