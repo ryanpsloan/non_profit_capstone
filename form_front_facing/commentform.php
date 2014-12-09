@@ -1,7 +1,9 @@
 
 <?php
 session_start();
+require_once("/etc/apache2/capstone-mysql/helpabq.php");
 require_once("../php/form/csrf.php");
+require_once("../php/userTeam.php")
 ?>
 <!DOCTYPE html>
 	<html>
@@ -18,11 +20,12 @@ require_once("../php/form/csrf.php");
 		</head>
 		<body>
 		<?php
+		$mysqli = MysqliConfiguration::getMysqli();
+		$userTeam = UserTeam::getUserTeamByProfileTeamId($mysqli, 3, 3);
 
-		if($userEvent->commentPermission === 2 || $userTeam->commentPermission === 2 || $teamEvent->commentPermission === 2){
-		echo "<p>You are not permitted to comment.</p>";}
-		elseif($userEvent->commentPermission === 1 || $userTeam->commentPermission === 1 || $teamEvent->commentPermission === 1){
-		echo <<<EOF
+
+				//Generic comment form to be inserted into various pages
+		$form = <<<EOF
 			<form id="commentForm" action="../php/form/commentprocessor.php" method="POST">
 				<?php echo generateInputTags();?>
 				<label for="commentBox">Type your comment:</label>
@@ -32,7 +35,15 @@ require_once("../php/form/csrf.php");
 				<input type="submit" value="Submit">
 
 			</form>
-EOF;	}
+EOF;
+
+		if(/*$userEvent->commentPermission === 2 |*/ $userTeam[0][0]->getCommentPermission() === 2 /*||$teamEvent->commentPermission === 2 */){
+		echo "<p>You are not permitted to comment.</p>";}
+		elseif(/*$userEvent->commentPermission === 1 ||*/ $userTeam[0][0]->getCommentPermission() === 1 /*|| $teamEvent->commentPermission === 1*/){
+		echo $form;
+		} else {
+			echo "<p>You are not permitted to text.</p>.</p>";
+		}
 		?>
 		</body>
 	</html>

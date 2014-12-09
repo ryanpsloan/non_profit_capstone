@@ -1,5 +1,4 @@
 <?php
-
 /**
  * mySQL Enabled Intersection Table for userTeam
  *
@@ -8,6 +7,10 @@
  *
  * User: Martin
  */
+
+//Required for initializing profile class
+require_once("profile.php");
+
 //setup User Class and respective fields
 class UserTeam {
 
@@ -507,15 +510,14 @@ class UserTeam {
 		$teamId = filter_var($teamId, FILTER_VALIDATE_INT);
 
 		// create query template
-		$query = <<< EOF
-		SELECT userTeam.profileId, userTeam.teamId, profile.userId, profile.firstName, profile.midInit,
-		profile.lastName, profile.bio, profile.attention, profile.street1, profile.street2, profile.city, profile.state
+		$query = "
+		SELECT userTeam.profileId, userTeam.teamId, profile.profileId, profile.userId, profile.userTitle, profile.firstName, profile.midInit,
+		profile.lastName, profile.bio, profile.attention, profile.street1, profile.street2, profile.city, profile.state,
 		profile.zipCode, userTeam.roleInTeam, userTeam.teamPermission, userTeam.commentPermission, userTeam.invitePermission,
 		userTeam.banStatus
 		FROM userTeam
 		INNER JOIN profile ON userTeam.profileId = profile.profileId
-		WHERE teamId = ?
-EOF;
+		WHERE teamId = ?";
 
 		$statement = $mysqli->prepare($query);
 		if($statement === false) {
@@ -539,12 +541,15 @@ EOF;
 		//turn the results into an array.
 		$teamMembershipMap = array();
 
+		// NOTICE: When calling the $teamMembershipMap array index of [0][x] will call the userTeam info
+		// NOTICE: When calling the index of [0][x+1] you will gain the profile information.
+
 		// Loop through the array and display the results
 		while(($row = $result->fetch_assoc()) !== null) {
 			try {
 				$team = new userTeam($row["profileId"], $row["teamId"], $row["roleInTeam"], $row["teamPermission"],
 					$row["commentPermission"], $row["invitePermission"], $row["banStatus"]);
-				$profile = new Profile($row["profileId"], $row["userId"], $row["firstName"], $row["midInit"], $row["lastName"],
+				$profile = new Profile($row["profileId"], $row["userId"],  $row["userTitle"], $row["firstName"], $row["midInit"], $row["lastName"],
 											  $row["bio"], $row["attention"], $row["street1"], $row["street2"], $row["city"],
 											  $row["state"], $row["zipCode"]);
 				$teamMembershipMap[] = array($team, $profile);
@@ -560,12 +565,12 @@ EOF;
 		}
 	}
 
-
 	/**
 	 * gets the UserTeam by profileId and teamId
 	 *
 	 * @param resource $mysqli pointer to mySQL connection, by reference
-	 * @param int $profileId and $teamId  profileId and teamId to search for
+	 * @param mixed $profileId to search for
+	 * @param mixed $teamId to search for
 	 * @return int profile and team found or null if not found
 	 * @throws mysqli_sql_exception when mySQL related errors occur
 	 **/
@@ -589,8 +594,15 @@ EOF;
 		}
 
 		//Create query template
-		$query = "SELECT profileId, teamId, roleInTeam, teamPermission, commentPermission, invitePermission, banStatus
-					 FROM userTeam WHERE profileId = ? AND teamId = ?";
+		$query = "SELECT userTeam.profileId, userTeam.teamId, profile.profileId, profile.userId, profile.userTitle,
+					profile.firstName, profile.midInit, profile.lastName, profile.bio, profile.attention, profile.street1,
+					profile.street2, profile.city, profile.state, profile.zipCode, userTeam.roleInTeam,
+					userTeam.teamPermission, userTeam.commentPermission, userTeam.invitePermission,
+					userTeam.banStatus
+					FROM userTeam
+					INNER JOIN profile ON userTeam.profileId = profile.profileId
+					WHERE userTeam.profileId = ? AND userTeam.teamId = ?";
+
 		$statement = $mysqli->prepare($query);
 		if($statement === false) {
 			throw(new mysqli_sql_exception ("unable to prepare statement"));
@@ -614,19 +626,26 @@ EOF;
 		//if there's a result, we can show it
 		//if not error code 404
 		$row = $result->fetch_assoc();
-
+		$userTeamProfile = array();
 		//covert the associative array to a userId
+
+		//NOTICE: When calling the $userTeamProfile Array the index $userTeamProfile[0][0] Will return the UserTeam info
+		//NOTICE: Calling the index $userTeamProfile[0][1] Will call the profile info.
 		if($row !== null) {
 			try {
 				$userTeam = new userTeam($row["profileId"], $row["teamId"], $row["roleInTeam"], $row["teamPermission"],
 												 $row["commentPermission"], $row["invitePermission"], $row["banStatus"]);
+				$profile = new Profile($row["profileId"], $row["userId"],  $row["userTitle"], $row["firstName"], $row["midInit"], $row["lastName"],
+					$row["bio"], $row["attention"], $row["street1"], $row["street2"], $row["city"],
+					$row["state"], $row["zipCode"]);
+				$userTeamProfile[] = array ($userTeam, $profile);
 			} catch(Exception $exception) {
 				//rethrow
 				throw(new mysqli_sql_exception ("unable to convert row to user", 0, $exception));
 
 			}
 			//if we get a profileId and teamId I'm lucky and show it
-			return ($userTeam);
+			return ($userTeamProfile);
 		} else {
 			//404 User not found
 			return (null);
