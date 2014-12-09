@@ -10,6 +10,11 @@ require_once("../profile.php");
 require_once("../teamevent.php");
 require_once("../userevent.php");
 require_once("../userTeam.php");
+/* TODO: arrays calling profile functions are dual index, need to add functionality to make sure the indexes are
+   TODO: correct. Index of [0][x] Will call UserTeam info, index of [0][x+1] Will call profileInfo.
+	TODO: Potential fix is to increment by 2 after initial 0. Modulo by 2?*/
+
+// TODO: Fix html1 profileName no longer within loop
 
 try{
 	$mysqli = MysqliConfiguration::getMysqli();
@@ -17,6 +22,7 @@ try{
 	if($_POST["permissionEdit"] === 1){
 		if($_SESSION["permissionType"] === 1)
 		{
+			// TODO array is now dual index must account for this
 			$userArray = UserTeam::getUserTeamByTeamId($mysqli, $_SESSION["teamId"]);
 			$profileIds = array();
 			$profileNames = array();
@@ -88,6 +94,8 @@ try{
 				$output[] = $html1 . " " . $html2 . " " . $html3 . " " . $html4 . " " . $html5;
 			}
 		} elseif($_SESSION["permissionType"] === 2){
+			// Array to check permission types for teamEvent
+			//TODO: Array is now dual index must account for this.
 			$teamArray = TeamEvent::getTeamEventByEventId($mysqli, $_SESSION["eventId"]);
 			$teamIds= array();
 			$teamNames = array();
@@ -141,6 +149,9 @@ try{
 				$output = $html1 . " " . $html2 . " " . $html3;
 			}
 		} elseif($_SESSION["permissionType"] === 3){
+			//Checks for permissions for userEvent
+
+			// TODO: Array is now dual index
 			$userArray = UserEvent::getUserEventByEventId($mysqli, $_SESSION["eventId"]);
 			$profileIds = array();
 			$profileNames = array();
