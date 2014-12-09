@@ -25,9 +25,9 @@ try {
 	$mysqli = MysqliConfiguration::getMysqli();
 	$cause->insert($mysqli);
 
-	echo"<div class='alert alert-success' role='alert'>Thank you for supporting this cause.</div>";
+	echo"<div class='alert alert-success' role='alert'>Thank you for supporting a cause to help ABQ.</div>";
 
 }catch(Exception $exception) {
-	echo "Unable to create a new cause: " . $exception->getMessage() ;
+	echo "<div class=\"alert alert-danger\" role=\"alert\"><strong>Oh snap!</strong> Unable to create a new cause: " . $exception->getMessage() . "</div>";
+
 }
-?>
