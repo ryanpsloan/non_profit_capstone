@@ -29,5 +29,6 @@ try {
 
 
 }catch(Exception $exception) {
-	echo "Unable to create a new team: " . $exception->getMessage();
+	echo "<div class=\"alert alert-danger\" role=\"alert\"><strong>Oh snap!</strong> Unable to create a new team: " . $exception->getMessage() . "</div>";
+
 }

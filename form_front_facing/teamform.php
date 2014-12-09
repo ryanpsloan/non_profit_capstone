@@ -23,7 +23,8 @@ session_start();
 <title>Team Form</title>
 
 <body>
-	<form id="team" action="../php/form/teamprocessor.php" method="POST">
+		<div id="outputArea"></div>
+		<form id="team" action="../php/form/teamprocessor.php" method="POST">
 		<?php echo generateInputTags();?>
 		<label for="teamName">Enter a Team you want to support:</label><br>
 			<input type="teamName" id="teamName" name="teamName" autocomplete="off"><br>

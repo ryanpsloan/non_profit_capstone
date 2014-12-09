@@ -11,7 +11,7 @@ module("tabs", {
 });
 
 // global variables for form values
-var VALID_TEAMNAME   = "Homeless Coders2";
+var VALID_TEAMNAME   = "Homeless Coders7";
 var VALID_TEAMCAUSE  = "Overworked underpaid homeless coders";
 
 var VALID_TEAMNAME1   = "Homeless Coders";
@@ -64,6 +64,6 @@ function testInvalidFields() {
 		ok(F(this).html().indexOf("Oh snap") >= 0, "unsuccessful message");
 		});
 }
-// call for the test to execute
+// call for the tests to execute
 test("test valid fields", testValidFields);
 test("test invalid fields", testInvalidFields);
