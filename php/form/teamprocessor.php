@@ -31,4 +31,3 @@ try {
 }catch(Exception $exception) {
 	echo "Unable to create a new team: " . $exception->getMessage();
 }
-?>
