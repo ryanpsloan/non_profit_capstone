@@ -41,7 +41,6 @@ function testValidFields() {
 		ok(F(this).html().indexOf("Thank you for joining a team") >= 0, "successful message");
 	});
 }
-
 // define a function to perform the actual unit tests
 function testInvalidFields() {
 	// fill in the form values
