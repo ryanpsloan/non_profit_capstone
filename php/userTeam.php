@@ -508,7 +508,7 @@ class UserTeam {
 
 		// create query template
 		$query = <<< EOF
-		SELECT userTeam.teamId, profile.profileId, profile.userId, profile.firstName, profile.midInit,
+		SELECT userTeam.profileId, userTeam.teamId, profile.userId, profile.firstName, profile.midInit,
 		profile.lastName, profile.bio, profile.attention, profile.street1, profile.street2, profile.city, profile.state
 		profile.zipCode, userTeam.roleInTeam, userTeam.teamPermission, userTeam.commentPermission, userTeam.invitePermission,
 		userTeam.banStatus
@@ -536,7 +536,7 @@ EOF;
 			throw(new mysqli_sql_exception("Unable to get result set."));
 		}
 
-		//turn the results into an array
+		//turn the results into an array.
 		$teamMembershipMap = array();
 
 		// Loop through the array and display the results

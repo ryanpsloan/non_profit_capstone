@@ -17,6 +17,12 @@ require_once("../php/form/csrf.php");
 			<title>Comment</title>
 		</head>
 		<body>
+		<?php
+
+		if($userEvent->commentPermission === 2 || $userTeam->commentPermission === 2 || $teamEvent->commentPermission === 2){
+		echo "<p>You are not permitted to comment.</p>";}
+		elseif($userEvent->commentPermission === 1 || $userTeam->commentPermission === 1 || $teamEvent->commentPermission === 1){
+		echo <<<EOF
 			<form id="commentForm" action="../php/form/commentprocessor.php" method="POST">
 				<?php echo generateInputTags();?>
 				<label for="commentBox">Type your comment:</label>
@@ -24,6 +30,9 @@ require_once("../php/form/csrf.php");
 				<textarea class="commentBox" name="comment" maxlength="1024" rows="6" cols="24"></textarea>
 				<br>
 				<input type="submit" value="Submit">
+
 			</form>
+EOF;	}
+		?>
 		</body>
 	</html>
