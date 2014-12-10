@@ -20,23 +20,21 @@ require_once("permissionfunction.php");
 try{
 	$mysqli = MysqliConfiguration::getMysqli();
 
-	if($_POST["permissionEdit"] === 1){
-		if($_SESSION["permissionType"] === 1) {
+		if($_POST["permissionType"] === 1) {
 			//Function to call in the permission changing code
 			userTeamPermissions();
-
-		} elseif($_SESSION["permissionType"] === 2){
+		} elseif($_POST["permissionType"] === 2){
 			//Function to call in the permission changing code
 			teamEventPermissions();
 
-		} elseif($_SESSION["permissionType"] === 3){
+		} elseif($_POST["permissionType"] === 3){
 			//Function to call in the permission changing code
 			userEventPermission();
 
 		} else {
 			throw(new UnexpectedValueException("Not a valid permission parameter."));
 		}
-	}
+
 } catch (Exception $exception){
 	echo "There has been an error" . " " . $exception->getMessage();
 }

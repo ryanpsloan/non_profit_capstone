@@ -10,7 +10,8 @@ require_once("/etc/apache2/capstone-mysql/helpabq.php");
 require_once("csrf.php");
 include("../comment.php");
 include("../commentUser.php");
-
+include("../commentEvent.php");
+include("../commentTeam.php");
 
 try {
 	$mysqli = MysqliConfiguration::getMysqli();
@@ -41,7 +42,10 @@ try {
 	} elseif($_POST("teamId") !== null) {
 		$newTeamComment = new CommentTeam($_POST("teamId"), $newComment->getCommentId());
 		$mysqli->insert($newTeamComment);
+	} else {
+		throw(new UnexpectedValueException("Unable to post comment"));
 	}
+
 } catch (RuntimeException $exception){
 		echo "We have encountered an error." . " " . $exception->getMessage();
 }

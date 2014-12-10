@@ -2,13 +2,11 @@
 	session_start();
 	require_once("/etc/apache2/capstone-mysql/helpabq.php");
 	require_once("../php/form/csrf.php");
-	require_once("../event.php");
+	require_once("../php/event.php");
+	require_once("commentform.php");
 	$mysqli = $mysqli = MysqliConfiguration::getMysqli();
-	$event = Event::getEventByEventId($mysqli, $_POST("eventId"));
-
-	function editCheck(){
-
-	}
+	$event = Event::getEventByEventId($mysqli, 1);
+	$dateString = $event->eventDate->format("Y-m-d H:i:s");
 
 ?>
 <!DOCTYPE html>
@@ -22,17 +20,29 @@
 	<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/jquery.validate.min.js"></script>
 	<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/additional-methods.min.js"></script>
 	<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-	<title><?php $event->eventTitle?></title>
+	<title><?php echo $event->eventTitle?></title>
 </head>
 <body>
 	<?php /*navBar()*/?>
 	<aside>
 		<?php
 			echo "<h3>$event->eventTitle</h3>";
-			echo "<h5>$event->eventDate</h5>";
+			echo "<h5>$dateString</h5>";
 			echo "<h5>$event->eventLocation</h5>";
+
+			echo <<<EOF
+					<form action=\"../php/form/permissionsprocessor.php\" method='post'>
+						<input type='hidden' name=\"permissionType\">
+						<input type='submit' value='Edit Permissions'>
+					</form>
+EOF;
 		?>
 	</aside>
+	<section>
+		<?php comment(); ?>
+	</section>
+
+
 
 
 </body>

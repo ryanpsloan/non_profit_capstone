@@ -22,26 +22,28 @@ require_once("../php/userTeam.php")
 		<?php
 		//FIXME post and session broken
 		$mysqli = MysqliConfiguration::getMysqli();
-		$pageId = $_POST("pageId");
-		$pageType = $_POST("pageType");
-		$userTeam = UserTeam::getUserTeamByProfileTeamId($mysqli, $_SESSION("profileId"), $pageId);
-		$teamEvent = TeamEvent::getTeamEventByTeamEventId($mysqli, $_SESSION("teamId"), $pageId);
-		$userEvent = UserEvent::getUserEventByProfileEventId($mysqli, $_SESSION("profileId"), $pageId);
-		// NOTICE: array returns one result so no need to loop comment.
-		// TODO: look into isset for comment
+		function comment()
+		{
+			$pageId = $_POST("pageId");
+			$pageType = $_POST("pageType");
+			$userTeam = UserTeam::getUserTeamByProfileTeamId($mysqli, $_SESSION("profileId"), $pageId);
+			$teamEvent = TeamEvent::getTeamEventByTeamEventId($mysqli, $_SESSION("teamId"), $pageId);
+			$userEvent = UserEvent::getUserEventByProfileEventId($mysqli, $_SESSION("profileId"), $pageId);
+			// NOTICE: array returns one result so no need to loop comment.
+			// TODO: look into isset for comment
 
-		if(@isset($pageType) === 1){
-			$permissionCheck = $userTeam[0][0]->getCommentPermission();
-		} elseif (@isset($pageType) === 2){
-			$permissionCheck = $teamEvent[0][0]->getCommentPermission();
-		} elseif (@isset($pageType) === 3){
-			$permissionCheck = $userEvent[0][0]->commentPermission;
-		} else {
-			$permissionCheck = null;
-		}
+			if(@isset($pageType) === 1) {
+				$permissionCheck = $userTeam[0][0]->getCommentPermission();
+			} elseif(@isset($pageType) === 2) {
+				$permissionCheck = $teamEvent[0][0]->getCommentPermission();
+			} elseif(@isset($pageType) === 3) {
+				$permissionCheck = $userEvent[0][0]->commentPermission;
+			} else {
+				$permissionCheck = null;
+			}
 
-				//Generic comment form to be inserted into various pages
-		$form = <<<EOF
+			//Generic comment form to be inserted into various pages
+			$form = <<<EOF
 			<form id="commentForm" action="../php/form/commentprocessor.php" method="POST">
 				<?php echo generateInputTags();?>
 				<label for="commentBox">Type your comment:</label>
@@ -51,16 +53,18 @@ require_once("../php/userTeam.php")
 				<input type="submit" value="Submit">
 			</form>
 EOF;
-		var_dump($userTeam);
-		if($permissionCheck === null){
-			echo "<p>You are not permitted to comment.</p>";
-		} elseif($permissionCheck === 2){
-			echo "<p>You are not permitted to comment.</p>";
-		} elseif($permissionCheck === 1){
-			echo $form;
-		} else {
-			echo "<p>You are not permitted to comment.</p>.</p>";
+			var_dump($userTeam);
+			if($permissionCheck === null) {
+				echo "<p>You are not permitted to comment.</p>";
+			} elseif($permissionCheck === 2) {
+				echo "<p>You are not permitted to comment.</p>";
+			} elseif($permissionCheck === 1) {
+				echo $form;
+			} else {
+				echo "<p>You are not permitted to comment.</p>.</p>";
+			}
 		}
 		?>
+
 		</body>
 	</html>
