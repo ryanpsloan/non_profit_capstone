@@ -153,7 +153,6 @@ class Team {
 			throw(new mysqli_sql_exception("Unable to bind parameters"));
 		}
       if($statement->execute() === false) {
-
 			throw(new mysqli_sql_exception("Unable to execute mySQL statement"));
 		}
 
@@ -339,25 +338,28 @@ class Team {
 		if($result === false) {
 			throw(new mysqli_sql_exception("unable to get result set"));
 		}
-		//Unique can only one of two things null or string
-		//if there's a result, we can show it
-		//if not error code 404
-		$row = $result->fetch_assoc();
 
-		//covert the associative array to a TeamId
-		if($row !== null) {
+		//teamArrayCounter = 0
+		$teamNameArray = array();
+		while(($row = $result->fetch_assoc()) !== null) {
+
+			//covert the associative array to a teamId and repeat for all teamNames
 			try {
 				$team = new team($row["teamId"], $row["teamName"], $row["teamCause"]);
+				//build empty array for sql to fill
+				$teamNameArray [] = $team;
+
 			} catch(Exception $exception) {
 				//rethrow
-				throw(new mysqli_sql_exception ("unable to convert row to team", 0, $exception));
-
+				throw(new mysqli_sql_exception ("unable to convert row to Team", 0, $exception));
 			}
-			//if we get a teamId I'm lucky and show it
-			return ($team);
-		} else {
-			//404 User not found
+		}
+		//if we get a teamId I'm lucky and show it
+		if($result->num_rows === 0) {
 			return (null);
+		} else {
+
+			return ($teamNameArray);
 		}
 	}
 	/**
