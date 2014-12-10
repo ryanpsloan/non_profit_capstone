@@ -5,6 +5,7 @@
  *
  */
 require_once("../php/form/csrf.php");
+require_once("../php/form/functions.php");
 session_start();
 ?>
 <!DOCTYPE html>
@@ -88,7 +89,6 @@ session_start();
 	<br>
 	<h4>The fields denoted with * cannot be left blank</h4>
 	<input id = "profileSubmit" type="submit" value="Sign Up">
-
 </form>
 
 

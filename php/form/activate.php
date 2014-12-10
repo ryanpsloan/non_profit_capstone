@@ -23,6 +23,7 @@ try {
 	$_SESSION["userId"] = $newUser->getUserId();
 	$_SESSION["userName"] = $newUser->getUserName();
 	$_SESSION["permissions"] = $newUser->getPermissions();
+	$_SESSION["profile"] = $newProfile->getProfileId();
 	$_SESSION["firstName"]= $newProfile->getFirstName();
 	$_SESSION["lastName"]= $newProfile->getLastName();
 	$_SESSION["zipCode"]= $newProfile->getZipCode();

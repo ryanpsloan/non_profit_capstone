@@ -318,13 +318,14 @@ class Team {
 		}
 
 		//Create query template
-		$query = "SELECT teamId, teamName, teamCause FROM team WHERE teamName = ?";
+		$query = "SELECT teamId, teamName, teamCause FROM team WHERE teamName LIKE ?";
 		$statement = $mysqli->prepare($query);
 		if($statement === false) {
 			throw(new mysqli_sql_exception ("unable to prepare statement"));
 		}
 
 		//bind the team Id to the place holder in the template
+		$teamName = "%$teamName%";
 		$wasClean = $statement->bind_param("s", $teamName);
 		if($wasClean === false) {
 			throw(new mysqli_sql_exception("unable to bind parameters"));
