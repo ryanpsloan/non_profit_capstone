@@ -20,6 +20,7 @@ require_once("../php/userTeam.php")
 		</head>
 		<body>
 		<?php
+		//FIXME post and session broken
 		$mysqli = MysqliConfiguration::getMysqli();
 		$pageId = $_POST("pageId");
 		$pageType = $_POST("pageType");
@@ -35,6 +36,8 @@ require_once("../php/userTeam.php")
 			$permissionCheck = $teamEvent[0][0]->getCommentPermission();
 		} elseif (@isset($pageType) === 3){
 			$permissionCheck = $userEvent[0][0]->commentPermission;
+		} else {
+			$permissionCheck = null;
 		}
 
 				//Generic comment form to be inserted into various pages
@@ -46,16 +49,17 @@ require_once("../php/userTeam.php")
 				<textarea class="commentBox" name="comment" maxlength="1024" rows="6" cols="24"></textarea>
 				<br>
 				<input type="submit" value="Submit">
-
 			</form>
 EOF;
 		var_dump($userTeam);
-		if($permissionCheck === 2){
-		echo "<p>You are not permitted to comment.</p>";}
-		elseif($permissionCheck === 1){
-		echo $form;
+		if($permissionCheck === null){
+			echo "<p>You are not permitted to comment.</p>";
+		} elseif($permissionCheck === 2){
+			echo "<p>You are not permitted to comment.</p>";
+		} elseif($permissionCheck === 1){
+			echo $form;
 		} else {
-			echo "<p>You are not permitted to text.</p>.</p>";
+			echo "<p>You are not permitted to comment.</p>.</p>";
 		}
 		?>
 		</body>

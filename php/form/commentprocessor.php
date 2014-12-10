@@ -30,10 +30,18 @@ try {
 	$newComment = new Comment(null, $_POST["comment"], new DateTime());
 	$newComment->insert($mysqli);
 	echo "<p>Comment posted!</p>";
-	var_dump($newComment);
 
-	$newUserComment
+	//FIXME session is broken
+	$newUserComment = new CommentUser($_SESSION("profileId"), $newComment->getCommentId());
+	$mysqli->insert($newComment);
 
+	if($_POST("eventId") !== null) {
+		$newEventComment = new CommentEvent($_POST("eventId"), $newComment->getCommentId());
+		$mysqli->insert($newEventComment);
+	} elseif($_POST("teamId") !== null) {
+		$newTeamComment = new CommentTeam($_POST("teamId"), $newComment->getCommentId());
+		$mysqli->insert($newTeamComment);
+	}
 } catch (RuntimeException $exception){
 		echo "We have encountered an error." . " " . $exception->getMessage();
 }

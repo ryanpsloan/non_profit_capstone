@@ -478,6 +478,4 @@ class Event {
 		}
 	}
 
-
-
 }
