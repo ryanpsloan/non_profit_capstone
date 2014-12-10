@@ -629,8 +629,8 @@ class UserTeam {
 		$userTeamProfile = array();
 		//covert the associative array to a userId
 
-		//NOTICE: When calling the $userTeamProfile Array the index $userTeamProfile[0][0] Will return the UserTeam info
-		//NOTICE: Calling the index $userTeamProfile[0][1] Will call the profile info.
+		//NOTICE: When calling the $userTeamProfile Array the index $userTeamProfile[x][0] Will return the UserTeam info
+		//NOTICE: Calling the index $userTeamProfile[x][1] Will call the profile info.
 		if($row !== null) {
 			try {
 				$userTeam = new userTeam($row["profileId"], $row["teamId"], $row["roleInTeam"], $row["teamPermission"],

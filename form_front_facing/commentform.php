@@ -21,8 +21,21 @@ require_once("../php/userTeam.php")
 		<body>
 		<?php
 		$mysqli = MysqliConfiguration::getMysqli();
-		$userTeam = UserTeam::getUserTeamByProfileTeamId($mysqli, 3, 3);
+		$pageId = $_POST("pageId");
+		$pageType = $_POST("pageType");
+		$userTeam = UserTeam::getUserTeamByProfileTeamId($mysqli, $_SESSION("profileId"), $pageId);
+		$teamEvent = TeamEvent::getTeamEventByTeamEventId($mysqli, $_SESSION("teamId"), $pageId);
+		$userEvent = UserEvent::getUserEventByProfileEventId($mysqli, $_SESSION("profileId"), $pageId);
+		// NOTICE: array returns one result so no need to loop comment.
+		// TODO: look into isset for comment
 
+		if(@isset($pageType) === 1){
+			$permissionCheck = $userTeam[0][0]->getCommentPermission();
+		} elseif (@isset($pageType) === 2){
+			$permissionCheck = $teamEvent[0][0]->getCommentPermission();
+		} elseif (@isset($pageType) === 3){
+			$permissionCheck = $userEvent[0][0]->commentPermission;
+		}
 
 				//Generic comment form to be inserted into various pages
 		$form = <<<EOF
@@ -36,10 +49,10 @@ require_once("../php/userTeam.php")
 
 			</form>
 EOF;
-
-		if(/*$userEvent->commentPermission === 2 |*/ $userTeam[0][0]->getCommentPermission() === 2 /*||$teamEvent->commentPermission === 2 */){
+		var_dump($userTeam);
+		if($permissionCheck === 2){
 		echo "<p>You are not permitted to comment.</p>";}
-		elseif(/*$userEvent->commentPermission === 1 ||*/ $userTeam[0][0]->getCommentPermission() === 1 /*|| $teamEvent->commentPermission === 1*/){
+		elseif($permissionCheck === 1){
 		echo $form;
 		} else {
 			echo "<p>You are not permitted to text.</p>.</p>";

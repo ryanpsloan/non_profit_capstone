@@ -9,15 +9,17 @@
 function userTeamPermissions()
 {
 
-	// TODO array is now dual index must account for this
-	$userArray = UserTeam::getUserTeamByTeamId($mysqli, $_SESSION["teamId"]);
+	// TODO array is now dual index must account for this\
+	// TODO array is indexed by index 1 ([x][]) is the userTeam with profile and index 2 ([][x]) is userTeam or
+	// TODO profile
+	$userArray = UserTeam::getUserTeamByTeamId($mysqli, $_POST["teamId"]);
 	$profileIds = array();
 	$profileNames = array();
 	$output = array();
 
 	for($i = 0; $i < count($userArray); $i++) {
-		$profileIds[] = $userArray[$i]->getProfileId();
-		$profileNames [] = $userArray[$i]->getFirstName() . " " . $userArray[$i]->getLastName();
+		$profileIds[] = $userArray[$i][0]->getProfileId();
+		$profileNames [] = $userArray[$i][1]->getFirstName() . " " . $userArray[$i][1]->getLastName();
 	}
 
 	/*	for($j=0; $j<=count($profileIds); $j++) {
@@ -29,7 +31,7 @@ function userTeamPermissions()
 			getLastName();
 	}*/
 
-	$html1 = "<p><form id='userTeamPermissionForm' method='post'>$profileNames[$j2] . ' ' .
+	$html1 = "<p><form id='userTeamPermissionForm' method='post'>
 							<select id='RoleInTeam'>
 							<option value='1'>Founder</option>
 							<option value='2'>Event Organizer</option>
@@ -78,7 +80,9 @@ function userTeamPermissions()
 		$replaceBanStatusSelected = str_replace("value=\"$userArray[$j2]->getBanStatus()\"",
 			"value=\"$userArray[$j2]->getBanStatus()\" selected", $html5);
 		//What will be displayed to the user in the HTML
-		$output[] = $html1 . " " . $html2 . " " . $html3 . " " . $html4 . " " . $html5;
+		$output[] = $profileNames[$j2] . " " . $replaceRoleInTeamSelected . " " . $replaceTeamPermissionSelected . " " .
+						$replaceCommentSelected . " " . $replaceInvitePermissionSelected . " " .
+						$replaceBanStatusSelected;
 	}
 
 }
@@ -137,7 +141,7 @@ function teamEventPermissions(){
 		$replaceBanStatusSelected = str_replace("value=\"$teamArray[$j2]->getBanStatus()\"",
 			"value=\"$teamArray[$j2]->getBanStatus()\" selected", $html3);
 		//What will be displayed to the user in the HTML
-		$output[] = $html1 . " " . $html2 . " " . $html3;
+		$output[] = $replaceTeamRoleSelected . " " . $replaceCommentSelected . " " . $replaceBanStatusSelected;
 	}
 }
 

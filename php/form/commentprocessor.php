@@ -9,6 +9,8 @@ session_start();
 require_once("/etc/apache2/capstone-mysql/helpabq.php");
 require_once("csrf.php");
 include("../comment.php");
+include("../commentUser.php");
+
 
 try {
 	$mysqli = MysqliConfiguration::getMysqli();
@@ -29,6 +31,8 @@ try {
 	$newComment->insert($mysqli);
 	echo "<p>Comment posted!</p>";
 	var_dump($newComment);
+
+	$newUserComment
 
 } catch (RuntimeException $exception){
 		echo "We have encountered an error." . " " . $exception->getMessage();
