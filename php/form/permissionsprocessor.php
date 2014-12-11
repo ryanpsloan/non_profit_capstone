@@ -11,23 +11,18 @@ require_once("../teamevent.php");
 require_once("../userevent.php");
 require_once("../userTeam.php");
 require_once("permissionfunction.php");
-/* TODO: arrays calling profile functions are dual index, need to add functionality to make sure the indexes are
-   TODO: correct. Index of [0][x] Will call UserTeam info, index of [0][x+1] Will call profileInfo.
-	TODO: Potential fix is to increment by 2 after initial 0. Modulo by 2?*/
-
-// TODO: Fix html1 profileName no longer within loop
 
 try{
 	$mysqli = MysqliConfiguration::getMysqli();
 
-		if($_POST["permissionType"] === 1) {
+		if($_POST["permissionType"] === "1") {
 			//Function to call in the permission changing code
 			userTeamPermissions();
-		} elseif($_POST["permissionType"] === 2){
+		} elseif($_POST["permissionType"] === "2"){
 			//Function to call in the permission changing code
 			teamEventPermissions();
 
-		} elseif($_POST["permissionType"] === 3){
+		} elseif($_POST["permissionType"] === "3"){
 			//Function to call in the permission changing code
 			userEventPermission();
 

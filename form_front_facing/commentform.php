@@ -1,10 +1,9 @@
 
 <?php
-session_start();
 require_once("/etc/apache2/capstone-mysql/helpabq.php");
 require_once("../php/form/csrf.php");
-require_once("../php/userTeam.php")
-?>
+require_once("../php/userTeam.php");
+?><!--
 <!DOCTYPE html>
 	<html>
 		<head lang="en">
@@ -19,24 +18,23 @@ require_once("../php/userTeam.php")
 			<title>Comment</title>
 		</head>
 		<body>
-		<?php
+		--><?php
 		//FIXME post and session broken
 		$mysqli = MysqliConfiguration::getMysqli();
-		function comment()
-		{
-			$pageId = $_POST("pageId");
-			$pageType = $_POST("pageType");
-			$userTeam = UserTeam::getUserTeamByProfileTeamId($mysqli, $_SESSION("profileId"), $pageId);
-			$teamEvent = TeamEvent::getTeamEventByTeamEventId($mysqli, $_SESSION("teamId"), $pageId);
-			$userEvent = UserEvent::getUserEventByProfileEventId($mysqli, $_SESSION("profileId"), $pageId);
+		function commentForm($pageType, $pageId){
+
+
 			// NOTICE: array returns one result so no need to loop comment.
 			// TODO: look into isset for comment
 
 			if(@isset($pageType) === 1) {
+				$userTeam = UserTeam::getUserTeamByProfileTeamId($mysqli, $_SESSION["profileId"], $pageId);
 				$permissionCheck = $userTeam[0][0]->getCommentPermission();
 			} elseif(@isset($pageType) === 2) {
+				$teamEvent = TeamEvent::getTeamEventByTeamEventId($mysqli, $_POST["teamId"], $pageId);
 				$permissionCheck = $teamEvent[0][0]->getCommentPermission();
 			} elseif(@isset($pageType) === 3) {
+				$userEvent = UserEvent::getUserEventByProfileEventId($mysqli, $_SESSION["profileId"], $pageId);
 				$permissionCheck = $userEvent[0][0]->commentPermission;
 			} else {
 				$permissionCheck = null;
@@ -53,9 +51,8 @@ require_once("../php/userTeam.php")
 				<input type="submit" value="Submit">
 			</form>
 EOF;
-			var_dump($userTeam);
 			if($permissionCheck === null) {
-				echo "<p>You are not permitted to comment.</p>";
+				echo "<p>You are not permitted to comment. Please sign in.</p>";
 			} elseif($permissionCheck === 2) {
 				echo "<p>You are not permitted to comment.</p>";
 			} elseif($permissionCheck === 1) {
@@ -65,6 +62,3 @@ EOF;
 			}
 		}
 		?>
-
-		</body>
-	</html>

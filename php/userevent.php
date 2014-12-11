@@ -6,8 +6,8 @@
  * @author Dameon Smith <dameonsmith76@gmail.com>
  */
 
-require_once("../php/event.php");
-require_once("../php/profile.php");
+require_once("event.php");
+require_once("profile.php");
 
 
 class UserEvent {
@@ -326,7 +326,7 @@ class UserEvent {
 
 		// create query template
 		$query = <<<EOF
-		SELECT userEvent.profileId, userEvent.eventId, profile.userId, profile.firstName, profile.midInit,
+		SELECT userEvent.profileId, userEvent.eventId, profile.userId, profile.userTitle, profile.firstName, profile.midInit,
 		profile.lastName, profile.bio, profile.attention, profile.street1, profile.street2, profile.city, profile.state,
 		profile.zipCode, userEvent.userEventRole, userEvent.commentPermission, userEvent.banStatus
 		FROM userEvent
@@ -362,7 +362,7 @@ EOF;
 			try {
 				$userEvent = new UserEvent( $row["profileId"], $row["eventId"], $row["userEventRole"], $row["commentPermission"],
 					$row["banStatus"]);
-				$profile = new Profile($row["profileId"], $row["userId"], $row["firstName"], $row["midInit"], $row["lastName"],
+				$profile = new Profile($row["profileId"], $row["userId"], $row["userTitle"], $row["firstName"], $row["midInit"], $row["lastName"],
 					$row["bio"], $row["attention"], $row["street1"], $row["street2"], $row["city"],
 					$row["state"], $row["zipCode"]);
 

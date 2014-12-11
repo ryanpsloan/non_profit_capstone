@@ -7,7 +7,8 @@
 	$mysqli = $mysqli = MysqliConfiguration::getMysqli();
 	$event = Event::getEventByEventId($mysqli, 1);
 	$dateString = $event->eventDate->format("Y-m-d H:i:s");
-
+	$pageId = $event->eventId;
+	$pageType = 3;
 ?>
 <!DOCTYPE html>
 <html>
@@ -31,15 +32,18 @@
 			echo "<h5>$event->eventLocation</h5>";
 
 			echo <<<EOF
-					<form action=\"../php/form/permissionsprocessor.php\" method='post'>
-						<input type='hidden' name=\"permissionType\">
+					<form action="../php/form/permissionsprocessor.php" method='post'>
+						<input type='hidden' name="permissionType" value="3">
+						<input type='hidden' name="eventId" value="$event->eventId">
 						<input type='submit' value='Edit Permissions'>
 					</form>
 EOF;
 		?>
 	</aside>
 	<section>
-		<?php comment(); ?>
+		<?php
+		var_dump($_SESSION);
+		commentForm($pageType, $pageId); ?>
 	</section>
 
 

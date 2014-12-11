@@ -33,14 +33,14 @@ try {
 	echo "<p>Comment posted!</p>";
 
 	//FIXME session is broken
-	$newUserComment = new CommentUser($_SESSION("profileId"), $newComment->getCommentId());
+	$newUserComment = new CommentUser($_SESSION["profileId"], $newComment->getCommentId());
 	$mysqli->insert($newComment);
 
-	if($_POST("eventId") !== null) {
-		$newEventComment = new CommentEvent($_POST("eventId"), $newComment->getCommentId());
+	if($_POST["eventId"] !== null) {
+		$newEventComment = new CommentEvent ($_POST["eventId"], $newComment->getCommentId());
 		$mysqli->insert($newEventComment);
-	} elseif($_POST("teamId") !== null) {
-		$newTeamComment = new CommentTeam($_POST("teamId"), $newComment->getCommentId());
+	} elseif($_POST["teamId"] !== null) {
+		$newTeamComment = new CommentTeam($_POST["teamId"], $newComment->getCommentId());
 		$mysqli->insert($newTeamComment);
 	} else {
 		throw(new UnexpectedValueException("Unable to post comment"));

@@ -6,8 +6,8 @@
  * @author Dameon Smith <dameonsmith76@gmail.com>
  */
 
-require_once("../php/event.php");
-require_once("../php/team.php");
+require_once("event.php");
+require_once("team.php");
 
 
 class TeamEvent {
