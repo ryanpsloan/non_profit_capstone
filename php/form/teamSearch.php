@@ -14,11 +14,11 @@ try {
 	//verify the form was submitted properly
 
 	if(@isset($_POST["teamName"]) === false) {
-		throw(new RuntimeException("Please enter a team criteria to search by."));
+		throw(new RuntimeException("Please enter a team to search by."));
 	}
 
 	// use filter_input to sanitize event name
-	$teamName = (filter_input(INPUT_GET, "teamName", FILTER_SANITIZE_STRING));
+	$teamName = (filter_input(INPUT_POST, "teamName", FILTER_SANITIZE_STRING));
 
 	// verify the CSRF tokens
 	if(verifyCsrf($_POST["csrfName"], $_POST["csrfToken"]) === false) {
@@ -38,7 +38,12 @@ try {
 		echo "<strong>" . $team->getTeamName() . "</strong><br/>" .
 			$team->getTeamCause()	.	"<br/>";
 
-		echo "<a href='../../form_front_facing/joinTeam.php'>join</a>";
+
+	echo "<form id=\"joinTeam\" action=\"joinTeamProcessor.php\" method=\"POST\">";
+	echo generateInputTags();
+	echo "<input type = 'hidden' name = 'teamId' value = \"" . $team->getTeamId() . "\">
+		<input id = \"profileSubmit\" type=\"submit\" value=\"Join Team\">
+		</form>";
 
 	}
 
@@ -47,3 +52,4 @@ try {
 	echo "<div class=\"alert alert-danger\" role=\"alert\"><strong>Oh snap!</strong> Unable to search events" . $exception->getMessage() . "</div>";
 
 }
+?>

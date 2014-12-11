@@ -26,21 +26,17 @@ session_start();
 <div id="outputArea"></div>
 <form id="searchTeam" action="../php/form/teamSearch.php" method="POST">
 	<?php echo generateInputTags();?>
-	<label for="teamName">teamname </label>
+	<label for="teamName">teamName </label>
 	<br>
 	<input type="text" id="teamName" name="teamName" autocomplete="off">
 	<br>
 
 	<input id = "profileSubmit" type="submit" value="search">
 	<br>
-
-
-<form id="joinTeam" action="../php/form/joinTeamProcessor.php" method="POST">
-	<?php echo generateInputTags();?>
-	<input type = 'hidden' name = 'teamId' value = "Get TeamId">
-	<input id = "profileSubmit" type="submit" value="Join Team">
-
 </form>
+
+
+
 </body>
 </html><?php
 /**

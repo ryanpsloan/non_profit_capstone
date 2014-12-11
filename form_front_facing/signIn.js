@@ -5,19 +5,26 @@
 // validate the form using jQuery
 $(document).ready(function()
 {
-	$("#searchTeam").validate(
+	$("#signIn").validate(
 	{
 
 			rules: {
-				 teamName: {
+				 userName: {
+					required: true
+
+				},
+				passwordHash: {
 					required: true
 
 				}
 			},
 
 			messages: {
-				teamName : {
-					required: "Please enter your teamName to search"
+				userName : {
+					required: "Please enter your Username or email"
+				},
+				passwordHash: {
+					required: "Please enter your password"
 				}
 
 
@@ -27,7 +34,7 @@ $(document).ready(function()
 				$(form).ajaxSubmit(
 					{
 						type   : "POST",
-						url    : "../php/form/joinTeamProcessor.php",
+						url    : "../php/form/signinprocessor.php",
 						success: function(ajaxOutput) {
 							$("#outputArea").html(ajaxOutput);
 						}

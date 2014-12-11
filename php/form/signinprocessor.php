@@ -14,8 +14,8 @@ require_once("../profile.php");
 try {
 	//verify the form was submitted properly
 
-		if(@isset($_POST["userName"]) === false || @isset($_POST["passwordHash"]) === false) {
-			throw(new RuntimeException("Please enter UserName or email or password."));
+	if(@isset($_POST["userName"]) === false || @isset($_POST["passwordHash"]) === false) {
+		throw(new RuntimeException("Please enter UserName or email or password."));
 		}
 		// verify the CSRF tokens
 		if(verifyCsrf($_POST["csrfName"], $_POST["csrfToken"]) === false) {
@@ -41,6 +41,8 @@ try {
 	$_SESSION["authToken"] = $user->getAuthToken();
 	$_SESSION["permissions"] = $user->getPermissions();
 	$_SESSION["profileId"] = $profile->getProfileId();
+
+
 
    echo "<div class=\"alert alert-success\" role=\"alert\"><strong>Welcome to HelpAbq.com</strong>  </div>";
 
