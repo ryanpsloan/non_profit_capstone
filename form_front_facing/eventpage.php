@@ -4,6 +4,7 @@
 	require_once("../php/form/csrf.php");
 	require_once("../php/event.php");
 	require_once("commentform.php");
+	require_once("../php/userevent.php");
 	$mysqli = $mysqli = MysqliConfiguration::getMysqli();
 	$event = Event::getEventByEventId($mysqli, 1);
 	$dateString = $event->eventDate->format("Y-m-d H:i:s");
@@ -42,7 +43,6 @@ EOF;
 	</aside>
 	<section>
 		<?php
-		var_dump($_SESSION);
 		commentForm($pageType, $pageId); ?>
 	</section>
 

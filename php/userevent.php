@@ -457,12 +457,12 @@ EOF;
 		}
 
 		// Create query template
-		$query = "SELECT userEvent.profileId, userEvent.eventId, profile.userId, profile.firstName, profile.midInit,
+		$query = "SELECT userEvent.profileId, userEvent.eventId, profile.profileId, profile.userId, profile.userTitle, profile.firstName, profile.midInit,
 					 profile.lastName, profile.bio, profile.attention, profile.street1, profile.street2, profile.city, profile.state,
 					 profile.zipCode, userEvent.userEventRole, userEvent.commentPermission, userEvent.banStatus
 					 FROM userEvent
 					 INNER JOIN profile ON userEvent.profileId = profile.profileId
-					 WHERE eventId = ?";
+					 WHERE userEvent.profileId = ? AND eventId = ?";
 
 		$statement = $mysqli->prepare($query);
 		if($statement === false){
@@ -473,6 +473,10 @@ EOF;
 		$wasClean = $statement->bind_param("ii", $profileId, $eventId);
 		if($wasClean === false){
 			throw(new mysqli_sql_exception("Unable to bind parameters"));
+		}
+
+		if($statement->execute() === false){
+			throw (new mysqli_sql_exception("Unable to execute mySQL statement."));
 		}
 
 		$result = $statement->get_result();

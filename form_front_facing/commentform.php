@@ -27,19 +27,21 @@ require_once("../php/userTeam.php");
 			// NOTICE: array returns one result so no need to loop comment.
 			// TODO: look into isset for comment
 
-			if(@isset($pageType) === 1) {
+			if($pageType === 1) {
+				$mysqli = MysqliConfiguration::getMysqli();
 				$userTeam = UserTeam::getUserTeamByProfileTeamId($mysqli, $_SESSION["profileId"], $pageId);
 				$permissionCheck = $userTeam[0][0]->getCommentPermission();
-			} elseif(@isset($pageType) === 2) {
+			} elseif($pageType === 2) {
+				$mysqli = MysqliConfiguration::getMysqli();
 				$teamEvent = TeamEvent::getTeamEventByTeamEventId($mysqli, $_POST["teamId"], $pageId);
 				$permissionCheck = $teamEvent[0][0]->getCommentPermission();
-			} elseif(@isset($pageType) === 3) {
+			} elseif($pageType === 3) {
+				$mysqli = MysqliConfiguration::getMysqli();
 				$userEvent = UserEvent::getUserEventByProfileEventId($mysqli, $_SESSION["profileId"], $pageId);
 				$permissionCheck = $userEvent[0][0]->commentPermission;
 			} else {
 				$permissionCheck = null;
 			}
-
 			//Generic comment form to be inserted into various pages
 			$form = <<<EOF
 			<form id="commentForm" action="../php/form/commentprocessor.php" method="POST">
