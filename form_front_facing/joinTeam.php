@@ -18,7 +18,7 @@ session_start();
 	<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/jquery.validate.min.js"></script>
 	<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/additional-methods.min.js"></script>
 	<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-<!--	<script type="text/javascript" src="signIn.js"></script>-->
+	<script type="text/javascript" src="joinTeam.js"></script>
 
 	<title>Join Team Form</title>
 </head>
@@ -30,12 +30,14 @@ session_start();
 	<br>
 	<input type="text" id="teamName" name="teamName" autocomplete="off">
 	<br>
-<input type = 'hidden' name = 'teamId' value = "Get TeamId">
+
 	<input id = "profileSubmit" type="submit" value="search">
 	<br>
 
 
 <form id="joinTeam" action="../php/form/joinTeamProcessor.php" method="POST">
+	<?php echo generateInputTags();?>
+	<input type = 'hidden' name = 'teamId' value = "Get TeamId">
 	<input id = "profileSubmit" type="submit" value="Join Team">
 
 </form>

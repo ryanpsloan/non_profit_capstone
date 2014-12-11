@@ -10,6 +10,7 @@
 
 //Required for initializing profile class
 require_once("profile.php");
+require_once("team.php");
 
 //setup User Class and respective fields
 class UserTeam {

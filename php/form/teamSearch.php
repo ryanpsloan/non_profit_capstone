@@ -36,11 +36,10 @@ try {
 		$team  = $teams[$i];
 
 		echo "<strong>" . $team->getTeamName() . "</strong><br/>" .
-			$team->getTeamCause	.	"<br/>"	.
+			$team->getTeamCause()	.	"<br/>";
 
+		echo "<a href='../../form_front_facing/joinTeam.php'>join</a>";
 
-		include("../forms/add-to-cart-form.php");
-		echo "</p><br/><br/><br/><br/><br/>";
 	}
 
 
