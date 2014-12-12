@@ -62,7 +62,7 @@ function testInvalidFields() {
 	F(".alert").visible(function() {
 		ok(F(this).hasClass("alert alert-danger"), "unsuccessful alert CSS");
 		ok(F(this).html().indexOf("Oh snap") >= 0, "unsuccessful message");
-		});
+	});
 }
 // call for the tests to execute
 test("test valid fields", testValidFields);
