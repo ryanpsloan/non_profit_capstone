@@ -5,18 +5,18 @@
 // validate the form using jQuery
 $(document).ready(function()
 {
-	$("#searchTeam").validate(
-	{
+	$("#searchCause").validate(
+		{
 
 			rules: {
-				teamName: {
+				causeName: {
 					required: true
 
 				}
 			},
 
 			messages: {
-				teamName : {
+				causeName : {
 					required: "Please enter a search parameter"
 				}
 
@@ -32,5 +32,5 @@ $(document).ready(function()
 			//			}
 			//		});
 			//}
-	})
+		})
 });
