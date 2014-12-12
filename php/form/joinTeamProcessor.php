@@ -28,6 +28,9 @@ try {
 
 // insert into mySQL
 	$joinUserTeam->insert($mysqli);
+
+	echo "<div class=\"alert alert-success\" role=\"alert\"><strong>Thank you for joining team: $team->getTeamName()</strong>  </div>";
+
 } catch(Exception $exception) {
 	echo "<div class=\"alert alert-danger\" role=\"alert\"><strong>Oh snap!</strong> Unable to join team: " . $exception->getMessage() . "</div>";
 
