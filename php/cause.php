@@ -324,13 +324,14 @@ class Cause {
 		}
 
 		//Create query template
-		$query = "SELECT causeId, causeName, causeDescription FROM cause WHERE causeName = ?";
+		$query = "SELECT causeId, causeName, causeDescription FROM cause WHERE causeName LIKE ?";
 		$statement = $mysqli->prepare($query);
 		if($statement === false) {
 			throw(new mysqli_sql_exception ("unable to prepare statement"));
 		}
 
 		//bind the cause Id to the place holder in the template
+		$causeName = "%$causeName%";
 		$wasClean = $statement->bind_param("s", $causeName);
 		if($wasClean === false) {
 			throw(new mysqli_sql_exception("unable to bind parameters"));

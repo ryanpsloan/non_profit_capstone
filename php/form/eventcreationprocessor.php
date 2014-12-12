@@ -23,6 +23,9 @@ try {
 	var_dump($mysqli);
 	$newEvent->insert($mysqli);
 
+	$joinUserEvent = new UserEvent($_SESSION["profileId"],$event->eventId, 1, 1, 1);
+	$joinUserEvent->insert($mysqli);
+
 	echo "<p class=\"alert alert-success\" role=\"alert\">Event posted!</p>";
 } catch (Exception $exception){
 	echo "We have encountered an error." . " " . $exception->getMessage();

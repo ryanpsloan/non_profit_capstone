@@ -22,13 +22,15 @@ try {
 // create a UserTeam object with the profileId and causeId
 	$mysqli    	= MysqliConfiguration::getMysqli();
 	$cause 		= Cause::getCauseByCauseId($mysqli, $_POST["causeId"]);
-
+			if ($cause === null) {
+				throw (new UnexpectedValueException ("No Cause found"));
+			}
 	$joinUserCause = new UserCause($_SESSION["profileId"],$team->getCauseId());
 
 // insert into mySQL
 	$joinUserCause->insert($mysqli);
 
-	echo "<div class=\"alert alert-success\" role=\"alert\"><strong>Thank you for supporting cause: </strong>  </div>";
+	echo "<div class=\"alert alert-success\" role=\"alert\"><strong>Thank you for supporting cause: " . $cause->getCauseName() . "</strong>  </div>";
 
 } catch(Exception $exception) {
 	echo "<div class=\"alert alert-danger\" role=\"alert\"><strong>Oh snap!</strong> Unable to join cause: " . $exception->getMessage() . "</div>";

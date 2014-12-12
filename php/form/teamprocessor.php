@@ -25,6 +25,9 @@ try {
 	$mysqli = MysqliConfiguration::getMysqli();
 	$team->insert($mysqli);
 
+	$joinUserTeam = new UserTeam($_SESSION["profileId"],$team->getTeamId(), 1, 1, 1, 1, 1);
+	$joinUserTeam->insert($mysqli);
+
 	echo"<div class='alert alert-success' role='alert'>Thank you for joining a team.</div>";
 
 
