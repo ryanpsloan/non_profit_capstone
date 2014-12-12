@@ -320,12 +320,13 @@ class Event {
 		$eventTitle = trim($eventTitle);
 		$eventTitle = filter_var($eventTitle, FILTER_SANITIZE_STRING);
 
-		$query = "SELECT eventId, eventTitle, eventDate, eventLocation FROM event WHERE eventTitle = ?";
+		$query = "SELECT eventId, eventTitle, eventDate, eventLocation FROM event WHERE eventTitle LIKE ?";
+
 		$statement = $mysqli->prepare($query);
 		if($statement === false) {
 			throw(new mysqli_sql_exception("Unable to prepare statement"));
 		}
-
+		$eventTitle = "%$eventTitle%";
 		$wasClean = $statement->bind_param("s", $eventTitle);
 		if($wasClean === false) {
 			throw(new mysqli_sql_exception("Unable to bind parameters"));

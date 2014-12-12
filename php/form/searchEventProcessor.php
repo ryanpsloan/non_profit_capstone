@@ -36,7 +36,7 @@ try {
 		$event  = $events[$i];
 
 		echo "<strong>" . $event->eventTitle . "</strong><br/>" .
-			$event->eventDate . "<br/>" .
+			$event->eventDate->format("Y-m-d H:i:s") . "<br/>" .
 			$event->eventLocation ."<br/>";
 
 
