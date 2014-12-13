@@ -6,7 +6,7 @@
 session_start();
 require_once("/etc/apache2/capstone-mysql/helpabq.php");
 require_once("csrf.php");
-require_once("../userCause.php");
+require_once("../usercause.php");
 require_once("../cause.php");
 
 
@@ -25,7 +25,7 @@ try {
 			if ($cause === null) {
 				throw (new UnexpectedValueException ("No Cause found"));
 			}
-	$joinUserCause = new UserCause($_SESSION["profileId"],$team->getCauseId());
+	$joinUserCause = new UserCause($_SESSION["profileId"],$cause->getCauseId());
 
 // insert into mySQL
 	$joinUserCause->insert($mysqli);

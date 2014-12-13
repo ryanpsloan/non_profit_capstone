@@ -8,6 +8,7 @@ session_start();
 require_once("/etc/apache2/capstone-mysql/helpabq.php");
 require_once("csrf.php");
 require_once("../team.php");
+require_once("../userTeam.php");
 
 try {
 	// verify the form was submitted OK
@@ -21,14 +22,16 @@ try {
 	}
 
 	// create a new object and insert it to mySQL
-	$team = new Team(null, $_POST["teamName"], $_POST["teamCause"]);
 	$mysqli = MysqliConfiguration::getMysqli();
+
+	$team = new Team(null, $_POST["teamName"], $_POST["teamCause"]);
 	$team->insert($mysqli);
 
 	$joinUserTeam = new UserTeam($_SESSION["profileId"],$team->getTeamId(), 1, 1, 1, 1, 1);
 	$joinUserTeam->insert($mysqli);
 
-	echo"<div class='alert alert-success' role='alert'>Thank you for joining a team.</div>";
+
+	echo"<div class='alert alert-success' role='alert'>Thank you for creating team:" . $team->getTeamName()." </div>";
 
 
 }catch(Exception $exception) {

@@ -175,7 +175,7 @@ class UserEvent {
 	 * @throws UnexpectedValueException if not an integer or null
 	 * @throws RangeException if team status is not positive
 	 */
-	public function setBanStatus($newBanStatus) {
+	public function 	setBanStatus($newBanStatus) {
 		if($newBanStatus === null) {
 			throw (new UnexpectedValueException("banStatus must not be null"));
 		}

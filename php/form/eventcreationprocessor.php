@@ -3,10 +3,11 @@ session_start();
 require_once("/etc/apache2/capstone-mysql/helpabq.php");
 require_once("csrf.php");
 include("../event.php");
+include("../userevent.php");
 
 
 try {
-	$mysqli = MysqliConfiguration::getMysqli();
+
 	if(($mysqli = MysqliConfiguration::getMysqli()) === false) {
 		throw (new mysqli_sql_exception("Server connection failed, please try again later."));
 	}
@@ -19,14 +20,17 @@ try {
 		throw(new RuntimeException("CSRF tokens incorrect or missing. Make sure cookies are enabled."));
 	}
 
+	$mysqli = MysqliConfiguration::getMysqli();
 	$newEvent = new Event(null, $_POST["eventTitle"], $_POST["eventDate"], $_POST["eventLocation"]);
-	var_dump($mysqli);
 	$newEvent->insert($mysqli);
 
-	$joinUserEvent = new UserEvent($_SESSION["profileId"],$event->eventId, 1, 1, 1);
+	$joinUserEvent = new UserEvent($_SESSION["profileId"],$newEvent->eventId, 1, 1, 1);
 	$joinUserEvent->insert($mysqli);
 
-	echo "<p class=\"alert alert-success\" role=\"alert\">Event posted!</p>";
+
+	echo"<div class='alert alert-success' role='alert'>Thank you for creating an event:" . $newEvent->eventTitle." </div>";
+
 } catch (Exception $exception){
-	echo "We have encountered an error." . " " . $exception->getMessage();
+	echo "<div class=\"alert alert-danger\" role=\"alert\"><strong>Oh snap!</strong> Unable to create a new event: " . $exception->getMessage() . "</div>";
+
 }

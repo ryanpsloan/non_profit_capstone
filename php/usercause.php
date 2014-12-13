@@ -5,8 +5,8 @@
  * @author Casimiro Vigil <cfvigil26@gmail.com>
  **/
 
-require_once("../php/profile.php");
-require_once("../php/cause.php");
+require_once("profile.php");
+require_once("cause.php");
 
 class UserCause{
 	/**
