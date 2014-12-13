@@ -1,20 +1,21 @@
 <?php
 require_once("../php/commentEvent.php");
+require_once("../php/commentTeam.php");
 require_once("../php/commentUser.php");
 require_once("../php/profile.php");
 require_once("../php/comment.php");
 
 
-function displayEventComment($pageId){
+function displayEventComment($pageId)
+{
 	$mysqli = $mysqli = MysqliConfiguration::getMysqli();
 	$commentIds = array();
 	$userComments = array();
-	$comments = array();
 	$profileIds = array();
 	$profiles = array();
 	$eventComment = commentEvent::getCommentEventByEventId($mysqli, $pageId);
 
-	for($i = 0; $i<count($eventComment); $i++) {
+	for($i = 0; $i < count($eventComment); $i++) {
 		$commentIds[] = $eventComment[$i]->commentId;
 
 		$userComments[] = CommentUser::getCommentUserByCommentId($mysqli, $commentIds[$i]);
@@ -33,14 +34,14 @@ function displayEventComment($pageId){
 				<p>$dateString</p><br/>
 				<p>$comments->commentText</p>";
 	}
-
+}
 	function displayTeamComment($pageId){
 		$mysqli = $mysqli = MysqliConfiguration::getMysqli();
 		$commentIds = array();
 		$userComments = array();
 		$profileIds = array();
 		$profiles = array();
-		$teamComment = commentTeam::getCommentTeamByTeamId($mysqli, $pageId);
+		$teamComment = CommentTeam::getCommentTeamByTeamId($mysqli, $pageId);
 
 		for($i = 0; $i<count($teamComment); $i++){
 			$commentIds[] = $teamComment[$i]->commentId;
@@ -63,7 +64,5 @@ function displayEventComment($pageId){
 		}
 	}
 
-
-}
 
 ?>

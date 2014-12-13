@@ -5,7 +5,10 @@
 			// NOTICE: array returns one result so no need to loop comment.
 			// TODO: look into isset for comment
 
-			if($pageType === 1) {
+			// NOTICE WORKING ON USERTEAM to get it to display comments.
+			if(@$_SESSION["profileId"] === null){
+				$permissionCheck = null;
+			} elseif($pageType === 1) {
 				$mysqli = MysqliConfiguration::getMysqli();
 				$userTeam = UserTeam::getUserTeamByProfileTeamId($mysqli, $_SESSION["profileId"], $pageId);
 				$permissionCheck = $userTeam[0][0]->getCommentPermission();
@@ -22,7 +25,6 @@
 			}
 			//Generic comment form to be inserted into various pages
 			$form = "
-
 				<label for=\"commentBox\">Type your comment:</label>
 				<br>
 				<textarea class=\"commentBox\" name=\"comment\" maxlength=\"1024\" rows=\"6\" cols=\"24\"></textarea>

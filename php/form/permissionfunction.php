@@ -74,8 +74,8 @@ function userTeamPermissions()
 		$replaceCommentSelected = str_replace("value=\"" . $userArray[$j2][0]->getCommentPermission() . "\"",
 			"value=\"" . $userArray[$j2][0]->getCommentPermission() . "\" selected", $html3);
 		//Makes the current invite permission the selected value on the drop down
-		$replaceInvitePermissionSelected = str_replace("value=\"" . $userArray[$j2][0]->getInvitePermission . "\"",
-			"value=\"" . $userArray[$j2][0]->getInvitePermission . "\" selected", $html4);
+		$replaceInvitePermissionSelected = str_replace("value=\"" . $userArray[$j2][0]->getInvitePermission() . "\"",
+			"value=\"" . $userArray[$j2][0]->getInvitePermission() . "\" selected", $html4);
 		//Makes the current ban status the selected value on the drop down
 		$replaceBanStatusSelected = str_replace("value=\"" . $userArray[$j2][0]->getBanStatus() . "\"",
 			"value=\"" . $userArray[$j2][0]->getBanStatus() . "\" selected", $html5);

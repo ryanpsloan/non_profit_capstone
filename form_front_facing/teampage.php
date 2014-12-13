@@ -4,10 +4,10 @@
 	require_once("../php/form/csrf.php");
 	require_once("../php/team.php");
 	require_once("commentform.php");
-	require_once("../php/userevent.php");
+	require_once("../php/userTeam.php");
 	require_once("../php/form/commentfunctions.php");
 	$mysqli = $mysqli = MysqliConfiguration::getMysqli();
-	$team = Team::getTeamByTeamId($mysqli, 3);
+	$team = Team::getTeamByTeamId($mysqli, 156);
 	$pageId = $team->getTeamId();
 	$pageType = 1;
 ?>
@@ -28,15 +28,15 @@
 	<?php /* navBar()*/ ?>
 	<aside>
 		<?php
-		echo "<h3>$team->getTeamName()</h3>";
-		echo "<h5>$team->getTeamCause()</h5>";
+		echo "<h3> " . $team->getTeamName() . "</h3>";
+		echo "<h5>" . $team->getTeamCause() . "</h5>";
 
 		echo "
 				<form action=\"../php/form/permissionsprocessor.php\" method='post'>
 				";
 		echo generateInputTags();
 		echo "	<input type='hidden' name=\"permissionType\" value=\"1\">
-						<input type='hidden' name=\"eventId\" value=\"$team->getTeamId\">
+						<input type='hidden' name=\"teamId\" value=\"" . $team->getTeamId() . "\">
 						<input type='submit' value='Edit Permissions'>
 					</form>
 					";

@@ -34,7 +34,6 @@ try {
 
 	$newUserComment = new CommentUser($_SESSION["profileId"], $newComment->commentId);
 	$newUserComment->insert($mysqli);
-	var_dump($_POST['pageType']);
 	if($_POST['pageType'] === "3") {
 		$newEventComment = new CommentEvent ($_POST['pageId'], $newComment->commentId);
 		$newEventComment->insert($mysqli);
