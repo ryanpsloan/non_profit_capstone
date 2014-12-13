@@ -2,15 +2,14 @@
 	session_start();
 	require_once("/etc/apache2/capstone-mysql/helpabq.php");
 	require_once("../php/form/csrf.php");
-	require_once("../php/event.php");
+	require_once("../php/team.php");
 	require_once("commentform.php");
 	require_once("../php/userevent.php");
 	require_once("../php/form/commentfunctions.php");
 	$mysqli = $mysqli = MysqliConfiguration::getMysqli();
-	$event = Event::getEventByEventId($mysqli, 1);
-	$dateString = $event->eventDate->format("Y-m-d H:i:s");
-	$pageId = $event->eventId;
-	$pageType = 3;
+	$team = Team::getTeamByTeamId($mysqli, 3);
+	$pageId = $team->getTeamId();
+	$pageType = 1;
 ?>
 <!DOCTYPE html>
 <html>
@@ -23,24 +22,21 @@
 	<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/jquery.validate.min.js"></script>
 	<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/additional-methods.min.js"></script>
 	<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-	<title><?php echo $event->eventTitle?></title>
+	<title><?php echo $team->getTeamName()?></title>
 </head>
 <body>
-	<?php /*navBar()*/?>
+	<?php /* navBar()*/ ?>
 	<aside>
 		<?php
-			echo "<h3>$event->eventTitle</h3>";
-			echo "<h5>$dateString</h5>";
-			echo "<h5>$event->eventLocation</h5>";
-			// NOTICE In the future have the events, teams, and other classes have an identifying hash
-			// NOTICE This is to further increase security when it comes to malicious users chaning form data
-			echo "
-					<form action=\"../php/form/permissionsprocessor.php\" method='post'>
-					";
-			echo generateInputTags();
+		echo "<h3>$team->getTeamName()</h3>";
+		echo "<h5>$team->getTeamCause()</h5>";
 
-			echo "	<input type='hidden' name=\"permissionType\" value=\"3\">
-						<input type='hidden' name=\"eventId\" value=\"$event->eventId\">
+		echo "
+				<form action=\"../php/form/permissionsprocessor.php\" method='post'>
+				";
+		echo generateInputTags();
+		echo "	<input type='hidden' name=\"permissionType\" value=\"1\">
+						<input type='hidden' name=\"eventId\" value=\"$team->getTeamId\">
 						<input type='submit' value='Edit Permissions'>
 					</form>
 					";
@@ -48,17 +44,16 @@
 	</aside>
 	<section>
 		<div>
-			<form id="commentForm" action="../php/form/commentprocessor.php" method="POST">
-		<?php
+			<form id="commentForm" action="../php/form/commentprocessor.php" method="post">
+			<?php
 				echo generateInputTags();
-		commentForm($pageType, $pageId);
-		?>
+			commentForm($pageType, $pageId);
+			?>
 		</div>
 	</section>
-
 	<section>
-		<?php displayEventComment($pageId); ?>
+		<?php displayTeamComment($pageId)?>
 	</section>
 
-
 </body>
+</html>
