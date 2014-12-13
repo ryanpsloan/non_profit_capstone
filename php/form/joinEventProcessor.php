@@ -6,7 +6,7 @@
 session_start();
 require_once("/etc/apache2/capstone-mysql/helpabq.php");
 require_once("csrf.php");
-require_once("../userEvent.php");
+require_once("../userevent.php");
 require_once("../event.php");
 
 
@@ -23,8 +23,8 @@ try {
 // create a UserEvent object with the profileId and eventId
 	$mysqli    = MysqliConfiguration::getMysqli();
 	$event = Event::getEventByEventId($mysqli, $_POST["eventId"]);
-		if ($event === null) {
-			throw (new UnexpectedValueException ("No Event found"));
+				if ($event === null) {
+					throw (new UnexpectedValueException ("No Event found"));
 	}
 
 	$joinUserEvent = new UserEvent($_SESSION["profileId"],$event->eventId, 1, 1, 1);
