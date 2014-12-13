@@ -5,6 +5,7 @@
 	require_once("../php/event.php");
 	require_once("commentform.php");
 	require_once("../php/userevent.php");
+	require_once("../php/form/commentfunctions.php");
 	$mysqli = $mysqli = MysqliConfiguration::getMysqli();
 	$event = Event::getEventByEventId($mysqli, 1);
 	$dateString = $event->eventDate->format("Y-m-d H:i:s");
@@ -31,22 +32,32 @@
 			echo "<h3>$event->eventTitle</h3>";
 			echo "<h5>$dateString</h5>";
 			echo "<h5>$event->eventLocation</h5>";
+			// NOTICE In the future have the events, teams, and other classes have an identifying hash
+			// NOTICE This is further increase security when it comes to malicious users chaning form data
+			echo "
+					<form action=\"../php/form/permissionsprocessor.php\" method='post'>
+					";
+			echo generateInputTags();
 
-			echo <<<EOF
-					<form action="../php/form/permissionsprocessor.php" method='post'>
-						<input type='hidden' name="permissionType" value="3">
-						<input type='hidden' name="eventId" value="$event->eventId">
+			echo "	<input type='hidden' name=\"permissionType\" value=\"3\">
+						<input type='hidden' name=\"eventId\" value=\"$event->eventId\">
 						<input type='submit' value='Edit Permissions'>
 					</form>
-EOF;
+					";
 		?>
 	</aside>
 	<section>
+		<div>
+			<form id="commentForm" action="../php/form/commentprocessor.php" method="POST">
 		<?php
-		commentForm($pageType, $pageId); ?>
+				echo generateInputTags();
+		commentForm($pageType, $pageId);
+		?>
 	</section>
 
-
+	<section>
+		<?php displayEventComment($pageId); ?>
+	</section>
 
 
 </body>
