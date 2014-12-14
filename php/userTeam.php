@@ -62,11 +62,11 @@ class UserTeam {
 
 			// catch exceptions and rethrow to caller
 		} catch(UnexpectedValueException $unexpectedValue) {
-			throw(new UnexpectedValueException ("Unable to construct User", 0, $unexpectedValue));
+			throw(new UnexpectedValueException ("Unable to construct UserTeam", 0, $unexpectedValue));
 
 		} catch(RangeException $range) {
 			$range->getMessage();
-			throw(new RangeException("Unable to construct User", 0, $range));
+			throw(new RangeException("Unable to construct UserTeam", 0, $range));
 		}
 	}
 

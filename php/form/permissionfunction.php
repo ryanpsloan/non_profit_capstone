@@ -9,10 +9,11 @@ require_once("/etc/apache2/capstone-mysql/helpabq.php");
 function userTeamPermissions()
 {
 	$mysqli = MysqliConfiguration::getMysqli();
-	// TODO add names to forms
 	// TODO array is indexed by index 1 ([x][]) is the userTeam with profile and index 2 ([][x]) is userTeam or
 	// TODO profile
 	$userArray = UserTeam::getUserTeamByTeamId($mysqli, $_POST["teamId"]);
+	$teamId = filter_var($_POST["teamId"], FILTER_VALIDATE_INT);
+	$teamId = intval($teamId);
 	$profileIds = array();
 	$profileNames = array();
 	$output = array();
@@ -31,33 +32,35 @@ function userTeamPermissions()
 			getLastName();
 	}*/
 
-	$html1 = "<p><form id='userTeamPermissionForm' method='post'>
-							<select id='RoleInTeam'>
+	$html1 = "			<p><form id='userTeamPermissionForm' action='updateuserteampermission.php' method='post'>
+							" . generateInputTags() . "
+							<input type='hidden' name='teamId'    value='$teamId'>
+							<select name='roleInTeam'>
 							<option value='1'>Founder</option>
 							<option value='2'>Event Organizer</option>
 							<option value='3'>Normal Member</option>
 							</select>
 							 ";
 
-	$html2 = "<select id='TeamPermission'>
+	$html2 = "<select name='teamPermission'>
 							 <option value='1'>Can Edit</option>
 							 <option value='2'>Cannot Edit</option>
 							 </select>
 							";
 
-	$html3 = "<select id='commentPermission'>
+	$html3 = "<select name='commentPermission'>
 							<option value='1'>Can Comment</option>
 							<option value='2'>Cannot Comment</option>
 							</select>
 							";
 
-	$html4 = "<select id='invitePermission'>
+	$html4 = "<select name='invitePermission'>
 							<option id='1'>Can Invite</option>
 							<option id='2'>Cannot Invite</option>
 							</select>
 							";
 
-	$html5 = "<select>
+	$html5 = "<select name='banStatus'>
 								<option value='1'>Not Banned</option>
 								<option value='2'>Banned</option>
 							</select>
@@ -80,7 +83,8 @@ function userTeamPermissions()
 		$replaceBanStatusSelected = str_replace("value=\"" . $userArray[$j2][0]->getBanStatus() . "\"",
 			"value=\"" . $userArray[$j2][0]->getBanStatus() . "\" selected", $html5);
 		//What will be displayed to the user in the HTML
-		$output[] = $profileNames[$j2] . " " . $replaceRoleInTeamSelected . " " . $replaceTeamPermissionSelected . " " .
+		$output[] = $profileNames[$j2] . " " . $replaceRoleInTeamSelected . " " .
+						$replaceTeamPermissionSelected . " <input type='hidden' name='profileId' value='$profileIds[$j2]'> " .  " " .
 						$replaceCommentSelected . " " . $replaceInvitePermissionSelected . " " .
 						$replaceBanStatusSelected;
 		echo $output[$j2];
@@ -145,7 +149,7 @@ function teamEventPermissions(){
 		//What will be displayed to the user in the HTML
 		$output[] = $teamNames[$j2] . " " . $replaceTeamRoleSelected . " " . $replaceCommentSelected . " " .
 		$replaceBanStatusSelected;}
-		$output[$j2];
+		echo $output[$j2];
 }
 
 function userEventPermission(){
@@ -179,6 +183,9 @@ function userEventPermission(){
 
 
 	$html1 = "<p><form id='userEventPermissionForm' method='post'>
+							" . generateInputTags() . "
+							<input type='hidden' name = 'profileId' value='$profileIds[$j2]'/>
+							<input type='hidden' name = 'eventId'   value='$eventId'/>
 							<select id='userEventRole'>
 							 <option value='1'>Event Organizer</option>
 							 <option value='2'>Normal Member</option>

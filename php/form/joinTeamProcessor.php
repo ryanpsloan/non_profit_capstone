@@ -27,7 +27,7 @@ try {
 				throw (new UnexpectedValueException ("No Team found"));
 	}
 
-	$joinUserTeam = new UserTeam($_SESSION["profileId"],$team->getTeamId(), 1, 1, 1, 1, 1);
+	$joinUserTeam = new UserTeam($_SESSION["profileId"],$team->getTeamId(), 3, 2, 1, 1, 1);
 
 // insert into mySQL
 	$joinUserTeam->insert($mysqli);
