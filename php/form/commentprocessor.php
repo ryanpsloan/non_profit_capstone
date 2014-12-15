@@ -19,6 +19,8 @@ try {
 		throw(new mysqli_sql_exception("Server connection failed, please try again later."));
 	}
 
+
+
 	if(@isset($_POST['comment']) === false) {
 		throw(new UnexpectedValueException("The comment was blank, please try again."));
 	}

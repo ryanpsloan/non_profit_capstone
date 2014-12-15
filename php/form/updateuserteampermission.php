@@ -41,10 +41,6 @@
 		$banStatus = $_POST['banStatus'];
 		$banStatus = intval($banStatus);
 
-		if(verifyCsrf($_POST["csrfName"], $_POST["csrfToken"]) === false) {
-			throw(new RuntimeException("CSRF tokens incorrect or missing. Make sure cookies are enabled."));
-		}
-
 		$permissionsUpdate = UserTeam::getUserTeamByProfileTeamId($mysqli, $profileId, $teamId);
 		$permissionsUpdate[0][0]->setRoleInTeam($roleInTeam);
 		$permissionsUpdate[0][0]->setTeamPermission($teamPermission);
