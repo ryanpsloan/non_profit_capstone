@@ -55,8 +55,8 @@ function userTeamPermissions()
 							";
 
 	$html4 = "<select name='invitePermission'>
-							<option id='1'>Can Invite</option>
-							<option id='2'>Cannot Invite</option>
+							<option value='1'>Can Invite</option>
+							<option value='2'>Cannot Invite</option>
 							</select>
 							";
 
@@ -68,20 +68,25 @@ function userTeamPermissions()
 
 	for($j2 = 0; $j2 < count($userArray); $j2++) {
 		//Makes the current role in team status as the displayed value on the drop down
-		$replaceRoleInTeamSelected = str_replace("value=\"" . $userArray[$j2][0]->getRoleInTeam() . "\"",
-			"value=\"" . $userArray[$j2][0]->getRoleinTeam() . "\" selected", $html1);
+		$replaceRoleInTeamSelected = str_replace("value='" . $userArray[$j2][0]->getRoleInTeam() . "'",
+			"value='" . $userArray[$j2][0]->getRoleinTeam() . "' selected", $html1);
+
 		//Makes the current team permission the selected value on the drop down
-		$replaceTeamPermissionSelected = str_replace("value=\"" . $userArray[$j2][0]->getTeamPermission() . "\"",
-			"value=\"" . $userArray[$j2][0]->getTeamPermission() . "\" selected", $html2);
+		$replaceTeamPermissionSelected = str_replace("value='" . $userArray[$j2][0]->getTeamPermission() . "'",
+			"value='" . $userArray[$j2][0]->getTeamPermission() . "' selected", $html2);
+
 		//Makes the current comment permission the selected value on the drop down
-		$replaceCommentSelected = str_replace("value=\"" . $userArray[$j2][0]->getCommentPermission() . "\"",
-			"value=\"" . $userArray[$j2][0]->getCommentPermission() . "\" selected", $html3);
+		$replaceCommentSelected = str_replace("value='" . $userArray[$j2][0]->getCommentPermission() . "'",
+			"value='" . $userArray[$j2][0]->getCommentPermission() . "' selected", $html3);
+
 		//Makes the current invite permission the selected value on the drop down
-		$replaceInvitePermissionSelected = str_replace("value=\"" . $userArray[$j2][0]->getInvitePermission() . "\"",
-			"value=\"" . $userArray[$j2][0]->getInvitePermission() . "\" selected", $html4);
+		$replaceInvitePermissionSelected = str_replace("value='" . $userArray[$j2][0]->getInvitePermission() . "'",
+			"value='" . $userArray[$j2][0]->getInvitePermission() . "' selected", $html4);
+
 		//Makes the current ban status the selected value on the drop down
-		$replaceBanStatusSelected = str_replace("value=\"" . $userArray[$j2][0]->getBanStatus() . "\"",
-			"value=\"" . $userArray[$j2][0]->getBanStatus() . "\" selected", $html5);
+		$replaceBanStatusSelected = str_replace("value='" . $userArray[$j2][0]->getBanStatus() . "'",
+			"value='" . $userArray[$j2][0]->getBanStatus() . "' selected", $html5);
+
 		//What will be displayed to the user in the HTML
 		$output[] = $profileNames[$j2] . " " . $replaceRoleInTeamSelected . " " .
 						$replaceTeamPermissionSelected . " <input type='hidden' name='profileId' value='$profileIds[$j2]'> " .  " " .
@@ -184,7 +189,6 @@ function userEventPermission(){
 
 	$html1 = "<p><form id='userEventPermissionForm' method='post'>
 							" . generateInputTags() . "
-							<input type='hidden' name = 'profileId' value='$profileIds[$j2]'/>
 							<input type='hidden' name = 'eventId'   value='$eventId'/>
 							<select id='userEventRole'>
 							 <option value='1'>Event Organizer</option>
@@ -209,17 +213,17 @@ function userEventPermission(){
 
 	for($j2 = 0; $j2<count($profileNames); $j2++) {
 		//Makes the current team permission the selected value on the drop down
-		$replaceTeamPermissionSelected = str_replace("value=\"" . $userArray[$j2][0]->userEventRole . "\"",
-			"value=\"" . $userArray[$j2][0]->userEventRole . "\" selected", $html1);
+		$replaceTeamPermissionSelected = str_replace("value='" . $userArray[$j2][0]->userEventRole . "'",
+			"value='" . $userArray[$j2][0]->userEventRole . "' selected", $html1);
 		//Makes the current comment permission the selected value on the drop down
-		$replaceCommentSelected = str_replace("value=\"" . $userArray[$j2][0]->commentPermission . "\"",
-			"value=\"" . $userArray[$j2][0]->commentPermission . "\" selected", $html2);
+		$replaceCommentSelected = str_replace("value='" . $userArray[$j2][0]->commentPermission . "'",
+			"value='" . $userArray[$j2][0]->commentPermission . "\" selected", $html2);
 		//Makes the current ban status the selected value on the drop down
-		$replaceBanStatusSelected = str_replace("value=\"" . $userArray[$j2][0]->banStatus . "\"",
-			"value=\"" . $userArray[$j2][0]->banStatus . "\" selected", $html3);
+		$replaceBanStatusSelected = str_replace("value='" . $userArray[$j2][0]->banStatus . "'",
+			"value='" . $userArray[$j2][0]->banStatus . "' selected", $html3);
 		//What will be displayed to the user in the HTML
-		$output[] = $profileNames[$j2] . " " . $replaceTeamPermissionSelected . " " . $replaceCommentSelected . " " .
-						$replaceBanStatusSelected;
+		$output[] = $profileNames[$j2] . " " . $replaceTeamPermissionSelected . "<input type='hidden' name = 'profileId' value='$profileIds[$j2]'/>"
+						. " " . $replaceCommentSelected . " " . $replaceBanStatusSelected;
 		echo $output[$j2];
 	}
 }
