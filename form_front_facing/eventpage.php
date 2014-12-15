@@ -51,7 +51,7 @@
 			<form id="commentForm" action="../php/form/commentprocessor.php" method="POST">
 		<?php
 				echo generateInputTags();
-		commentForm($pageType, $pageId);
+				commentForm($pageType, $pageId);
 		?>
 		</div>
 	</section>

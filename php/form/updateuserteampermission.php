@@ -16,6 +16,10 @@
 			throw(new UnexpectedValueException("The permission parameters are invalid please try again."));
 		}
 
+		if(verifyCsrf($_POST["csrfName"], $_POST["csrfToken"]) === false) {
+			throw(new RuntimeException("CSRF tokens incorrect or missing. Make sure cookies are enabled."));
+		}
+
 		$teamId = $_POST['teamId'];
 		$teamId = intval($teamId);
 
@@ -41,9 +45,6 @@
 			throw(new RuntimeException("CSRF tokens incorrect or missing. Make sure cookies are enabled."));
 		}
 
-		/*$permissionsUpdate = new UserTeam ($_POST['profileId'], $_POST['teamId'], $_POST['roleInTeam'],
-														$_POST['teamPermission'], $_POST['commentPermission'],
-														$_POST['invitePermission'], $_POST['banStatus']);*/
 		$permissionsUpdate = UserTeam::getUserTeamByProfileTeamId($mysqli, $profileId, $teamId);
 		$permissionsUpdate[0][0]->setRoleInTeam($roleInTeam);
 		$permissionsUpdate[0][0]->setTeamPermission($teamPermission);

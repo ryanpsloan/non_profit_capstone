@@ -14,6 +14,18 @@ require_once("permissionfunction.php");
 
 try{
 	$mysqli = MysqliConfiguration::getMysqli();
+	if(($mysqli = MysqliConfiguration::getMysqli()) === false){
+		throw(new mysqli_sql_exception("Server connection failed, please try again later."));
+	}
+
+	if(@isset($_POST['permissionType']) === false) {
+		throw(new UnexpectedValueException("The not a valid permission set, please try again."));
+	}
+
+	// verify the CSRF tokens
+	if(verifyCsrf($_POST["csrfName"], $_POST["csrfToken"]) === false) {
+		throw(new RuntimeException("CSRF tokens incorrect or missing. Make sure cookies are enabled."));
+	}
 
 		if($_POST["permissionType"] === "1") {
 			//Function to call in the permission changing code

@@ -28,7 +28,7 @@
 	<?php /* navBar()*/ ?>
 	<aside>
 		<?php
-		echo "<h3> " . $team->getTeamName() . "</h3>";
+		echo "<h3>" . $team->getTeamName() . "</h3>";
 		echo "<h5>" . $team->getTeamCause() . "</h5>";
 
 		echo "

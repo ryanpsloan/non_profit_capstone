@@ -12,11 +12,18 @@ function userTeamPermissions()
 	// TODO array is indexed by index 1 ([x][]) is the userTeam with profile and index 2 ([][x]) is userTeam or
 	// TODO profile
 	$userArray = UserTeam::getUserTeamByTeamId($mysqli, $_POST["teamId"]);
+	$user = UserTeam::getUserTeamByProfileTeamId($mysqli, $_SESSION["profileId"], $_POST["teamId"]);
 	$teamId = filter_var($_POST["teamId"], FILTER_VALIDATE_INT);
 	$teamId = intval($teamId);
 	$profileIds = array();
 	$profileNames = array();
 	$output = array();
+
+	if($user === null){
+		return;
+	} elseif($user->teamPermissions !== 1){
+		return;
+	}
 
 	for($i = 0; $i < count($userArray); $i++) {
 		$profileIds[] = $userArray[$i][0]->getProfileId();
@@ -166,9 +173,16 @@ function userEventPermission(){
 	$eventId = intval($eventId);
 
 	$userArray = UserEvent::getUserEventByEventId($mysqli, $eventId);
+	$user = UserEvent::getUserEventByProfileEventId($mysqli, $_SESSION["profileId"], $eventId);
 	$profileIds = array();
 	$profileNames = array();
 	$output = array();
+
+	if($user = null){
+		return;
+	} elseif ($user->userEventRole !== 1){
+		return;
+	}
 
 	for($i = 0; $i<count($userArray); $i++){
 		$profileIds[] = $userArray[$i][0]->profileId;
@@ -187,26 +201,27 @@ function userEventPermission(){
 	}*/
 
 
-	$html1 = "<p><form id='userEventPermissionForm' method='post'>
+	$html1 = "<p><form id='userEventPermissionForm' action='updateusereventprocessor.php' method='post'>
 							" . generateInputTags() . "
 							<input type='hidden' name = 'eventId'   value='$eventId'/>
-							<select id='userEventRole'>
+							<select name='userEventRole'>
 							 <option value='1'>Event Organizer</option>
 							 <option value='2'>Normal Member</option>
 							 </select>
 							 ";
 
-	$html2 = "<select id='commentPermission'>
+	$html2 = "<select name='commentPermission'>
 							<option value='1'>Can Comment</option>
 							<option value='2'>Cannot Comment</option>
 							</select>
 							";
 
-	$html3 = "<select id='banStatus'>
+	$html3 = "<select name='banStatus'>
 								<option value='1'>Not Banned</option>
 								<option value='2'>Banned</option>
 							</select>
-							<input type='submit' value='Submit'></form></p> <br/>";
+							<input type='submit' value='Submit'></form></p> <br/>
+							</form></p>";
 
 
 
@@ -217,7 +232,7 @@ function userEventPermission(){
 			"value='" . $userArray[$j2][0]->userEventRole . "' selected", $html1);
 		//Makes the current comment permission the selected value on the drop down
 		$replaceCommentSelected = str_replace("value='" . $userArray[$j2][0]->commentPermission . "'",
-			"value='" . $userArray[$j2][0]->commentPermission . "\" selected", $html2);
+			"value='" . $userArray[$j2][0]->commentPermission . "' selected", $html2);
 		//Makes the current ban status the selected value on the drop down
 		$replaceBanStatusSelected = str_replace("value='" . $userArray[$j2][0]->banStatus . "'",
 			"value='" . $userArray[$j2][0]->banStatus . "' selected", $html3);
