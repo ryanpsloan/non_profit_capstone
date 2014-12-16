@@ -10,8 +10,8 @@
 	<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/jquery.validate.min.js"></script>
 	<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/additional-methods.min.js"></script>
 	<script type="text/j	avascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="searchEvent.js"></script>
-	<link type="text/css" rel="stylesheet" href="sign.css"/>
+	<script type="text/javascript" src="../../form_front_facing/searchCause.js"></script>
+	<link type="text/css" rel="stylesheet" href="../../form_front_facing/sign.css"/>
 
 	<title>Join Cause Form</title>
 </head>
@@ -55,15 +55,17 @@ try {
 	for($i = 0; $i < $resultCount; $i++)	{
 		$cause  = $causes[$i];
 
+		echo "<div class='col-lg-12 miscItems' >";
 		echo "<strong>" . $cause->getCauseName() . "</strong><br/>" .
 			$cause->getCauseDescription()	.	"<br/>";
 
 
-		echo "<form id=\"joinCause\" action=\"joinCauseProcessor.php\" method=\"POST\">";
+		echo "<form id=\"joinThings\" action=\"joinCauseProcessor.php\" method=\"POST\">";
 		echo generateInputTags();
 		echo "<input type = 'hidden' name = 'causeId' value = \"" . $cause->getCauseId() . "\">
-		<input id = \"profileSubmit\" type=\"submit\" value=\"Join Cause\">
+		<button type ='submit' class='btn btn-primary'>Join Cause</button>
 		</form>";
+		echo "</div>";
 
 	}
 

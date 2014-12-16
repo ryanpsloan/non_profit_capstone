@@ -47,3 +47,13 @@ body {
 	padding: 10px;
 	font-size: 16px;
 }
+
+.miscItems {
+
+	margin: 15px;
+}
+.goToThings, .joinThings {
+	position: relative;
+	margin:5px;
+}
+

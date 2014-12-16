@@ -10,10 +10,10 @@
 	<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/jquery.validate.min.js"></script>
 	<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/additional-methods.min.js"></script>
 	<script type="text/j	avascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="searchEvent.js"></script>
-	<link type="text/css" rel="stylesheet" href="sign.css"/>
+	<script type="text/javascript" src="../../form_front_facing/searchEvent.js"></script>
+	<link type="text/css" rel="stylesheet" href="../../form_front_facing/sign.css"/>
 
-	<title>Join Cause Form</title>
+	<title>Join Event Form</title>
 </head>
 <body>
 <div class="container">
@@ -56,22 +56,24 @@ try {
 	for($i = 0; $i < $resultCount; $i++)	{
 		$event  = $events[$i];
 
+		echo "<div class='col-lg-12 miscItems' >";
 		echo "<strong>" . $event->eventTitle . "</strong><br/>" .
 			$event->eventDate->format("Y-m-d H:i:s") . "<br/>" .
 			$event->eventLocation ."<br/>";
 
-		echo "<form id='goToEvent' action='../../form_front_facing/eventpage.php' method='post'>"
+		echo "<form class='goToThings' action='../../form_front_facing/eventpage.php' method='post'>"
 				. generateInputTags() .
 			  "<input type='hidden' name='eventId' value='" . $event->eventId . "'>
 			   <button type='submit' class='btn btn-primary'>Go To Event Page</button>
 			   </form>";
 
 
-		echo "<form id=\"joinEvent\" action=\"joinEventProcessor.php\" method=\"POST\">";
+		echo "<form class=\"joinThings\" action=\"joinEventProcessor.php\" method=\"POST\">";
 		echo generateInputTags();
 		echo "<input type = 'hidden' name = 'eventId' value = \"" . $event->eventId . "\">
-		<input id = \"profileSubmit\" type=\"submit\" value=\"Join Event\">
+		<button type ='submit' class='btn btn-primary'>Join Event</button>
 		</form>";
+		echo "</div>";
 
 	}
 

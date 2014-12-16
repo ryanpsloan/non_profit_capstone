@@ -10,8 +10,8 @@
 	<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/jquery.validate.min.js"></script>
 	<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/additional-methods.min.js"></script>
 	<script type="text/j	avascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="searchEvent.js"></script>
-	<link type="text/css" rel="stylesheet" href="sign.css"/>
+	<script type="text/javascript" src="../../form_front_facing/searchTeam.js"></script>
+	<link type="text/css" rel="stylesheet" href="../../form_front_facing/sign.css"/>
 
 	<title>Join Team Form</title>
 </head>
@@ -54,21 +54,23 @@
 		for($i = 0; $i < $resultCount; $i++)	{
 			$team  = $teams[$i];
 
+			echo "<div class='col-lg-12 miscItems' >";
 			echo "<strong>" . $team->getTeamName() . "</strong><br/>" .
 				$team->getTeamCause()	.	"<br/>";
 
-			echo "<form id='goToTeam' action='../../form_front_facing/teampage.php' method='get'>"
+			echo "<form class='goToThings' action='../../form_front_facing/teampage.php' method='get'>"
 				. generateInputTags() .
 				"<input type='hidden' name='teamId' value ='" . $team->getTeamId() . "' >
-			 <button type='submit' class='btn btn primary'>Go To Team Page</button>
+			 <button type='submit' class='btn btn-primary'>Go To Team Page</button>
 			 </form>";
 
 
-			echo "<form id='joinTeam' action='joinTeamProcessor.php' method='post'>";
-			echo generateInputTags();
-			echo "<input type = 'hidden' name = 'teamId' value = '" . $team->getTeamId() . "'>
+			echo "<form class='joinThings' action='joinTeamProcessor.php' method='post'>"
+			 . generateInputTags() .
+			 "<input type = 'hidden' name = 'teamId' value = '" . $team->getTeamId() . "'>
 			<button type ='submit' class='btn btn-primary'>Join Team</button>
 			</form>";
+			echo "</div>";
 
 		}
 
