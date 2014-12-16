@@ -19,27 +19,30 @@ session_start();
 	<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/additional-methods.min.js"></script>
 	<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="signIn.js"></script>
+	<link type="text/css" rel="stylesheet" href="sign.css"/>
 
 	<title>SignIn Form</title>
 </head>
 <body>
-	<div id="outputArea"></div>
-	<form id="signIn" action="../php/form/signinprocessor.php" method="POST">
-		<?php echo generateInputTags();?>
-		<label for="userName">username/email</label>
-		<br>
-		<input type="text" id="userName" name="userName" autocomplete="off">
-		<br>
-		<label for="passwordHash">Password:</label>
-		<br>
-		<input type="password" id="passwordHash" name="passwordHash" autocomplete="off">
-		<br>
-		<input id = "profileSubmit" type="submit" value="Sign In">
-
-	</form>
-		<div id="signUpLink"><p>OR</p>
-		<a href="signUp.php">Sign Up</a></div>
+		<div class="container">
+			<div id="outputArea"></div>
+				<form id="signIn" class="form-signin" action="../php/form/signinprocessor.php" method="POST">
+				<?php echo generateInputTags();?>
+					<h2 class="form-signin-heading">Please sign in</h2>
+					<label for="userName">username/email</label>
+					<br>
+					<input type="text" class="form-control" id="userName" name="userName" autocomplete="off">
+					<br>
+					<label for="passwordHash">Password:</label>
+					<br>
+					<input type="password" id="passwordHash" class="form-control" name="passwordHash" autocomplete="off">
+					<br>
+					<button class="btn btn-lg btn-primary btn-block" type="submit">Sign In</button>
 
 
+					<div id="signUpLink"><p>OR</p>
+					<a href="signUp.php">Sign Up</a></div>
+				</form>
+		</div>
 </body>
 </html>
