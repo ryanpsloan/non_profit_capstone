@@ -7,7 +7,7 @@
 	require_once("../php/userTeam.php");
 	require_once("../php/form/commentfunctions.php");
 	$mysqli = $mysqli = MysqliConfiguration::getMysqli();
-	$team = Team::getTeamByTeamId($mysqli, $_POST['teamId']);
+	$team = Team::getTeamByTeamId($mysqli, $_GET['teamId']);
 	$pageId = $team->getTeamId();
 	$pageType = 1;
 ?>
@@ -28,35 +28,40 @@
 </head>
 <body>
 	<?php /* navBar()*/ ?>
-	<div id="outputArea"></div>
-	<aside class="col-md-4 information">
-		<?php
-		echo "<h3>" . $team->getTeamName() . "</h3>";
-		echo "<h5>" . $team->getTeamCause() . "</h5>";
-
-		echo "
-				<form action=\"../php/form/permissionsprocessor.php\" method='post'>
-				";
-		echo generateInputTags();
-		echo "	<input type='hidden' name=\"permissionType\" value=\"1\">
-						<input type='hidden' name=\"teamId\" value=\"" . $team->getTeamId() . "\">
-						<button type='submit' class='btn btn-primary'>Edit Permissions</button>
-					</form>
-					";
-		?>
-	</aside>
-	<section class="col-md-6 commentBox">
-		<div>
-			<form id="commentForm" class="control-form" action="../php/form/commentprocessor.php" method="post">
+	<div id="outputArea" class="container"></div>
+	<row>
+		<aside class="col-lg-4 information">
 			<?php
-				echo generateInputTags();
-			commentForm($pageType, $pageId);
+			echo "<h3>" . $team->getTeamName() . "</h3>";
+			echo "<h5>" . $team->getTeamCause() . "</h5>";
+
+			echo "
+					<form action=\"../php/form/permissionsprocessor.php\" method='post'>
+					";
+			echo generateInputTags();
+			echo "	<input type='hidden' name=\"permissionType\" value=\"1\">
+							<input type='hidden' name=\"teamId\" value=\"" . $team->getTeamId() . "\">
+							<button type='submit' class='btn btn-primary'>Edit Permissions</button>
+						</form>
+						";
 			?>
+		</aside>
+		<div id="mainContent" class="col-lg-8">
+			<section class="col-lg-8">
+				<div>
+					<form id="commentForm" class="commentBox" action="../php/form/commentprocessor.php" method="post">
+					<?php
+						echo generateInputTags();
+					commentForm($pageType, $pageId);
+					?>
+				</div>
+			</section>
+			<section class="comments">
+				<?php displayTeamComment($pageId)?>
+			</section>
 		</div>
-	</section>
-	<section class="col-md-5 comments">
-		<?php displayTeamComment($pageId)?>
-	</section>
+		<div class="clearfix"></div>
+	</row>
 
 </body>
 </html>
