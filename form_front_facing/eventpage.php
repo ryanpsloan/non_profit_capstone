@@ -28,12 +28,13 @@
 	<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/additional-methods.min.js"></script>
 	<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="comment.js"></script>
+	<link type="text/css" href="teameventpage.css" rel="stylesheet">
 	<title><?php echo $event->eventTitle?></title>
 </head>
 <body>
 	<?php /*navBar()*/?>
 	<div id="outputArea"></div>
-	<aside>
+	<aside class="col-md-4 information">
 		<?php
 			echo "<h3>$event->eventTitle</h3>";
 			echo "<h5>$dateString</h5>";
@@ -47,14 +48,14 @@
 
 			echo "	<input type='hidden' name=\"permissionType\" value=\"3\">
 						<input type='hidden' name=\"eventId\" value=\"$event->eventId\">
-						<input type='submit' value='Edit Permissions'>
+						<button type='submit' class='btn btn-primary'>Edit Permissions</button>
 					</form>
 					";
 		?>
 	</aside>
-	<section>
+	<section class=" col-md-6 commentBox">
 		<div>
-			<form id="commentForm" action="../php/form/commentprocessor.php" method="POST">
+			<form id="commentForm" class="control-form" action="../php/form/commentprocessor.php" method="POST">
 		<?php
 				echo generateInputTags();
 				commentForm($pageType, $pageId);
@@ -62,7 +63,7 @@
 		</div>
 	</section>
 
-	<section>
+	<section class="col-md-5 comments">
 		<?php displayEventComment($pageId); ?>
 	</section>
 

@@ -7,7 +7,7 @@
 	require_once("../php/userTeam.php");
 	require_once("../php/form/commentfunctions.php");
 	$mysqli = $mysqli = MysqliConfiguration::getMysqli();
-	$team = Team::getTeamByTeamId($mysqli, 156);
+	$team = Team::getTeamByTeamId($mysqli, $_POST['teamId']);
 	$pageId = $team->getTeamId();
 	$pageType = 1;
 ?>
@@ -23,12 +23,13 @@
 	<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/additional-methods.min.js"></script>
 	<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="comment.js"></script>
+	<link type="text/css" href="teameventpage.css" rel="stylesheet">
 	<title><?php echo $team->getTeamName()?></title>
 </head>
 <body>
 	<?php /* navBar()*/ ?>
 	<div id="outputArea"></div>
-	<aside>
+	<aside class="col-md-4 information">
 		<?php
 		echo "<h3>" . $team->getTeamName() . "</h3>";
 		echo "<h5>" . $team->getTeamCause() . "</h5>";
@@ -39,21 +40,21 @@
 		echo generateInputTags();
 		echo "	<input type='hidden' name=\"permissionType\" value=\"1\">
 						<input type='hidden' name=\"teamId\" value=\"" . $team->getTeamId() . "\">
-						<input type='submit' value='Edit Permissions'>
+						<button type='submit' class='btn btn-primary'>Edit Permissions</button>
 					</form>
 					";
 		?>
 	</aside>
-	<section>
+	<section class="col-md-6 commentBox">
 		<div>
-			<form id="commentForm" action="../php/form/commentprocessor.php" method="post">
+			<form id="commentForm" class="control-form" action="../php/form/commentprocessor.php" method="post">
 			<?php
 				echo generateInputTags();
 			commentForm($pageType, $pageId);
 			?>
 		</div>
 	</section>
-	<section>
+	<section class="col-md-5 comments">
 		<?php displayTeamComment($pageId)?>
 	</section>
 

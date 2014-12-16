@@ -30,11 +30,18 @@ function displayEventComment($pageId)
 
 		$profileNames[] = $profiles[$i]->getFirstName() . " " . $profiles[$i]->getLastName();
 
-		echo "<p>$profileNames[$i]</p><br/>
-				<p>$dateString</p><br/>
-				<p>$comments->commentText</p>";
+		echo "<section class='panel panel-info'>
+					<section class='panel-heading'>
+					<div style='text-align: left'>$profileNames[$i]</div>
+					<div style='text-align: right'>$dateString</div>
+					</section>
+					<section class='panel-body'>
+					<p>$comments->commentText</p>
+					</section>
+				</section>";
 	}
 }
+
 	function displayTeamComment($pageId){
 		$mysqli = $mysqli = MysqliConfiguration::getMysqli();
 		$commentIds = array();
@@ -58,9 +65,15 @@ function displayEventComment($pageId)
 
 			$profileNames[] = $profiles[$i]->getFirstName() . " " . $profiles[$i]->getLastName();
 
-			echo "<p>$profileNames[$i]</p><br/>
-					<p>$dateString</p><br/>
-					<p>$comments->commentText</p>";
+			echo "<section class='panel panel-info'>
+						<section class='panel-heading'>
+						<div style='text-align: left'>$profileNames[$i]</div>
+						<div style='text-align: right'>$dateString</div>
+						</section>
+						<section class='panel-body'>
+						<p>$comments->commentText</p>
+						</section>
+					</section>";
 		}
 	}
 

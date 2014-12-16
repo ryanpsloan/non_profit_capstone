@@ -38,12 +38,17 @@ try {
 		echo "<strong>" . $team->getTeamName() . "</strong><br/>" .
 			$team->getTeamCause()	.	"<br/>";
 
+	echo "<form id='goTo' action='/form_front_facing/teampage.php' method='post'>"
+			. generateInputTags() .
+			"<input type='hidden' name='teamId' value ='" . $team->getTeamId() . "' >
+			 <button type='submit' class='btn btn primary'>Go To Team Page</button>";
 
-	echo "<form id=\"joinTeam\" action=\"joinTeamProcessor.php\" method=\"POST\">";
+
+	echo "<form id='joinTeam' action='joinTeamProcessor.php' method='post'>";
 	echo generateInputTags();
-	echo "<input type = 'hidden' name = 'teamId' value = \"" . $team->getTeamId() . "\">
-		<input id = \"profileSubmit\" type=\"submit\" value=\"Join Team\">
-		</form>";
+	echo "<input type = 'hidden' name = 'teamId' value = '" . $team->getTeamId() . "'>
+			<button type ='submit' class='btn btn-primary'>Join Team</button>
+			</form>";
 
 	}
 

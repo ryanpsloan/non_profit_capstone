@@ -25,13 +25,13 @@
 			}
 			//Generic comment form to be inserted into various pages
 			$form = "
-				<label for=\"commentBox\">Type your comment:</label>
+				<label for='commentBox' class='label'>Type your comment:</label>
 				<br>
-				<textarea class=\"commentBox\" name=\"comment\" maxlength=\"1024\" rows=\"6\" cols=\"24\"></textarea>
+				<textarea class=\"commentBox\" name=\"comment\" maxlength=\"1024\" rows=\"6\" cols=\"75\"></textarea>
 				<input type='hidden' name='pageId' value='$pageId'>
 				<input type='hidden' name='pageType' value='$pageType'>
 				<br>
-				<input type=\"submit\" value=\"Submit\">
+				<button type=\"submit\" class='btn btn-primary'>Submit!</button>
 			</form>
 			</div>
 ";
