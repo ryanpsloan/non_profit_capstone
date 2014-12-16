@@ -10,6 +10,7 @@
 
 //Required for initializing profile class
 require_once("profile.php");
+require_once("team.php");
 
 //setup User Class and respective fields
 class UserTeam {
@@ -61,11 +62,11 @@ class UserTeam {
 
 			// catch exceptions and rethrow to caller
 		} catch(UnexpectedValueException $unexpectedValue) {
-			throw(new UnexpectedValueException ("Unable to construct User", 0, $unexpectedValue));
+			throw(new UnexpectedValueException ("Unable to construct UserTeam", 0, $unexpectedValue));
 
 		} catch(RangeException $range) {
 			$range->getMessage();
-			throw(new RangeException("Unable to construct User", 0, $range));
+			throw(new RangeException("Unable to construct UserTeam", 0, $range));
 		}
 	}
 
@@ -629,8 +630,8 @@ class UserTeam {
 		$userTeamProfile = array();
 		//covert the associative array to a userId
 
-		//NOTICE: When calling the $userTeamProfile Array the index $userTeamProfile[0][0] Will return the UserTeam info
-		//NOTICE: Calling the index $userTeamProfile[0][1] Will call the profile info.
+		//NOTICE: When calling the $userTeamProfile Array the index $userTeamProfile[x][0] Will return the UserTeam info
+		//NOTICE: Calling the index $userTeamProfile[x][1] Will call the profile info.
 		if($row !== null) {
 			try {
 				$userTeam = new userTeam($row["profileId"], $row["teamId"], $row["roleInTeam"], $row["teamPermission"],

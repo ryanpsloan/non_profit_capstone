@@ -1,13 +1,13 @@
 <?php
 /**
- * Signin HTML form
+ * Search Cause HTML form
  * User: Martin
  *
  */
 require_once("../php/form/csrf.php");
 session_start();
 ?>
-<!DOCTYPE html>
+	<!DOCTYPE html>
 <html>
 <head lang="en">
 	<meta charset="UTF-8" />
@@ -18,31 +18,27 @@ session_start();
 	<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/jquery.validate.min.js"></script>
 	<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/additional-methods.min.js"></script>
 	<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="signIn.js"></script>
+	<script type="text/javascript" src="searchCause.js"></script>
 	<link type="text/css" rel="stylesheet" href="sign.css"/>
 
-	<title>SignIn Form</title>
+	<title>Join Cause Form</title>
 </head>
 <body>
-		<div class="container">
-			<div id="outputArea"></div>
-				<form id="signIn" class="form-signin" action="../php/form/signinprocessor.php" method="POST">
-				<?php echo generateInputTags();?>
-					<h2 class="form-signin-heading">Please sign in</h2>
-					<label for="userName">username/email</label>
-					<br>
-					<input type="text" class="form-control" id="userName" name="userName" autocomplete="off">
-					<br>
-					<label for="passwordHash">Password:</label>
-					<br>
-					<input type="password" id="passwordHash" class="form-control" name="passwordHash" autocomplete="off">
-					<br>
-					<button class="btn btn-lg btn-primary btn-block" type="submit">Sign In</button>
+	<div class="container">
+	<div id="outputArea"></div>
+		<form id="searchCause" class="col-lg-4" action="../php/form/searchCauseProcessor.php" method="POST">
+			<?php echo generateInputTags();?>
+			<h2 class="form-signin-heading">Please enter cause name</h2>
+			<label for="causeName"></label>
+			<br>
+			<input type="text" class="form-control" id="causeName" name="causeName" autocomplete="off">
+			<br>
+			<button class="btn btn-primary" type="submit" >Search</button>
+			<br>
+		</form>
+	</div>
 
 
-					<div id="signUpLink"><p>OR</p>
-					<a href="signUp.php">Sign Up</a></div>
-				</form>
-		</div>
+
 </body>
 </html>

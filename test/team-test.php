@@ -19,6 +19,8 @@ class TeamTest extends UnitTestCase {
 	private $TEAMID		= null;
 	private $TEAMNAME   	= "Run DMC";
 	private $TEAMCAUSE   = "homeless coders";
+	private $TEAMNAME1	= "LOS LOCOS";
+	private $TEAMCAUSE1	= "Keep ABQ beautiful";
 
 	// setUp() is a method that is run before each test
 	// here, we use it to connect to mySQL and to calculate the salt, hash, and authenticationToken
@@ -144,19 +146,24 @@ class TeamTest extends UnitTestCase {
 
 		// create a team to post to mySQL
 		$this->team = new Team(null, $this->TEAMNAME, $this->TEAMCAUSE);
+		$this->team1 = new Team(null,$this->TEAMNAME1, $this->TEAMCAUSE1);
 
 		// third, insert the team to mySQL
 		$this->team->insert($this->mysqli);
+		$this->team1->insert($this->mysqli);
+
 
 		// fourth, get the team using the static method
 		$staticTeam = Team::getTeamByTeamName($this->mysqli, $this->TEAMNAME);
 
 		// finally, compare the fields
-		$this->assertNotNull($staticTeam->getTeamId ());
-		$this->assertTrue($staticTeam->getTeamId () > 0);
-		$this->assertIdentical($staticTeam->getTeamId(),	 					$this->team->getTeamId());
-		$this->assertIdentical($staticTeam->getTeamName(),						$this->TEAMNAME);
-		$this->assertIdentical($staticTeam->getTeamCause(), 					$this->TEAMCAUSE);
+		for($i = 0; $i < count($staticTeam); $i++) {
+			$this->assertNotNull($staticTeam[$i]->getTeamId());
+			$this->assertTrue($staticTeam[$i]->getTeamId() > 0);
+			$this->assertIdentical($staticTeam[$i]->getTeamName(), $this->TEAMNAME);
+		}
+
+		$this->team1->delete($this->mysqli);
 	}
 
 	public function testTeamByTeamCause() {

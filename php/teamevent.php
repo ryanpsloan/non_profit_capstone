@@ -6,8 +6,8 @@
  * @author Dameon Smith <dameonsmith76@gmail.com>
  */
 
-require_once("../php/event.php");
-require_once("../php/team.php");
+require_once("event.php");
+require_once("team.php");
 
 
 class TeamEvent {
@@ -326,7 +326,7 @@ class TeamEvent {
 
 		// create query template
 		$query = <<< EOF
-		SELECT teamEvent.teamId,team.teamName, teamEvent.eventId, teamEvent.teamStatus, teamEvent.commentPermission,
+		SELECT teamEvent.teamId,team.teamName, team.teamCause, teamEvent.eventId, teamEvent.teamStatus, teamEvent.commentPermission,
 		teamEvent.banStatus
 		FROM teamEvent
 		INNER JOIN team ON teamEvent.teamId = team.teamId
@@ -360,7 +360,8 @@ EOF;
 			try {
 				$teamEvent = new TeamEvent($row["teamId"], $row["eventId"], $row["teamStatus"], $row["commentPermission"],
 				$row["banStatus"]);
-				$eventIdSearch [] = $teamEvent;
+				$team = new Team($row["teamId"], $row["teamName"], $row["teamCause"]);
+				$eventIdSearch [] = array($teamEvent, $team);
 			} catch(Exception $exception) {
 
 				throw(new mysqli_sql_exception("Unable to convert row to event", 0, $exception));
@@ -432,6 +433,74 @@ EOF;
 		} else {
 			return($teamIdSearch);
 		}
+
+	}
+
+	public static function getTeamEventByTeamEventId($mysqli, $teamId, $eventId){
+		// Handle degenerate cases
+		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
+			throw(new mysqli_sql_exception("input is not a mysqli object"));
+		}
+
+		//sanitize the inputs
+		$teamId = filter_var($teamId, FILTER_VALIDATE_INT);
+		if($teamId === null){
+			throw(new mysqli_sql_exception("Input is null"));
+		}
+
+		$eventId = filter_var($eventId, FILTER_VALIDATE_INT);
+		if($eventId === null){
+			throw(new mysqli_sql_exception("Input is null"));
+		}
+
+		$query = "SELECT teamEvent.teamId, team.teamName, team.teamCause, teamEvent.eventId, teamEvent.teamStatus, teamEvent.commentPermission,
+		teamEvent.banStatus
+		FROM teamEvent
+		INNER JOIN team ON teamEvent.teamId = team.teamId
+		WHERE eventId = ?";
+
+		$statement = $mysqli->prepare($query);
+		if($statement === false){
+			throw(new mysqli_sql_exception("Unable to prepare statement"));
+		}
+
+		$wasClean = $statement->bind_param("ii", $teamId, $eventId);
+		if($wasClean === false){
+			throw(new mysqli_sql_exception("Unable to bind parameters"));
+		}
+
+		$result = $statement->get_result();
+		if($result === false){
+			throw(new mysqli_sql_exception("Unable to get result set"));
+		}
+
+		//primary key can only one of two things null or integer
+		//if there's a result, we can show it
+		//if not error code 404
+		$row = $result->fetch_assoc();
+		$userEventProfile = array();
+		//covert the associative array to a userId
+
+		//NOTICE: When calling the $userTeamProfile Array the index $userTeamProfile[x][0] Will return the UserTeam info
+		//NOTICE: Calling the index $userTeamProfile[x][1] Will call the profile info.
+		if($row !== null) {
+			try {
+				$teamEvent = new TeamEvent($row["teamId"], $row["eventId"], $row["teamStatus"], $row["commentPermission"],
+					$row["banStatus"]);
+				$team = new Team($row["teamId"], $row["teamName"], $row["teamCause"]);
+				$userEventProfile[] = array ($teamEvent, $team);
+			} catch(Exception $exception) {
+				//rethrow
+				throw(new mysqli_sql_exception ("unable to convert row to user", 0, $exception));
+
+			}
+			//if we get a profileId and teamId I'm lucky and show it
+			return ($userEventProfile);
+		} else {
+			//404 User not found
+			return (null);
+		}
+
 
 	}
 }

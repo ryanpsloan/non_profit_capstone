@@ -1,49 +1,48 @@
-
 <?php
-session_start();
-require_once("/etc/apache2/capstone-mysql/helpabq.php");
-require_once("../php/form/csrf.php");
-require_once("../php/userTeam.php")
-?>
-<!DOCTYPE html>
-	<html>
-		<head lang="en">
-			<meta charset="UTF-8" />
-			<meta name="viewport" content="width=device-width, initial-scale=1" />
-			<link type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" />
-			<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-			<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
-			<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/jquery.validate.min.js"></script>
-			<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/additional-methods.min.js"></script>
-			<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-			<title>Comment</title>
-		</head>
-		<body>
-		<?php
-		$mysqli = MysqliConfiguration::getMysqli();
-		$userTeam = UserTeam::getUserTeamByProfileTeamId($mysqli, 3, 3);
+		function commentForm($pageType, $pageId){
 
 
-				//Generic comment form to be inserted into various pages
-		$form = <<<EOF
-			<form id="commentForm" action="../php/form/commentprocessor.php" method="POST">
-				<?php echo generateInputTags();?>
-				<label for="commentBox">Type your comment:</label>
+			// NOTICE: array returns one result so no need to loop comment.
+			// TODO: look into isset for comment
+
+			// NOTICE WORKING ON USERTEAM to get it to display comments.
+			if(@$_SESSION["profileId"] === null){
+				$permissionCheck = null;
+			} elseif($pageType === 1) {
+				$mysqli = MysqliConfiguration::getMysqli();
+				$userTeam = UserTeam::getUserTeamByProfileTeamId($mysqli, $_SESSION["profileId"], $pageId);
+				$permissionCheck = $userTeam[0][0]->getCommentPermission();
+			} elseif($pageType === 2) {
+				$mysqli = MysqliConfiguration::getMysqli();
+				$teamEvent = TeamEvent::getTeamEventByTeamEventId($mysqli, $_POST["teamId"], $pageId);
+				$permissionCheck = $teamEvent[0][0]->getCommentPermission();
+			} elseif($pageType === 3) {
+				$mysqli = MysqliConfiguration::getMysqli();
+				$userEvent = UserEvent::getUserEventByProfileEventId($mysqli, $_SESSION["profileId"], $pageId);
+				$permissionCheck = $userEvent[0][0]->commentPermission;
+			} else {
+				$permissionCheck = null;
+			}
+			//Generic comment form to be inserted into various pages
+			$form = "
+				<label for='commentBox' class='label'>Type your comment:</label>
 				<br>
-				<textarea class="commentBox" name="comment" maxlength="1024" rows="6" cols="24"></textarea>
+				<textarea class=\"commentBox\" name=\"comment\" maxlength=\"1024\" rows=\"6\" cols=\"75\"></textarea>
+				<input type='hidden' name='pageId' value='$pageId'>
+				<input type='hidden' name='pageType' value='$pageType'>
 				<br>
-				<input type="submit" value="Submit">
-
+				<button type=\"submit\" class='btn btn-primary'>Submit!</button>
 			</form>
-EOF;
-
-		if(/*$userEvent->commentPermission === 2 |*/ $userTeam[0][0]->getCommentPermission() === 2 /*||$teamEvent->commentPermission === 2 */){
-		echo "<p>You are not permitted to comment.</p>";}
-		elseif(/*$userEvent->commentPermission === 1 ||*/ $userTeam[0][0]->getCommentPermission() === 1 /*|| $teamEvent->commentPermission === 1*/){
-		echo $form;
-		} else {
-			echo "<p>You are not permitted to text.</p>.</p>";
+			</div>
+";
+			if($permissionCheck === null) {
+				echo "<p>You are not permitted to comment. Please sign in.</p>";
+			} elseif($permissionCheck === 2) {
+				echo "<p>You are not permitted to comment.</p>";
+			} elseif($permissionCheck === 1) {
+				echo $form;
+			} else {
+				echo "<p>You are not permitted to comment.</p>.</p>";
+			}
 		}
-		?>
-		</body>
-	</html>
+?>

@@ -6,8 +6,8 @@
  * @author Dameon Smith
  */
 
-require_once("../php/event.php");
-require_once("../php/comment.php");
+require_once("event.php");
+require_once("comment.php");
 
 class CommentEvent {
 	/**

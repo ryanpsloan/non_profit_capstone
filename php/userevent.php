@@ -6,8 +6,8 @@
  * @author Dameon Smith <dameonsmith76@gmail.com>
  */
 
-require_once("../php/event.php");
-require_once("../php/profile.php");
+require_once("event.php");
+require_once("profile.php");
 
 
 class UserEvent {
@@ -175,7 +175,7 @@ class UserEvent {
 	 * @throws UnexpectedValueException if not an integer or null
 	 * @throws RangeException if team status is not positive
 	 */
-	public function setBanStatus($newBanStatus) {
+	public function 	setBanStatus($newBanStatus) {
 		if($newBanStatus === null) {
 			throw (new UnexpectedValueException("banStatus must not be null"));
 		}
@@ -326,8 +326,8 @@ class UserEvent {
 
 		// create query template
 		$query = <<<EOF
-		SELECT userEvent.profileId, userEvent.eventId, profile.userId, profile.firstName, profile.midInit,
-		profile.lastName, profile.bio, profile.attention, profile.street1, profile.street2, profile.city, profile.state
+		SELECT userEvent.profileId, userEvent.eventId, profile.userId, profile.userTitle, profile.firstName, profile.midInit,
+		profile.lastName, profile.bio, profile.attention, profile.street1, profile.street2, profile.city, profile.state,
 		profile.zipCode, userEvent.userEventRole, userEvent.commentPermission, userEvent.banStatus
 		FROM userEvent
 		INNER JOIN profile ON userEvent.profileId = profile.profileId
@@ -362,11 +362,11 @@ EOF;
 			try {
 				$userEvent = new UserEvent( $row["profileId"], $row["eventId"], $row["userEventRole"], $row["commentPermission"],
 					$row["banStatus"]);
-				$profile = new Profile($row["profileId"], $row["userId"], $row["firstName"], $row["midInit"], $row["lastName"],
+				$profile = new Profile($row["profileId"], $row["userId"], $row["userTitle"], $row["firstName"], $row["midInit"], $row["lastName"],
 					$row["bio"], $row["attention"], $row["street1"], $row["street2"], $row["city"],
 					$row["state"], $row["zipCode"]);
 
-				$eventIdSearch [] = array($userEvent, $profile);
+				$eventIdSearch[] = array($userEvent, $profile);
 			} catch(Exception $exception) {
 
 				throw(new mysqli_sql_exception("Unable to convert row to event", 0, $exception));
@@ -435,6 +435,82 @@ EOF;
 			return(null);
 		} else {
 			return($profileIdSearch);
+		}
+
+	}
+
+	public static function getUserEventByProfileEventId($mysqli, $profileId, $eventId){
+		//handle degenerate cases
+		if(gettype($mysqli) !== "object" || get_class($mysqli) !== "mysqli") {
+			throw(new mysqli_sql_exception("input is not a mysqli object"));
+		}
+
+		//sanitize the profileId and teamId before searching
+		$profileId = filter_var($profileId, FILTER_VALIDATE_INT);
+		if($profileId === null) {
+			throw(new mysqli_sql_exception("input is null"));
+		}
+
+		$eventId = filter_var($eventId, FILTER_VALIDATE_INT);
+		if($eventId === null) {
+			throw(new mysqli_sql_exception("input is null"));
+		}
+
+		// Create query template
+		$query = "SELECT userEvent.profileId, userEvent.eventId, profile.profileId, profile.userId, profile.userTitle, profile.firstName, profile.midInit,
+					 profile.lastName, profile.bio, profile.attention, profile.street1, profile.street2, profile.city, profile.state,
+					 profile.zipCode, userEvent.userEventRole, userEvent.commentPermission, userEvent.banStatus
+					 FROM userEvent
+					 INNER JOIN profile ON userEvent.profileId = profile.profileId
+					 WHERE userEvent.profileId = ? AND eventId = ?";
+
+		$statement = $mysqli->prepare($query);
+		if($statement === false){
+			throw(new mysqli_sql_exception("Unable to prepare statement"));
+		}
+
+		//bind the parameters
+		$wasClean = $statement->bind_param("ii", $profileId, $eventId);
+		if($wasClean === false){
+			throw(new mysqli_sql_exception("Unable to bind parameters"));
+		}
+
+		if($statement->execute() === false){
+			throw (new mysqli_sql_exception("Unable to execute mySQL statement."));
+		}
+
+		$result = $statement->get_result();
+		if($result === false){
+			throw(new mysqli_sql_exception("Unable to get result set"));
+		}
+
+		//primary key can only one of two things null or integer
+		//if there's a result, we can show it
+		//if not error code 404
+		$row = $result->fetch_assoc();
+		$userEventProfile = array();
+		//covert the associative array to a userId
+
+		//NOTICE: When calling the $userTeamProfile Array the index $userTeamProfile[x][0] Will return the UserTeam info
+		//NOTICE: Calling the index $userTeamProfile[x][1] Will call the profile info.
+		if($row !== null) {
+			try {
+				$userEvent = new UserEvent( $row["profileId"], $row["eventId"], $row["userEventRole"], $row["commentPermission"],
+					$row["banStatus"]);
+				$profile = new Profile($row["profileId"], $row["userId"],  $row["userTitle"], $row["firstName"], $row["midInit"], $row["lastName"],
+					$row["bio"], $row["attention"], $row["street1"], $row["street2"], $row["city"],
+					$row["state"], $row["zipCode"]);
+				$userEventProfile[] = array ($userEvent, $profile);
+			} catch(Exception $exception) {
+				//rethrow
+				throw(new mysqli_sql_exception ("unable to convert row to user", 0, $exception));
+
+			}
+			//if we get a profileId and teamId I'm lucky and show it
+			return ($userEventProfile);
+		} else {
+			//404 User not found
+			return (null);
 		}
 
 	}
