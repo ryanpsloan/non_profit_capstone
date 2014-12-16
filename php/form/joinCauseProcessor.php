@@ -25,7 +25,9 @@ try {
 			if ($cause === null) {
 				throw (new UnexpectedValueException ("No Cause found"));
 			}
+
 	$joinUserCause = new UserCause($_SESSION["profileId"],$cause->getCauseId());
+
 
 // insert into mySQL
 	$joinUserCause->insert($mysqli);

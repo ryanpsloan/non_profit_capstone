@@ -17,31 +17,29 @@ session_start();
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
 	<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/jquery.validate.min.js"></script>
 	<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/additional-methods.min.js"></script>
-	<script type="text/j	avascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="searchTeam.js"></script>
+	<link type="text/css" rel="stylesheet" href="sign.css"/>
 
 	<title>Join Team Form</title>
 </head>
 <body>
-<div id="outputArea"></div>
-<form id="searchTeam" action="../php/form/searchTeamProcessor.php" method="POST">
-	<?php echo generateInputTags();?>
-	<label for="teamName">teamName </label>
-	<br>
-	<input type="text" id="teamName" name="teamName" autocomplete="off">
-	<br>
-
-	<input id = "profileSubmit" type="submit" value="search">
-	<br>
-</form>
+	<div class="container">
+	<div id="outputArea"></div>
+		<form id="searchTeam" class="col-lg-4" action="../php/form/searchTeamProcessor.php" method="POST">
+			<?php echo generateInputTags();?>
+			<h2 class="form-signin-heading">Please enter team name</h2
+			<label for="teamName"></label>
+			<br>
+			<input type="text" class="form-control" id="teamName" name="teamName" autocomplete="off">
+			<br>
+			<button class="btn btn-primary" type="submit" >Search</button>
+			<br>
+		</form>
 
 
 
 </body>
-</html><?php
-/**
- * Created by PhpStorm.
- * User: Martin
- * Date: 12/10/2014
- * Time: 9:32 AM
- */ 
+</html>
+
+<?php

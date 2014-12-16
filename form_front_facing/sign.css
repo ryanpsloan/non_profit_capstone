@@ -38,3 +38,12 @@ body {
 	border-top-left-radius: 0;
 	border-top-right-radius: 0;
 }
+.form-control-search {
+	position: relative;
+	height:80%;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	padding: 10px;
+	font-size: 16px;
+}

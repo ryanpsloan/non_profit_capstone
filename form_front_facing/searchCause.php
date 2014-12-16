@@ -19,23 +19,26 @@ session_start();
 	<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/additional-methods.min.js"></script>
 	<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="searchCause.js"></script>
+	<link type="text/css" rel="stylesheet" href="sign.css"/>
 
 	<title>Join Cause Form</title>
 </head>
 <body>
-<div id="outputArea"></div>
-<form id="searchCause" action="../php/form/searchCauseProcessor.php" method="POST">
-	<?php echo generateInputTags();?>
-	<label for="causeName">causeName </label>
-	<br>
-	<input type="text" id="causeName" name="causeName" autocomplete="off">
-	<br>
-
-	<input id = "profileSubmit" type="submit" value="search">
-	<br>
-</form>
+	<div class="container">
+	<div id="outputArea"></div>
+		<form id="searchCause" class="col-lg-4" action="../php/form/searchCauseProcessor.php" method="POST">
+			<?php echo generateInputTags();?>
+			<h2 class="form-signin-heading">Please enter cause name</h2>
+			<label for="causeName"></label>
+			<br>
+			<input type="text" class="form-control" id="causeName" name="causeName" autocomplete="off">
+			<br>
+			<button class="btn btn-primary" type="submit" >Search</button>
+			<br>
+		</form>
+	</div>
 
 
 
 </body>
-</html><?php
+</html>

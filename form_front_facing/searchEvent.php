@@ -19,25 +19,27 @@ session_start();
 	<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/additional-methods.min.js"></script>
 	<script type="text/j	avascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="searchEvent.js"></script>
+	<link type="text/css" rel="stylesheet" href="sign.css"/>
 
 	<title>Join Event Form</title>
 </head>
 <body>
-<div id="outputArea"></div>
-<form id="searchEvent" action="../php/form/searchEventProcessor.php" method="POST">
-	<?php echo generateInputTags();?>
-	<label for="eventTitle">EventTitle </label>
-	<br>
-	<input type="text" id="eventTitle" name="eventTitle" autocomplete="off">
-	<br>
-
-	<input id = "profileSubmit" type="submit" value="search">
-	<br>
-</form>
+	<div class="container">
+	<div id="outputArea"></div>
+		<form id="searchEvent" class="col-lg-4" action="../php/form/searchEventProcessor.php" method="POST">
+		<?php echo generateInputTags();?>
+			<h2 class="form-signin-heading">Please enter event name</h2
+			<label for="eventTitle"></label>
+			<br>
+			<input type="text" class="form-control"  id="eventTitle" name="eventTitle" autocomplete="off">
+			<br>
+			<button class="btn btn-primary" type="submit" >Search</button>
+			<br>
+	</div>
+		</form>
 
 
 
 </body>
 </html>
 
-<?php
