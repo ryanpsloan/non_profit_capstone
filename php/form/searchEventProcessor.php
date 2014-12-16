@@ -39,6 +39,12 @@ try {
 			$event->eventDate->format("Y-m-d H:i:s") . "<br/>" .
 			$event->eventLocation ."<br/>";
 
+		echo "<form id='goToEvent' action='../../form_front_facing/eventpage.php' method='post'>"
+				. generateInputTags() .
+			  "<input type='hidden' name='eventId' value='" . $event->eventId . "'>
+			   <button type='submit' class='btn btn-primary'>Go To Event Page</button>
+			   </form>";
+
 
 		echo "<form id=\"joinEvent\" action=\"joinEventProcessor.php\" method=\"POST\">";
 		echo generateInputTags();

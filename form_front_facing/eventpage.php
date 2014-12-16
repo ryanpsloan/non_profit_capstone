@@ -11,7 +11,7 @@
 	require_once("../php/userevent.php");
 	require_once("../php/form/commentfunctions.php");
 	$mysqli = $mysqli = MysqliConfiguration::getMysqli();
-	$event = Event::getEventByEventId($mysqli, 1);
+	$event = Event::getEventByEventId($mysqli, $_POST['eventId']);
 	$dateString = $event->eventDate->format("Y-m-d H:i:s");
 	$pageId = $event->eventId;
 	$pageType = 3;
