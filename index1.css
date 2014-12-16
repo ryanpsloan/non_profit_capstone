@@ -1,0 +1,30 @@
+
+h2 {
+	color: #ff0000;
+}
+.header  {margin-top: 20px;
+}
+
+
+body {
+	background-color: #ffffff ;
+}
+
+.navbar-right { padding-right: 20px;
+
+}
+
+.navbar {
+	margin-top: 10px;
+	margin-bottom: 0;
+}
+
+.navbar-brand {height: auto
+}
+
+.logo {z-index: 9999;
+		position: relitive;
+}
+
+.jumbotron  {margin-top: 40px
+}
