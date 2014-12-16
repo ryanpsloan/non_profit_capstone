@@ -1,4 +1,8 @@
 <?php
+/**
+ * @author Dameon Smith <dameonsmith76@gmail.com>
+ */
+
 	session_start();
 	require_once("/etc/apache2/capstone-mysql/helpabq.php");
 	require_once("../php/form/csrf.php");
@@ -23,10 +27,12 @@
 	<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/jquery.validate.min.js"></script>
 	<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/additional-methods.min.js"></script>
 	<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="comment.js"></script>
 	<title><?php echo $event->eventTitle?></title>
 </head>
 <body>
 	<?php /*navBar()*/?>
+	<div id="outputArea"></div>
 	<aside>
 		<?php
 			echo "<h3>$event->eventTitle</h3>";

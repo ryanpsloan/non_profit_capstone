@@ -22,7 +22,7 @@ function displayEventComment($pageId)
 
 		$comments = Comment::getCommentByCommentId($mysqli, $commentIds[$i]);
 
-		$dateString = $comments->commentDate->format("Y-m-d H:i:s");
+		$dateString = $comments->commentDate->format("d-m-Y H:i:s");
 
 		$profileIds[] = $userComments[$i][0]->getProfileId();
 
@@ -50,7 +50,7 @@ function displayEventComment($pageId)
 
 			$comments = Comment::getCommentByCommentId($mysqli, $commentIds[$i]);
 
-			$dateString = $comments->commentDate->format("Y-m-d H:i:s");
+			$dateString = $comments->commentDate->format("d-m-Y H:i:s");
 
 			$profileIds[] = $userComments[$i][0]->getProfileId();
 

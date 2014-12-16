@@ -21,8 +21,8 @@ try {
 
 
 
-	if(@isset($_POST['comment']) === false) {
-		throw(new UnexpectedValueException("The comment was blank, please try again."));
+	if(@empty($_POST['comment']) === true) {
+		throw(new RuntimeException("The comment was blank, please try again."));
 	}
 
 	// verify the CSRF tokens
