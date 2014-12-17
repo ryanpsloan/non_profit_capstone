@@ -1,3 +1,9 @@
+<?php
+	session_start();
+	require_once("php/user.php");
+	require_once("php/profile.php");
+	require_once("form_front_facing/navbar.php");
+?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/html">
 <head lang="en">
@@ -14,7 +20,7 @@
 	<style>
 
 		h2 {
-			color: #ff0000;
+			color: #337ab7;
 			text-align: center;
 		}
 
@@ -25,44 +31,7 @@
 
 </head>
 <body>
-	<header>
-		<div class="container">
-			<aside class="logo col-lg-2"><img src="images/HelpAcrossABQ.png" style="height: 5em; width: 5em;"></aside>
-			<div class="col-lg-10">
-				<nav class="navbar navbar-default" role="navigation">
-				<ul class="nav navbar-nav navbar-right">
-					<!--Three Drop downs -->
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Cause <span class="caret"></span></a>
-						<ul class="dropdown-menu" role="menu">
-							<li><a href="form_front_facing/searchCause.php">Find a Cause to Support</a></li>
-							<li><a href="form_front_facing/causeform.php">Enter a Cause Description</a></li>
-						</ul>
-					</li>
-					<!-- create the Event Button with drop downs -->
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Event<span class="caret"></span></a>
-						<ul class="dropdown-menu" role="menu">
-							<li><a href="form_front_facing/searchEvent.php">Find an Event</a></li>
-							<li><a href="form_front_facing/eventform.php">Create an Event</a></li>
-						</ul>
-					</li>
-					<!-- create the Team Button with drop downs -->
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Team<span class="caret"></span></a>
-						<ul class="dropdown-menu" role="menu">
-							<li><a href="form_front_facing/teamform.php">Create a Team</a></li>
-							<li><a href="form_front_facing/searchTeam.php">Join a Team</a></li>
-							<!--<li><a href="#">Delete a team</a></li>-->
-						</ul>
-					</li>
-					<li><a href="form_front_facing/signin.php">Sign In</a></li>
-					<li><a href="form_front_facing/SignUp.php">Sign Up</a></li>
-				</ul>
-			</nav>
-			</div>
-		</div>
-	</header>
+	<?php navBar() ?>
 							<!-- Main jumbotron on why to volunteer -->
 	<div class="container">
 

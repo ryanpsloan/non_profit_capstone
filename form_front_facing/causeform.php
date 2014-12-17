@@ -4,13 +4,17 @@
  * User: Cass
  * Form to enter a cause
  */
-require_once("../php/form/csrf.php");
 session_start();
+require_once("../php/form/csrf.php");
+require_once("navbar.php");
+require_once("../php/profile.php");
+require_once("../php/user.php");
 ?>
 <!DOCTYPE html>
 <html>
 <head lang="en">
 	<meta charset="UTF-8" />
+	<title>Cause Form</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<link type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" />
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -20,11 +24,10 @@ session_start();
 	<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="cause.js"></script>
 	<link type="text/css" href="sign.css" rel="stylesheet">
+	<link type="text/css" href="../index1.css" rel="stylesheet">
 </head>
-
-<title>Cause Form</title>
-
 <body>
+	<?php navBarForm() ?>
 	<div class="container">
 		<div id="outputArea"></div>
 		<form id="cause" class="form-signin" action="../php/form/causeprocessor.php" method="POST">

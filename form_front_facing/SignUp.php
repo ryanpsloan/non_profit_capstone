@@ -4,9 +4,12 @@
  * User: Martin
  *
  */
+session_start();
 require_once("../php/form/csrf.php");
 require_once("../php/form/functions.php");
-session_start();
+require_once("navbar.php");
+require_once("../php/profile.php");
+require_once("../php/user.php");
 ?>
 <!DOCTYPE html>
 <html>
@@ -21,11 +24,13 @@ session_start();
 	<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="signUp.js"></script>
 	<link type="text/css" rel="stylesheet" href="sign.css"/>
+	<link type="text/css" rel="stylesheet" href="../index1.css"/>
 
 
 	<title>SignUp Form</title>
 </head>
 <body>
+<?php navBarForm() ?>
 <div class="container">
 	<div id="outputArea"></div>
 		<form id="signUp" class="form-signin" action="../php/form/signupprocessor.php" method="POST">

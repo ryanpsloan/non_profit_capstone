@@ -1,4 +1,6 @@
-
+<?php
+	require_once("../../form_front_facing/navbar.php");
+?>
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -16,6 +18,7 @@
 	<title>Search Team Form</title>
 </head>
 <body>
+<? navBarProcessor() ?>
 <div class="container">
 	<?php
 	/**
