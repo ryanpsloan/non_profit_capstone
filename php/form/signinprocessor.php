@@ -32,7 +32,6 @@ require_once("../profile.php");
 	<title>SignUp Form</title>
 </head>
 <body>
-<?php navBarForm() ?>
 <div class="container">
 
 <?php
