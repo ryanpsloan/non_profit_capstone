@@ -1,6 +1,14 @@
 <?php
+	/**
+	 * Form to create events and add them to the data base.
+	 *
+	 * @author Dameon Smith <dameonsmith76@gmail.com>
+	 */
 	session_start();
 	require_once("../php/form/csrf.php");
+	require_once("navbar.php");
+	require_once("../php/profile.php");
+	require_once("../php/user.php");
 ?>
 <!DOCTYPE html>
 	<html>
@@ -14,8 +22,10 @@
 			<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/additional-methods.min.js"></script>
 			<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 			<link type="text/css" href="sign.css" rel="stylesheet">
+			<link type="text/css" href="../index1.css" rel="stylesheet">
 		</head>
 		<body>
+			<?php navBarForm() ?>
 			<div class="container">
 				<div id="outputArea"></div>
 				<form id="eventCreation" class="form-signin" action="../php/form/eventcreationprocessor.php" method="post">

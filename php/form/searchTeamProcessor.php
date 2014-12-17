@@ -1,5 +1,13 @@
 <?php
-	require_once("../../form_front_facing/navbar.php");
+session_start();
+require_once("/etc/apache2/capstone-mysql/helpabq.php");
+require_once("csrf.php");
+require_once("../team.php");
+require_once("../../form_front_facing/navbar.php");
+require_once("../../form_front_facing/navbar.php");
+require_once("../profile.php");
+require_once("../user.php");
+$mysqli    = MysqliConfiguration::getMysqli();
 ?>
 <!DOCTYPE html>
 <html>
@@ -25,13 +33,6 @@
 	 * Create team search processor
 	 * User: Martin
 	 */
-
-	session_start();
-	require_once("/etc/apache2/capstone-mysql/helpabq.php");
-	require_once("csrf.php");
-	require_once("../team.php");
-	$mysqli    = MysqliConfiguration::getMysqli();
-
 	try {
 		//verify the form was submitted properly
 

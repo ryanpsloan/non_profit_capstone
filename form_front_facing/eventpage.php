@@ -10,6 +10,9 @@
 	require_once("commentform.php");
 	require_once("../php/userevent.php");
 	require_once("../php/form/commentfunctions.php");
+	require_once("navbar.php");
+	require_once("../php/profile.php");
+	require_once("../php/user.php");
 	$mysqli = $mysqli = MysqliConfiguration::getMysqli();
 	$event = Event::getEventByEventId($mysqli, $_GET['eventId']);
 	$dateString = $event->eventDate->format("Y-m-d H:i:s");
@@ -29,10 +32,11 @@
 	<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="comment.js"></script>
 	<link type="text/css" href="teameventpage.css" rel="stylesheet">
+	<link type="text/css" href="../index1.css" rel="stylesheet">
 	<title><?php echo $event->eventTitle?></title>
 </head>
 <body>
-	<?php /*navBar()*/?>
+	<?php navBarForm() ?>
 	<div class="container">
 	<div id="outputArea"></div>
 		<div class="row">

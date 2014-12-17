@@ -4,8 +4,11 @@
  * User: Martin
  *
  */
-require_once("../php/form/csrf.php");
 session_start();
+require_once("../php/form/csrf.php");
+require_once("navbar.php");
+require_once("../php/profile.php");
+require_once("../php/user.php");
 ?>
 	<!DOCTYPE html>
 <html>
@@ -20,10 +23,12 @@ session_start();
 	<script type="text/j	avascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="searchEvent.js"></script>
 	<link type="text/css" rel="stylesheet" href="sign.css"/>
+	<link type="text/css" rel="stylesheet" href="../index1.css"/>
 
 	<title>Join Event Form</title>
 </head>
 <body>
+	<?php navBarForm() ?>
 	<div class="container">
 	<div id="outputArea"></div>
 		<form id="searchEvent" class="col-lg-4" action="../php/form/searchEventProcessor.php" method="POST">
@@ -35,9 +40,8 @@ session_start();
 			<br>
 			<button class="btn btn-primary" type="submit" >Search</button>
 			<br>
-	</div>
 		</form>
-
+	</div>
 
 
 </body>

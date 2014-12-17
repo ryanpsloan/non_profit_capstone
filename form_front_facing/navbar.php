@@ -2,6 +2,7 @@
 /**
  * Function to make the navBar reusable and dynamic.
  *
+ * @author Casimiro Vigil
  * @author Dameon Smith
  */
 require_once("/etc/apache2/capstone-mysql/helpabq.php");
