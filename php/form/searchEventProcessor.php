@@ -61,7 +61,7 @@ try {
 			$event->eventDate->format("Y-m-d H:i:s") . "<br/>" .
 			$event->eventLocation ."<br/>";
 
-		echo "<form class='goToThings' action='../../form_front_facing/eventpage.php' method='post'>"
+		echo "<form id='goToThings' action='../../form_front_facing/eventpage.php' method='get'>"
 				. generateInputTags() .
 			  "<input type='hidden' name='eventId' value='" . $event->eventId . "'>
 			   <button type='submit' class='btn btn-primary'>Go To Event Page</button>

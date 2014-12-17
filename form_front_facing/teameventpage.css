@@ -10,8 +10,6 @@
 
 .comments{
 	padding: 1em;
-	margin-right: 18em;
-	float: right;
 }
 
 textarea{
@@ -19,7 +17,6 @@ textarea{
 }
 
 #commentForm{
-	margin : 4em;
 	padding-top: 5em;
 }
 

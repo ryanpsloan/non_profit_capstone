@@ -11,7 +11,7 @@
 			} elseif($pageType === 1) {
 				$mysqli = MysqliConfiguration::getMysqli();
 				$userTeam = UserTeam::getUserTeamByProfileTeamId($mysqli, $_SESSION["profileId"], $pageId);
-				$permissionCheck = $userTeam[0][0]->getCommentPermission();
+				$permissionCheck = @$userTeam[0][0]->getCommentPermission();
 			} elseif($pageType === 2) {
 				$mysqli = MysqliConfiguration::getMysqli();
 				$teamEvent = TeamEvent::getTeamEventByTeamEventId($mysqli, $_POST["teamId"], $pageId);
@@ -19,7 +19,7 @@
 			} elseif($pageType === 3) {
 				$mysqli = MysqliConfiguration::getMysqli();
 				$userEvent = UserEvent::getUserEventByProfileEventId($mysqli, $_SESSION["profileId"], $pageId);
-				$permissionCheck = $userEvent[0][0]->commentPermission;
+				$permissionCheck = @$userEvent[0][0]->commentPermission;
 			} else {
 				$permissionCheck = null;
 			}
@@ -33,7 +33,6 @@
 				<br>
 				<button type=\"submit\" class='btn btn-primary'>Submit!</button>
 			</form>
-			</div>
 ";
 			if($permissionCheck === null) {
 				echo "<p>You are not permitted to comment. Please sign in.</p>";

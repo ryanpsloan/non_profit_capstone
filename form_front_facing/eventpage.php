@@ -11,7 +11,7 @@
 	require_once("../php/userevent.php");
 	require_once("../php/form/commentfunctions.php");
 	$mysqli = $mysqli = MysqliConfiguration::getMysqli();
-	$event = Event::getEventByEventId($mysqli, $_POST['eventId']);
+	$event = Event::getEventByEventId($mysqli, $_GET['eventId']);
 	$dateString = $event->eventDate->format("Y-m-d H:i:s");
 	$pageId = $event->eventId;
 	$pageType = 3;
@@ -33,39 +33,42 @@
 </head>
 <body>
 	<?php /*navBar()*/?>
+	<div class="container">
 	<div id="outputArea"></div>
-	<aside class="col-md-4 information">
-		<?php
-			echo "<h3>$event->eventTitle</h3>";
-			echo "<h5>$dateString</h5>";
-			echo "<h5>$event->eventLocation</h5>";
-			// NOTICE In the future have the events, teams, and other classes have an identifying hash
-			// NOTICE This is to further increase security when it comes to malicious users chaning form data
-			echo "
-					<form action=\"../php/form/permissionsprocessor.php\" method='post'>
-					";
-			echo generateInputTags();
+		<div class="row">
+				<aside class="col-lg-4 information">
+					<?php
+						echo "<h3>$event->eventTitle</h3>";
+						echo "<h5>$dateString</h5>";
+						echo "<h5>$event->eventLocation</h5>";
+						// NOTICE In the future have the events, teams, and other classes have an identifying hash
+						// NOTICE This is to further increase security when it comes to malicious users chaning form data
+						echo "
+								<form action=\"../php/form/permissionsprocessor.php\" method='post'>
+								";
+						echo generateInputTags();
 
-			echo "	<input type='hidden' name=\"permissionType\" value=\"3\">
-						<input type='hidden' name=\"eventId\" value=\"$event->eventId\">
-						<button type='submit' class='btn btn-primary'>Edit Permissions</button>
-					</form>
-					";
-		?>
-	</aside>
-	<section class=" col-md-6 commentBox">
-		<div>
-			<form id="commentForm" class="control-form" action="../php/form/commentprocessor.php" method="POST">
-		<?php
-				echo generateInputTags();
-				commentForm($pageType, $pageId);
-		?>
+						echo "	<input type='hidden' name=\"permissionType\" value=\"3\">
+									<input type='hidden' name=\"eventId\" value=\"$event->eventId\">
+									<button type='submit' class='btn btn-primary'>Edit Permissions</button>
+								</form>
+								";
+					?>
+				</aside>
+				<div id="mainContent" class=" col-lg-8">
+					<section>
+							<form id="commentForm" class="control-form" action="../php/form/commentprocessor.php" method="POST">
+							<?php
+							echo generateInputTags();
+							commentForm($pageType, $pageId);
+							?>
+					</section>
+
+					<section class="comments">
+						<?php displayEventComment($pageId); ?>
+					</section>
+				</div>
+			</div>
 		</div>
-	</section>
-
-	<section class="col-md-5 comments">
-		<?php displayEventComment($pageId); ?>
-	</section>
-
-
+	<div class="clearfix"></div>
 </body>
