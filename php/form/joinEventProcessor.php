@@ -57,7 +57,7 @@ try {
 // insert into mySQL
 	$joinUserEvent->insert($mysqli);
 
-	echo "<div class=\"alert alert-success\" role=\"alert\"><strong>Thank you for supporting event: " . $event->eventTitle . "</strong>  </div>";
+	echo "<div class=\"alert alert-info\" role=\"alert\"><strong>Thank you for supporting event: " . $event->eventTitle . "</strong>  </div>";
 
 
 } catch(Exception $exception) {

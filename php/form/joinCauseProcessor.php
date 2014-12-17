@@ -56,7 +56,7 @@ try {
 // insert into mySQL
 	$joinUserCause->insert($mysqli);
 
-	echo "<div class=\"alert alert-success\" role=\"alert\"><strong>Thank you for supporting cause: " . $cause->getCauseName() . "</strong>  </div>";
+	echo "<div class=\"alert alert-info\" role=\"alert\"><strong>Thank you for supporting cause: " . $cause->getCauseName() . "</strong>  </div>";
 
 } catch(Exception $exception) {
 	echo "<div class=\"alert alert-danger\" role=\"alert\"><strong>Oh snap!</strong> Unable to join cause: " . $exception->getMessage() . "</div>";

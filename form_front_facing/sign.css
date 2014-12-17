@@ -55,4 +55,6 @@ body {
 	position: relative;
 	margin:5px;
 }
-
+.alert .alert-info {
+	color: #337ab7;
+}

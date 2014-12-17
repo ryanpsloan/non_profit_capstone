@@ -51,7 +51,7 @@ try {
 		throw(new RuntimeException("CSRF tokens incorrect or missing. Make sure cookies are enabled."));
 
 	}
-	echo "<div class=\"alert alert-success\" role=\"alert\"><strong><h1>Here are your results</strong></h1>  </div><br/> <br/>";
+	echo "<div class=\"alert alert-info\" role=\"alert\"><strong><h1>Here are your results</strong></h1>  </div><br/> <br/>";
 	// grab mysql data
 	$events = Event::getEventByEventTitle($mysqli, $eventTitle);
 	/**
