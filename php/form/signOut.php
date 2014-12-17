@@ -11,4 +11,11 @@ foreach($_SESSION as $key => $value) {
 }
 
 session_destroy();
+?>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="refresh" content="0; url=../../index.php">
+</head>
+</html>
 

@@ -1,7 +1,17 @@
 
 <!--* join team form processor-->
 <!--* User: Martin-->
-
+<?php
+session_start();
+require_once("/etc/apache2/capstone-mysql/helpabq.php");
+require_once("csrf.php");
+require_once("../userTeam.php");
+require_once("../team.php");
+require_once("../../form_front_facing/navbar.php");
+require_once("../profile.php");
+require_once("../user.php");
+$mysqli    = MysqliConfiguration::getMysqli();
+?>
 
 <!DOCTYPE html>
 <html>
@@ -17,19 +27,17 @@
 	<script type="text/j	avascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="../../form_front_facing/searchTeam.js"></script>
 	<link type="text/css" rel="stylesheet" href="../../form_front_facing/sign.css"/>
+	<link type="text/css" rel="stylesheet" href="../../index1.css"/>
 
 	<title>Join Team Form</title>
 </head>
 <body>
+<?php navBarProcessor() ?>
 <div class="container">
 
 
 <?php
-session_start();
-require_once("/etc/apache2/capstone-mysql/helpabq.php");
-require_once("csrf.php");
-require_once("../userTeam.php");
-require_once("../team.php");
+
 
 
 // verify CSRF

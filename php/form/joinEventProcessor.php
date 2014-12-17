@@ -1,6 +1,15 @@
 <!--* join event form processor-->
 <!--* User: Martin-->
-
+<?php
+	session_start();
+	require_once("/etc/apache2/capstone-mysql/helpabq.php");
+	require_once("csrf.php");
+	require_once("../userevent.php");
+	require_once("../event.php");
+	require_once("../../form_front_facing/navbar.php");
+	require_once("../profile.php");
+	require_once("../user.php");
+?>
 
 <!DOCTYPE html>
 <html>
@@ -16,19 +25,15 @@
 	<script type="text/j	avascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="../../form_front_facing/searchEvent.js"></script>
 	<link type="text/css" rel="stylesheet" href="../../form_front_facing/sign.css"/>
+	<link type="text/css" rel="stylesheet" href="../../index1.css"/>
 
 	<title>Join Event Form</title>
 </head>
 <body>
+<?php navBarProcessor() ?>
 <div class="container">
 
 <?php
-session_start();
-require_once("/etc/apache2/capstone-mysql/helpabq.php");
-require_once("csrf.php");
-require_once("../userevent.php");
-require_once("../event.php");
-
 
 
 // verify CSRF

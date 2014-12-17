@@ -21,7 +21,7 @@ $mysqli    = MysqliConfiguration::getMysqli();
 	<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="../../form_front_facing/searchTeam.js"></script>
 	<link type="text/css" rel="stylesheet" href="../../form_front_facing/sign.css"/>
-	<link type="text/css" rel="stylesheet" hrec="../../index1.css"/>
+	<link type="text/css" rel="stylesheet" href="../../index1.css"/>
 
 	<title>Search Team Form</title>
 </head>
@@ -85,7 +85,7 @@ $mysqli    = MysqliConfiguration::getMysqli();
 
 
 	} catch(Exception $exception) {
-		echo "<div class=\"alert alert-danger\" role=\"alert\"><strong>Oh snap!</strong> Unable to search teams" . $exception->getMessage() . "</div>";
+		echo "<div class=\"alert alert-danger\" role=\"alert\"><strong>Oh snap!</strong> Unable to search teams. " . $exception->getMessage() . "</div>";
 
 	}
 	?>
