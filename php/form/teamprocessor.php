@@ -31,7 +31,6 @@ require_once("../user.php");
 		<title>Team Creation</title>
 	</head>
 	<body>
-	<?php navBarProcessor() ?>
 	<div class="container">
 		<?php
 		try {
