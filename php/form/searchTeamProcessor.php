@@ -2,8 +2,7 @@
 session_start();
 require_once("/etc/apache2/capstone-mysql/helpabq.php");
 require_once("csrf.php");
-require_once("../team.php");
-require_once("../../form_front_facing/navbar.php");
+require_once("../team.php");;
 require_once("../../form_front_facing/navbar.php");
 require_once("../profile.php");
 require_once("../user.php");
@@ -19,14 +18,14 @@ $mysqli    = MysqliConfiguration::getMysqli();
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
 	<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/jquery.validate.min.js"></script>
 	<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/additional-methods.min.js"></script>
-	<script type="text/j	avascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="../../form_front_facing/searchTeam.js"></script>
 	<link type="text/css" rel="stylesheet" href="../../form_front_facing/sign.css"/>
 
 	<title>Search Team Form</title>
 </head>
 <body>
-<? navBarProcessor() ?>
+<?php navBarProcessor() ?>
 <div class="container">
 	<?php
 	/**

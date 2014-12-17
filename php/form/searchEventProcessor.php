@@ -20,7 +20,7 @@ $mysqli    = MysqliConfiguration::getMysqli();
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
 	<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/jquery.validate.min.js"></script>
 	<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/additional-methods.min.js"></script>
-	<script type="text/j	avascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="../../form_front_facing/searchEvent.js"></script>
 	<link type="text/css" rel="stylesheet" href="../../form_front_facing/sign.css"/>
 	<link type="text/css" rel="stylesheet" href="../../index1.css"/>
@@ -30,8 +30,6 @@ $mysqli    = MysqliConfiguration::getMysqli();
 <body>
 <?php navBarProcessor() ?>
 <div class="container">
-
-
 <?php
 /**
  * Create event search processor

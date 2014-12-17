@@ -34,7 +34,11 @@ function navBar()
 	echo <<< EOF
 <header>
 		<div class="container">
-			<aside class="logo col-lg-2"><img src="images/HelpAcrossABQ.png" style="height: 5em; width: 5em;"></aside>
+			<aside class="logo col-lg-2">
+			<a href="#">
+				<img src="images/HelpAcrossABQ.png" style="height: 5em; width: 5em;">
+			</a>
+			</aside>
 			<div class="col-lg-10">
 				<nav class="navbar navbar-default" role="navigation">
 				<ul class="nav navbar-nav navbar-right">
@@ -96,7 +100,10 @@ function navBarForm(){
 	echo <<< EOF
 <header>
 		<div class="container">
-			<aside class="logo col-lg-2"><img src="../images/HelpAcrossABQ.png" style="height: 5em; width: 5em;"></aside>
+			<aside class="logo col-lg-2">
+			<a href="../index.php">
+				<img src="../images/HelpAcrossABQ.png" style="height: 5em; width: 5em;">
+			</a></aside>
 			<div class="col-lg-10">
 				<nav class="navbar navbar-default" role="navigation">
 				<ul class="nav navbar-nav navbar-right">
@@ -159,7 +166,11 @@ function navBarProcessor(){
 	echo <<< EOF
 <header>
 		<div class="container">
-			<aside class="logo col-lg-2"><img src="../../images/HelpAcrossABQ.png" style="height: 5em; width: 5em;"></aside>
+			<aside class="logo col-lg-2">
+			<a href="../../index.php">
+				<img src="../../images/HelpAcrossABQ.png" style="height: 5em; width: 5em;">
+			</a>
+			</aside>
 			<div class="col-lg-10">
 				<nav class="navbar navbar-default" role="navigation">
 				<ul class="nav navbar-nav navbar-right">
