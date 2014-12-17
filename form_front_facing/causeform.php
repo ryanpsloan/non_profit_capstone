@@ -19,19 +19,26 @@ session_start();
 	<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/additional-methods.min.js"></script>
 	<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="cause.js"></script>
+	<link type="text/css" href="sign.css" rel="stylesheet">
 </head>
 
 <title>Cause Form</title>
 
 <body>
+	<div class="container">
 		<div id="outputArea"></div>
-		<form id="cause" action="../php/form/causeprocessor.php" method="POST">
+		<form id="cause" class="form-signin" action="../php/form/causeprocessor.php" method="POST">
 			<?php echo generateInputTags();?>
-			<label for="causeName">Enter Cause you want to support:</label><br>
-				<input type="causeName" id="causeName" name="causeName" autocomplete="off"><br>
-			<label for="cause">Enter Cause Description:</label><br>
-				<input type="causeDescription" id="causeDescription" name="causeDescription" autocomplete="off"><br>
-				<input id = "Submit" type="submit" value="Submit">
+				<label for="causeName">Enter Cause you want to support:</label>
+				<br>
+					<input type="causeName" class="form-signin form-control" id="causeName" name="causeName" autocomplete="off">
+					<br>
+				<label for="cause">Enter Cause Description:</label>
+				<br>
+					<input type="causeDescription" class="form-signin form-control" id="causeDescription" name="causeDescription" autocomplete="off">
+					<br>
+				<input type="submit" class="btn btn-primary" value="Create cause!">
 		</form>
+	</div>
 </body>
 </html>
