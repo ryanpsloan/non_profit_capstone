@@ -101,6 +101,6 @@ require_once("../php/user.php");
 		</form>
 
 
-
+</div>
 </body>
 </html>
