@@ -24,7 +24,7 @@ require_once("../user.php");
 		<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/jquery.validate.min.js"></script>
 		<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/additional-methods.min.js"></script>
 		<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-		<script type="text/javascript" src="signIn.js"></script>
+		<script type="text/javascript" src="../../form_front_facing/team.js"></script>
 		<link type="text/css" rel="stylesheet" href="../../index1.css"/>
 
 		<title>Team Creation</title>
@@ -50,7 +50,7 @@ require_once("../user.php");
 			$team = new Team(null, $_POST["teamName"], $_POST["teamCause"]);
 			$team->insert($mysqli);
 
-			$joinUserTeam = new UserTeam($_SESSION["profileId"],$team->getTeamId(), 1, 1, 1, 1, 1);
+			@$joinUserTeam = new UserTeam($_SESSION["profileId"],$team->getTeamId(), 3, 2, 1, 1, 1);
 			$joinUserTeam->insert($mysqli);
 
 
