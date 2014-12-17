@@ -16,7 +16,7 @@
 	<script type="text/javascript" src="../../form_front_facing/searchTeam.js"></script>
 	<link type="text/css" rel="stylesheet" href="../../form_front_facing/sign.css"/>
 
-	<title>Join Cause Form</title>
+	<title>Create Cause Form</title>
 </head>
 <body>
 <div class="container">

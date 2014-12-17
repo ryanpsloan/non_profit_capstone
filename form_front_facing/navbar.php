@@ -112,7 +112,7 @@ function navBarForm(){
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Cause <span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
 							<li><a href="searchCause.php">Find a Cause to Support</a></li>
-							<li><a href="causeform.php">Enter a Cause Description</a></li>
+							<li><a href="causeform.php">Create a Cause</a></li>
 						</ul>
 					</li>
 					<!-- create the Event Button with drop downs -->
@@ -179,7 +179,7 @@ function navBarProcessor(){
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Cause <span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
 							<li><a href="../../form_front_facing/searchCause.php">Find a Cause to Support</a></li>
-							<li><a href="../../form_front_facing/causeform.php">Enter a Cause Description</a></li>
+							<li><a href="../../form_front_facing/causeform.php">Create a Cause</a></li>
 						</ul>
 					</li>
 					<!-- create the Event Button with drop downs -->
