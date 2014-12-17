@@ -42,6 +42,7 @@
 			<p>to make a difference --	to feel needed -- to share a skill -- to get to know a community -- to demonstrate commitment -- to a cause/belief -- to do your civic duty --
 				satisfaction from accomplishment -- to keep busy -- to have an impact -- to learn something new -- to feel proud -- to make new friends -- to help someone			for fun!				to assure progress
 				to feel good -- to be part of a team -- to be an agent of change</p>
+			<button class="col-lg-12 btn btn-primary"><a style="color: white" href="form_front_facing/SignUp.php">Sign Up Today!</a></button>
 		</div>
 	</div>
 
