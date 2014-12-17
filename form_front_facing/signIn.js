@@ -38,7 +38,8 @@ $(document).ready(function()
 						success: function(ajaxOutput) {
 							$("#outputArea").html(ajaxOutput);
 								setTimeout(function() {
-									window.navigate("../index.php");
+									// FIXME: unsure if this works on IE
+									window.location = "../index.php";
 								}, 3000);
 						}
 					});

@@ -42,7 +42,7 @@ $(document).ready(function()
 						success: function(ajaxOutput) {
 							$("#outputArea").html(ajaxOutput);
 								setTimeout(function() {
-									window.navigate("../index.php");
+									window.location = "../index.php";
 								}, 3000);
 
 						}

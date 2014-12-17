@@ -41,6 +41,9 @@ $(document).ready(function()
 						url    : "../php/form/teamprocessor.php",
 						success: function(ajaxOutput) {
 							$("#outputArea").html(ajaxOutput);
+							setTimeout(function() {
+								window.location = "../index.php";
+							}, 3000);
 						}
 					});
 			}

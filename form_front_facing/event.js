@@ -42,9 +42,9 @@ $(document).ready(function()
 						url    : "../php/form/causeprocessor.php",
 						success: function(ajaxOutput) {
 							$("#outputArea").html(ajaxOutput);
-							setTimeout(function() {
-								window.navigate("../index.php");
-							}, 3000);
+									setTimeout(function() {
+										window.location = "../index.php";
+									}, 3000);
 						}
 					});
 			}
